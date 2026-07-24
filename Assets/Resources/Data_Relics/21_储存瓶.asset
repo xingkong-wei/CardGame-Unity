@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac4b4442b8b18742915ba6a2f020c1d, type: 3}
+  m_Name: "21_\u50A8\u5B58\u74F6"
+  m_EditorClassIdentifier: 
+  id: 1021
+  relicName: "\u50A8\u5B58\u74F6"
+  description: "\u6218\u6597\u5F00\u59CB\u65F6\uFF0C\u9009\u62E9\u4E00\u79CD\u5143\u7D20\uFF0C\u83B7\u5F975\u5C42\u8BE5\u5143\u7D20\u4EB2\u548C\u5EA6"
+  rarity: 4
+  price: 120
+  sprite: {fileID: 21300000, guid: 5ddac3c0003348c42829a33a3fd4ba75, type: 3}
+  scriptName: StorageVial

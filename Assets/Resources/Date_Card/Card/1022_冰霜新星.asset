@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1022_\u51B0\u971C\u65B0\u661F"
+  m_EditorClassIdentifier: 
+  id: 1022
+  cardName: "\u51B0\u971C\u65B0\u661F"
+  rarity: 2
+  price: 100
+  cardTypes:
+  - {fileID: 11400000, guid: a2a45f2c5195d3c468ac91a023e5fd97, type: 2}
+  - {fileID: 11400000, guid: 4736391e1db329841b8f9cfa78a19ba2, type: 2}
+  scriptName: FrostNovaCard
+  bgIcon: Icon/CardBg/RedCard
+  icon: Icon/AttackCard/FrostNova
+  expend: 2
+  arg0: 10
+  effects: Effects/GreenBloodExplosion
+  damageSource: 0
+  damagePercent: 1
+  description: "\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u621010\u70B9\u4F24\u5BB3\uFF0C\u7ED9\u4E881\u5C42\u865A\u5F31\uFF0C\u83B7\u5F973\u70B9\u51B0\u4EB2\u548C\u5EA6"
+  upgradable: 1
+  upgradedExpend: 2
+  upgradedArg0: 14
+  upgradedDescription: "\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u621014\u70B9\u4F24\u5BB3\uFF0C\u7ED9\u4E882\u5C42\u865A\u5F31\uFF0C\u83B7\u5F973\u70B9\u51B0\u4EB2\u548C\u5EA6"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

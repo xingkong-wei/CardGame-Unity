@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1001_\u9632\u5FA1"
+  m_EditorClassIdentifier: 
+  id: 1001
+  cardName: "\u9632\u5FA1"
+  rarity: 0
+  price: 0
+  cardTypes:
+  - {fileID: 11400000, guid: bcf01d909da3de34a945b6e097d8b009, type: 2}
+  scriptName: DefendCard
+  bgIcon: Icon/CardBg/GreenCard
+  icon: Icon/DefenseCard/OrdinaryDefense
+  expend: 1
+  arg0: 5
+  effects: Effects/SpinZoneBlue
+  damageSource: 0
+  damagePercent: 1
+  description: "\u83B7\u5F975\u70B9\u62A4\u76FE"
+  upgradable: 1
+  upgradedExpend: 1
+  upgradedArg0: 8
+  upgradedDescription: "\u83B7\u5F978\u70B9\u62A4\u76FE"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

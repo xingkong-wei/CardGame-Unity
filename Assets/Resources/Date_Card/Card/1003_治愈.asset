@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1003_\u6CBB\u6108"
+  m_EditorClassIdentifier: 
+  id: 1003
+  cardName: "\u6CBB\u6108"
+  rarity: 2
+  price: 100
+  cardTypes:
+  - {fileID: 11400000, guid: bcf01d909da3de34a945b6e097d8b009, type: 2}
+  - {fileID: 11400000, guid: f304a1c1e31643f4cab644e4ab2ccfc9, type: 2}
+  scriptName: CureCard
+  bgIcon: Icon/CardBg/GreenCard
+  icon: Icon/OtherCard/potions (4)
+  expend: 0
+  arg0: 6
+  effects: Effects/HealOnce
+  damageSource: 0
+  damagePercent: 1
+  description: "\u6062\u590D6\u70B9\u751F\u547D"
+  upgradable: 1
+  upgradedExpend: 0
+  upgradedArg0: 10
+  upgradedDescription: "\u6062\u590D10\u70B9\u751F\u547D"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

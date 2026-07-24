@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1025_\u65F6\u95F4\u56DE\u6EAF"
+  m_EditorClassIdentifier: 
+  id: 1025
+  cardName: "\u65F6\u95F4\u56DE\u6EAF"
+  rarity: 3
+  price: 150
+  cardTypes:
+  - {fileID: 11400000, guid: bcf01d909da3de34a945b6e097d8b009, type: 2}
+  scriptName: TimeRewindsCard
+  bgIcon: Icon/CardBg/GreenCard
+  icon: Icon/OtherCard/TimeRewinds
+  expend: 2
+  arg0: 0
+  effects: Effects/SpinZoneBlue
+  damageSource: 0
+  damagePercent: 1
+  description: "\u5C06\u5F03\u724C\u5806\u968F\u673A\u4E00\u5F20\u724C\u7F6E\u5165\u624B\u724C\uFF0C\u8BE5\u724C\u672C\u56DE\u5408\u8D39\u7528\u4E3A0"
+  upgradable: 1
+  upgradedExpend: 1
+  upgradedArg0: 0
+  upgradedDescription: "\u5C06\u5F03\u724C\u5806\u968F\u673A\u4E00\u5F20\u724C\u7F6E\u5165\u624B\u724C\uFF0C\u8BE5\u724C\u672C\u56DE\u5408\u8D39\u7528\u4E3A0"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

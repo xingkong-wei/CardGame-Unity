@@ -1,0 +1,106 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 炽火药剂 - 对单个敌人造成伤害
+/// LineUI 起点 = 被点击的药水按钮，终点跟随鼠标
+/// </summary>
+public class FirePotion : PotionBase
+{
+    public override void Use()
+    {
+        base.Use();
+
+        List<Enemy> aliveEnemies = GetAliveEnemies();
+
+        if (aliveEnemies.Count == 0)
+        {
+            Debug.LogWarning("[FirePotion] 没有存活的敌人！");
+            return;
+        }
+
+        if (aliveEnemies.Count == 1)
+        {
+            HitEnemy(aliveEnemies[0]);
+        }
+        else
+        {
+            FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
+            if (fightUI != null)
+            {
+                fightUI.StartCoroutine(EnemyTargetingRoutine(aliveEnemies));
+            }
+        }
+    }
+
+    private IEnumerator EnemyTargetingRoutine(List<Enemy> enemies)
+    {
+        FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
+        Canvas canvas = fightUI?.GetComponentInParent<Canvas>();
+        Camera cam = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera : null;
+        RectTransform canvasRT = canvas?.GetComponent<RectTransform>();
+
+        // 显示 LineUI
+        UIManager.Instance.ShowUI<LineUI>("LineUI");
+        LineUI lineUI = UIManager.Instance.GetUI<LineUI>("LineUI");
+        if (lineUI != null)
+            lineUI.SetStartPos(potionBtnScreenPos);
+
+        bool targetSelected = false;
+
+        while (!targetSelected)
+        {
+            if (lineUI != null && canvasRT != null)
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvasRT, Input.mousePosition, cam, out Vector2 localMouse);
+                lineUI.SetEndPos(localMouse);
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Enemy")))
+                {
+                    Enemy enemy = hit.collider.GetComponent<Enemy>();
+                    if (enemy != null && enemies.Contains(enemy))
+                    {
+                        HitEnemy(enemy);
+                        targetSelected = true;
+                    }
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                targetSelected = true;
+            }
+
+            yield return null;
+        }
+
+        UIManager.Instance.CloseUI("LineUI");
+    }
+
+    private void HitEnemy(Enemy enemy)
+    {
+        int damage = data.effectValue;
+        enemy.Hit(damage);
+        UIManager.Instance.ShowTip($"造成 {damage} 点伤害",
+            new Color(1f, 0.6f, 0.2f));
+    }
+
+    private List<Enemy> GetAliveEnemies()
+    {
+        List<Enemy> alive = new List<Enemy>();
+        Enemy[] all = Object.FindObjectsOfType<Enemy>();
+        foreach (var e in all)
+        {
+            if (e != null && e.gameObject != null && e.gameObject.activeInHierarchy)
+                alive.Add(e);
+        }
+        return alive;
+    }
+}

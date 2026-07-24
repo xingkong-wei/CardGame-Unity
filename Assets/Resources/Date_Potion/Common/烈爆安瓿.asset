@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a887457af62da4ab4998bd7c4f3647, type: 3}
+  m_Name: "\u70C8\u7206\u5B89\u74FF"
+  m_EditorClassIdentifier: 
+  potionName: "\u70C8\u7206\u5B89\u74FF"
+  description: "\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u621010\u70B9\u4F24\u5BB3"
+  icon: Icon/potion/Bomb
+  scriptName: BombPotion
+  buyPrice: 100
+  sellPrice: 50
+  rarity: 0
+  effectValue: 10
+  duration: 0
+  target: 2
+  requiredEnergy: 0
+  canUseInCombat: 1
+  canUseInMap: 0
+  canUseWhenFull: 1
+  useSound: Sounds/Effect/DrinkPotion
+  useEffect: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Miss

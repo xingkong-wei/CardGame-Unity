@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac4b4442b8b18742915ba6a2f020c1d, type: 3}
+  m_Name: "16_\u7425\u73C0"
+  m_EditorClassIdentifier: 
+  id: 1016
+  relicName: "\u7425\u73C0"
+  description: "\u6BCF\u56DE\u5408\u5F00\u59CB\u65F6\uFF0C\u82E5\u4E09\u79CD\u5143\u7D20\u5C42\u6570\u4E4B\u548C
+    \u2265 6\uFF0C\u5219\u83B7\u5F971\u5C42\u5C42\u6570\u6700\u4F4E\u7684\u5143\u7D20\uFF1B\u82E5\u6700\u9AD8\u4E0E\u6700\u4F4E\u5C42\u6570\u5DEE\u503C=4\uFF0C\u5219\u6539\u4E3A\u83B7\u5F973\u5C42\u6700\u4F4E\u5143\u7D20"
+  rarity: 3
+  price: 200
+  sprite: {fileID: 21300000, guid: 92d7502da033a1d499b9ad1f4d4f2e21, type: 3}
+  scriptName: Amber

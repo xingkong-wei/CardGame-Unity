@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1027_\u5927\u6CD5\u5E08\u888D"
+  m_EditorClassIdentifier: 
+  id: 1027
+  cardName: "\u5927\u6CD5\u5E08\u888D"
+  rarity: 3
+  price: 150
+  cardTypes:
+  - {fileID: 11400000, guid: ccd5e9e81afa15247ad078d490c9af9a, type: 2}
+  scriptName: GrandMageRobeCard
+  bgIcon: Icon/CardBg/GreyCard
+  icon: Icon/AbilityCard/GrandMageRobe
+  expend: 2
+  arg0: 2
+  effects: Effects/SpinZoneBlue
+  damageSource: 0
+  damagePercent: 1
+  description: "\u6BCF\u6253\u51FA\u4E00\u5F20\u6CD5\u672F\u724C\uFF0C\u83B7\u5F972\u70B9\u683C\u6321"
+  upgradable: 1
+  upgradedExpend: 2
+  upgradedArg0: 4
+  upgradedDescription: "\u6BCF\u6253\u51FA\u4E00\u5F20\u6CD5\u672F\u724C\uFF0C\u83B7\u5F974\u70B9\u683C\u6321"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

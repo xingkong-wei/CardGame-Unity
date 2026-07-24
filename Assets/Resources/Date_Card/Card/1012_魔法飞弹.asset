@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1012_\u9B54\u6CD5\u98DE\u5F39"
+  m_EditorClassIdentifier: 
+  id: 1012
+  cardName: "\u9B54\u6CD5\u98DE\u5F39"
+  rarity: 1
+  price: 50
+  cardTypes:
+  - {fileID: 11400000, guid: a2a45f2c5195d3c468ac91a023e5fd97, type: 2}
+  - {fileID: 11400000, guid: 4736391e1db329841b8f9cfa78a19ba2, type: 2}
+  scriptName: MagicMissileCard
+  bgIcon: Icon/CardBg/RedCard
+  icon: Icon/AttackCard/MagicMissile
+  expend: 1
+  arg0: 2
+  effects: Effects/GreenBloodExplosion
+  damageSource: 0
+  damagePercent: 1
+  description: "\u9020\u62105\u70B9\u4F24\u5BB3\u4E24\u6B21"
+  upgradable: 1
+  upgradedExpend: 1
+  upgradedArg0: 2
+  upgradedDescription: "\u9020\u62107\u70B9\u4F24\u5BB3\u4E24\u6B21"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 0
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

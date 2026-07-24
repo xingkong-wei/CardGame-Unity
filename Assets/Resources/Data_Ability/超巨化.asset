@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca92f9bcaae1641b77e81bb1907c0b, type: 3}
+  m_Name: "\u8D85\u5DE8\u5316"
+  m_EditorClassIdentifier: 
+  statusType: 42
+  displayName: "\u8D85\u5DE8\u5316"
+  description: "\u4E0B\u4E00\u5F20\u653B\u51FB\u724C\u5C06\u4F1A\u9020\u62103\u500D\u4F24\u5BB3"
+  iconPath: Icon/Ability/GiantGrowth
+  displayType: 0
+  stackFormat: +{0}

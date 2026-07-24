@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
+  m_Name: "1021_\u9B54\u6756\u5145\u80FD"
+  m_EditorClassIdentifier: 
+  id: 1021
+  cardName: "\u9B54\u6756\u5145\u80FD"
+  rarity: 2
+  price: 100
+  cardTypes:
+  - {fileID: 11400000, guid: f304a1c1e31643f4cab644e4ab2ccfc9, type: 2}
+  scriptName: WandChargingCard
+  bgIcon: Icon/CardBg/BlueCard
+  icon: Icon/OtherCard/WandCharing
+  expend: 0
+  arg0: 2
+  effects: Effects/SmokeExplosionDark
+  damageSource: 0
+  damagePercent: 1
+  description: "\u83B7\u5F97\u4E24\u70B9\u80FD\u91CF\uFF0C\u672C\u56DE\u5408\u4E0B\u6B21\u653B\u51FB\u9020\u6210\u53CC\u500D\u4F24\u5BB3"
+  upgradable: 1
+  upgradedExpend: 0
+  upgradedArg0: 2
+  upgradedDescription: "\u83B7\u5F97\u4E24\u70B9\u80FD\u91CF\uFF0C\u672C\u56DE\u5408\u4E0B\u6B21\u653B\u51FB\u9020\u6210\u53CC\u500D\u4F24\u5BB3"
+  removeConsumeOnUpgrade: 0
+  isInnate: 0
+  upgradedIsInnate: 0
+  isRetain: 0
+  upgradedIsRetain: 1
+  autoPlayOnDiscard: 0
+  upgradedAutoPlayOnDiscard: 0

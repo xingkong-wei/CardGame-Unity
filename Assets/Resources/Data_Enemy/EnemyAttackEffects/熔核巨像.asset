@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fe69d906a68dca4c94c653b84513477, type: 3}
+  m_Name: "\u7194\u6838\u5DE8\u50CF"
+  m_EditorClassIdentifier: 
+  version: 1.0
+  description: "\u7194\u6838\u5DE8\u50CF\u653B\u51FB\u7279\u6548"
+  attackEffects:
+  - effectName: MeleeAttack01
+    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Blood/Red/BloodSplatWide2
+    spawnPositionType: 3
+    spawnTransformPath: 
+    positionOffset: {x: 0, y: 0, z: 0}
+    effectScale: 2
+    delayTime: 0.5
+    duration: 1
+    rotationOffset: {x: 0, y: 0, z: 0}
+  - effectName: MeleeAttack02
+    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Blood/Red/BloodSplatWide2
+    spawnPositionType: 3
+    spawnTransformPath: 
+    positionOffset: {x: 0, y: 0, z: 0}
+    effectScale: 2
+    delayTime: 0.5
+    duration: 1
+    rotationOffset: {x: 0, y: 0, z: 0}
+  - effectName: ShockwaveAttack
+    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions/FireballSoftExplosion/ExplosionFireballSoftFire
+    spawnPositionType: 0
+    spawnTransformPath: 
+    positionOffset: {x: 0, y: 0, z: -2}
+    effectScale: 2
+    delayTime: 0.5
+    duration: 0
+    rotationOffset: {x: 0, y: 0, z: 0}
+  - effectName: FireBreathAttack
+    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Brawling/Soft/SoftPunchHeavy
+    spawnPositionType: 4
+    spawnTransformPath: RigTail2Gizmo
+    positionOffset: {x: -0.05, y: 0.08, z: -0.5}
+    effectScale: 3
+    delayTime: 0.5
+    duration: 0
+    rotationOffset: {x: -190, y: 2, z: 0}
+  - effectName: CrushAttack
+    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Brawling/RoundHit/RoundHitRed
+    spawnPositionType: 3
+    spawnTransformPath: 
+    positionOffset: {x: 0, y: 1, z: 2}
+    effectScale: 4
+    delayTime: 0.5
+    duration: 0
+    rotationOffset: {x: 0, y: 0, z: 0}

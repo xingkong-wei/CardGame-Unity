@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a887457af62da4ab4998bd7c4f3647, type: 3}
+  m_Name: "\u6DB2\u6001\u8BB0\u5FC6"
+  m_EditorClassIdentifier: 
+  potionName: "\u6DB2\u6001\u8BB0\u5FC6"
+  description: "\u5C06\u4F60\u5F03\u724C\u5806\u4E2D\u76841\u5F20\u724C\u653E\u5165\u4F60\u7684\u624B\u724C\u3002\u8FD9\u5F20\u724C\u5728\u672C\u56DE\u5408\u53EF\u4EE5\u514D\u8D39\u6253\u51FA"
+  icon: Icon/potion/LiquidMemory
+  scriptName: LiquidMemoryPotion
+  buyPrice: 200
+  sellPrice: 100
+  rarity: 2
+  effectValue: 1
+  duration: 0
+  target: 0
+  requiredEnergy: 0
+  canUseInCombat: 1
+  canUseInMap: 0
+  canUseWhenFull: 1
+  useSound: Sounds/Effect/DrinkPotion
+  useEffect: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Miss
+  usedIconConfig: {fileID: 0}

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac4b4442b8b18742915ba6a2f020c1d, type: 3}
+  m_Name: "7_\u5171\u9E23\u77F3"
+  m_EditorClassIdentifier: 
+  id: 1007
+  relicName: "\u5171\u9E23\u77F3"
+  description: "\u82E5\u4F60\u540C\u65F6\u62E5\u6709\u706B\u3001\u51B0\u3001\u96F7\u4E09\u79CD\u4EB2\u548C\u5EA6\uFF08\u5747\u22655\u5C42\uFF09\uFF0C\u6BCF\u56DE\u5408\u591A\u62BD1\u5F20\u724C"
+  rarity: 2
+  price: 150
+  sprite: {fileID: 21300000, guid: 6d850d16af21538479d39c81f9f32fb7, type: 3}
+  scriptName: ResonanceStone

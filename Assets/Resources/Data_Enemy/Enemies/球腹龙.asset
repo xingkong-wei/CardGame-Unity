@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451b49c1e33f27941831c97795f79b4f, type: 3}
+  m_Name: "球腹龙"
+  m_EditorClassIdentifier: 
+  id: 10005
+  enemyName: "球腹龙"
+  maxHp: 30
+  modelPath: Model/Cute Devil-Red
+  idleAnim: Idle
+  hitAnim: TakeDamage
+  attack: 10
+  attackAnim: HeadAttack=ProjectileAttack
+  flightAttackAnim: 
+  defense: 15
+  defenseAnim: CastSpell
+  flightDefenseAnim: 
+  defenseEffectPath: Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
+  defenseEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 0.6
+    duration: 1.3
+  useFlightAnim: 0
+  flightThreshold: 0
+  flightIdleAnim: 
+  flightHitAnim: 
+  healAnim: CastSpell
+  healEffectPath: Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraGreen
+  healEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 0.6
+    duration: 1.3

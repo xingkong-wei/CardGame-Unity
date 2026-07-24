@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac4b4442b8b18742915ba6a2f020c1d, type: 3}
+  m_Name: "0_\u5143\u7D20\u6CD5\u5178"
+  m_EditorClassIdentifier: 
+  id: 1000
+  relicName: "\u5143\u7D20\u6CD5\u5178"
+  description: "\u6BCF\u573A\u6218\u6597\u5F00\u59CB\u65F6\uFF0C\u9009\u62E9\u4E00\u79CD\u5143\u7D20\uFF08\u706B/\u51B0/\u96F7\uFF09\uFF0C\u7B2C\u4E00\u56DE\u5408\u8BE5\u5143\u7D20\u4EB2\u548C\u5EA6\u53E0\u52A0\u901F\u5EA6\u7FFB\u500D\uFF0C\u5176\u4ED6\u4E24\u79CD\u5143\u7D20\u53E0\u5C42\u51CF\u534A\uFF08\u5411\u4E0B\u53D6\u6574\uFF09"
+  rarity: 0
+  price: 100
+  sprite: {fileID: 21300000, guid: 6a53aaf831117e249ae3fa194a9356f1, type: 3}
+  scriptName: ElementCodex

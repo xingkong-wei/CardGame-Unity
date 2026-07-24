@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a887457af62da4ab4998bd7c4f3647, type: 3}
+  m_Name: "\u67AF\u96FE\u8BE1\u6C34"
+  m_EditorClassIdentifier: 
+  potionName: "\u67AF\u96FE\u8BE1\u6C34"
+  description: "\u6D88\u8017\u624B\u724C\u4E2D\u4EFB\u610F\u5F20\u724C"
+  icon: Icon/potion/WitheredMistVenom
+  scriptName: WitheredMistVenomPotion
+  buyPrice: 150
+  sellPrice: 75
+  rarity: 1
+  effectValue: 0
+  duration: 0
+  target: 0
+  requiredEnergy: 0
+  canUseInCombat: 1
+  canUseInMap: 0
+  canUseWhenFull: 1
+  useSound: Sounds/Effect/DrinkPotion
+  useEffect: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Miss

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a887457af62da4ab4998bd7c4f3647, type: 3}
+  m_Name: "\u5BC2\u706D\u7C89"
+  m_EditorClassIdentifier: 
+  potionName: "\u5BC2\u706D\u7C89"
+  description: "\u654C\u4EBA\u6BCF\u56DE\u5408\u7ED3\u675F\u65F6\uFF0C\u5931\u53BB9\u70B9\u751F\u547D"
+  icon: Icon/potion/VoidDus
+  scriptName: VoidDusPotion
+  buyPrice: 150
+  sellPrice: 75
+  rarity: 1
+  effectValue: 9
+  duration: 0
+  target: 1
+  requiredEnergy: 0
+  canUseInCombat: 1
+  canUseInMap: 0
+  canUseWhenFull: 1
+  useSound: Sounds/Effect/DrinkPotion
+  useEffect: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Miss

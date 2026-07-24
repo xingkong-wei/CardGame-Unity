@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7a9226fb17801409459bd1345cfb0a, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  maxHp: 100
+  curHp: 100
+  maxPowerCount: 3
+  initialCoin: 999
+  killCoinReward: 25
+  drawCardsPerTurn: 5
+  maxHandSize: 10
+  initialCards:
+  - cardData: {fileID: 11400000, guid: 2fc9bcf8e43f7f84cab60811b2048270, type: 2}
+    count: 4
+  - cardData: {fileID: 11400000, guid: 792ac2965af2f3144b22fc3aa11ff269, type: 2}
+    count: 4
+  - cardData: {fileID: 11400000, guid: b76e3abbe9e3bd341ae1d38df3044f55, type: 2}
+    count: 1
+  - cardData: {fileID: 11400000, guid: 60353d13ee1876e4192bcb7773339dfd, type: 2}
+    count: 1
+  initialPotions:
+  - {fileID: 11400000, guid: 468d66c3a5656dd46b918f6acbe72d74, type: 2}
+  - {fileID: 11400000, guid: 1338ddaebc3385945b87c58cab548fd1, type: 2}
+  - {fileID: 11400000, guid: b67326d398c12c0429d200db91b1e7ed, type: 2}
+  initialRelics:
+  - {fileID: 11400000, guid: 3f0c79f36c23b4c4fbd6bff01451fa60, type: 2}
+  - {fileID: 11400000, guid: 94fe94d02c7e2c0409f2c51d83d537a2, type: 2}
+  - {fileID: 11400000, guid: d17a3f854cdabda49b342fb23d6e2b84, type: 2}
