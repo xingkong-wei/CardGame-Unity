@@ -258,7 +258,6 @@ public class ShopUI : UIBase
         AddPriceLabel(obj, price, itemPriceFont, itemPriceColor, itemPriceFontSize, itemPricePos, itemPriceSize);
 
         Button btn = obj.GetComponent<Button>() ?? obj.AddComponent<Button>();
-        // 移除 Navigation 避免干扰焦点/射线检测
         btn.transition = Selectable.Transition.None;
         Navigation nav = btn.navigation;
         nav.mode = Navigation.Mode.None;
@@ -272,6 +271,8 @@ public class ShopUI : UIBase
             }
             FightManager.Instance.AddCoin(-price);
             FightManager.Instance.AddRelic(relic);
+            // 购买前先关闭并归位 TooltipPanel，防止因 SetParent 到根 Canvas 导致销毁后残留
+            CleanupRelicIcon(obj);
             Destroy(obj);
             relicObjects.Remove(obj);
             UpdateInvemtoryUI();
@@ -325,6 +326,7 @@ public class ShopUI : UIBase
             }
             FightManager.Instance.AddCoin(-price);
             FightManager.Instance.potionList.Add(potion);
+            CleanupRelicIcon(obj);
             Destroy(obj);
             potionObjects.Remove(obj);
             UpdateInvemtoryUI();
@@ -494,11 +496,37 @@ public class ShopUI : UIBase
         }
     }
 
+    /// <summary>
+    /// 购买前清理 RelicIcon：关闭 Tooltip 并将其恢复到 obj 子层级，避免销毁后残留
+    /// </summary>
+    private void CleanupRelicIcon(GameObject obj)
+    {
+        if (obj == null) return;
+        RelicIcon ri = obj.GetComponent<RelicIcon>();
+        if (ri == null) return;
+        // 触发 OnPointerExit 关闭 Tooltip 并将其归位
+        ri.OnPointerExit(null);
+    }
+
     private void ClearAllItems()
     {
         foreach (var obj in cardObjects) if (obj != null) Destroy(obj);
-        foreach (var obj in relicObjects) if (obj != null) Destroy(obj);
-        foreach (var obj in potionObjects) if (obj != null) Destroy(obj);
+        foreach (var obj in relicObjects)
+        {
+            if (obj != null)
+            {
+                CleanupRelicIcon(obj);
+                Destroy(obj);
+            }
+        }
+        foreach (var obj in potionObjects)
+        {
+            if (obj != null)
+            {
+                CleanupRelicIcon(obj);
+                Destroy(obj);
+            }
+        }
         cardObjects.Clear();
         relicObjects.Clear();
         potionObjects.Clear();

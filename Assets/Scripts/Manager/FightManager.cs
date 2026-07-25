@@ -27,6 +27,8 @@ public class FightManager : MonoBehaviour
     [HideInInspector] public int DefenseCount;//防御值
     [HideInInspector] public int CoinAmount { get; private set; } // 当前金币
 
+    private static int savedCoinAmount = -1; // 持久化金币
+
     /// <summary>当前持有的药水列表（最多3瓶）</summary>
     [HideInInspector] public List<PotionData> potionList = new List<PotionData>();
 
@@ -46,8 +48,9 @@ public class FightManager : MonoBehaviour
     {
         var cfg = GameConfig.Instance;
 
-        // 从 PlayerPrefs 恢复血量（脚本重编译后保持）
+        // 从 PlayerPrefs 恢复血量和金币
         savedCurHp = PlayerPrefs.GetInt("SavedCurHp", savedCurHp);
+        savedCoinAmount = PlayerPrefs.GetInt("SavedCoinAmount", -1);
 
         if (savedIslandIndex != currentIslandIndex)
         {
@@ -67,7 +70,9 @@ public class FightManager : MonoBehaviour
         MaxPowerCount = cfg.maxPowerCount;
         CurPowerCount = cfg.maxPowerCount;
         DefenseCount = 0; // 初始护盾为0
-        CoinAmount = cfg.initialCoin;
+        // 金币持久化（玩家战斗之间保留）
+        CoinAmount = savedCoinAmount >= 0 ? savedCoinAmount : cfg.initialCoin;
+        savedCoinAmount = CoinAmount;
     }
 
     /// <summary>
@@ -335,8 +340,10 @@ public class FightManager : MonoBehaviour
         savedMaxHp = cfg.maxHp;
         savedCurHp = cfg.curHp;
         savedIslandIndex = -1;
+        savedCoinAmount = cfg.initialCoin;
         PlayerPrefs.DeleteKey("SavedCurHp");
         PlayerPrefs.DeleteKey("SavedMaxHp");
+        PlayerPrefs.SetInt("SavedCoinAmount", savedCoinAmount);
         PlayerPrefs.Save();
     }
 
@@ -357,6 +364,9 @@ public class FightManager : MonoBehaviour
     public void AddCoin(int amount)
     {
         CoinAmount += amount;
+        savedCoinAmount = CoinAmount;
+        PlayerPrefs.SetInt("SavedCoinAmount", savedCoinAmount);
+        PlayerPrefs.Save();
         UIManager.Instance.GetUI<FightUI>("FightUI")?.UpdateCoinDisplay(CoinAmount);
     }
 

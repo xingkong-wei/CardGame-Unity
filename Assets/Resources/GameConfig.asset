@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 100
   curHp: 100
   maxPowerCount: 3
-  initialCoin: 999
+  initialCoin: 888
   killCoinReward: 25
   drawCardsPerTurn: 5
   maxHandSize: 10
@@ -36,3 +36,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f0c79f36c23b4c4fbd6bff01451fa60, type: 2}
   - {fileID: 11400000, guid: 94fe94d02c7e2c0409f2c51d83d537a2, type: 2}
   - {fileID: 11400000, guid: d17a3f854cdabda49b342fb23d6e2b84, type: 2}
+  smallChest:
+    goldMin: 30
+    goldMax: 33
+    goldChance: 0.5
+    commonWeight: 75
+    uncommonWeight: 25
+    rareWeight: 0
+  mediumChest:
+    goldMin: 40
+    goldMax: 55
+    goldChance: 0.8
+    commonWeight: 35
+    uncommonWeight: 50
+    rareWeight: 15
+  largeChest:
+    goldMin: 68
+    goldMax: 82
+    goldChance: 1
+    commonWeight: 0
+    uncommonWeight: 75
+    rareWeight: 25

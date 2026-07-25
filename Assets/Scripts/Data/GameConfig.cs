@@ -50,6 +50,22 @@ public class GameConfig : ScriptableObject
     [Tooltip("游戏开始时持有的遗物列表")]
     public List<RelicData> initialRelics;
 
+    [Header(" 宝箱配置 ")]
+    public TreasureConfigData smallChest;
+    public TreasureConfigData mediumChest;
+    public TreasureConfigData largeChest;
+
+    /// <summary>
+    /// 随机一个宝箱配置（50%/33%/17%）
+    /// </summary>
+    public TreasureConfigData RollRandomChest()
+    {
+        int roll = Random.Range(0, 100);
+        if (roll < 50) return smallChest;
+        if (roll < 83) return mediumChest;
+        return largeChest;
+    }
+
     /// <summary>
     /// 根据配置生成初始卡牌列表（每张独立DeckCard实例）
     /// </summary>

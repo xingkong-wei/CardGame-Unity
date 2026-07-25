@@ -236,6 +236,16 @@ public class SlayTheSpireMapUI : UIBase
             return;
         }
 
+        // Treasure 节点特殊处理
+        if (node.Node.nodeType == NodeType.Treasure)
+        {
+            Hide();
+            TreasureUI treasureUI = UIManager.Instance.ShowUI<TreasureUI>("TreasureUI") as TreasureUI;
+            if (treasureUI != null)
+                treasureUI.OnClosed += () => { Show(); mapView?.SetAttainableNodes(); };
+            return;
+        }
+
         FightManager.Instance.SetCurrentIslandIndex(currentIslandIndex);
         FightManager.Instance.ChangeType(FightType.Init);
 
