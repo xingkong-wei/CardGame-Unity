@@ -98,7 +98,8 @@ MonoBehaviour:
   goldText: {fileID: 8856301050637059815}
   takeInBtn: {fileID: 3788248732579979598}
   discardBtn: {fileID: 5297520129886557522}
-  openEffectPrefab: {fileID: 110212, guid: 258d13d2331bbf34e837bdf97fea4878, type: 3}
+  openEffectPrefab: {fileID: 118250, guid: a79f8048fa75d6c449d730e96bb836fa, type: 3}
+  effectSpawnPoint: {fileID: 2392364988521779342}
 --- !u!1 &1018852793666187767
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +167,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f097d702635db304cb190111b4b7a233, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 75535bc9ca65c5245a8d81b29cc23005, type: 2}
   m_sharedMaterial: {fileID: -2932554217377864915, guid: f097d702635db304cb190111b4b7a233, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2541506704244040110

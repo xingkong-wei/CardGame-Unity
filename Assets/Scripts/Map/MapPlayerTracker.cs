@@ -83,7 +83,8 @@ namespace Map
 
         private void PlayWarningThatNodeCannotBeAccessed()
         {
-            // 选中的节点无法访问
+            // 选中的节点无法访问 - 显示提示
+            UIManager.Instance?.ShowTip("无法到达此节点", new Color(1f, 0.5f, 0.2f));
         }
     }
 }

@@ -106,11 +106,7 @@ public class SelectCardUI : UIBase
         Button mapBtn = mapBtnTf.GetComponent<Button>();
         if (mapBtn == null) return;
         mapBtn.onClick.RemoveAllListeners();
-        mapBtn.onClick.AddListener(() =>
-        {
-            MapUI mapUI = UIManager.Instance.ShowUI<MapUI>("MapUI") as MapUI;
-            if (mapUI != null) mapUI.transform.SetAsLastSibling();
-        });
+        mapBtn.onClick.AddListener(FightUI.OpenNodeMapForObservation);
     }
 
     public override void Close()

@@ -127,7 +127,7 @@ public static class PotionDropManager
         }
 
         if (pool.Count == 0) return null;
-        return pool[Random.Range(0, pool.Count)];
+        return PickWeightedRelic(pool);
     }
 
     /// <summary>
@@ -145,6 +145,53 @@ public static class PotionDropManager
         }
 
         if (pool.Count == 0) return null;
-        return pool[Random.Range(0, pool.Count)];
+        return PickWeightedRelic(pool);
+    }
+
+    /// <summary>
+    /// 从遗物池中按权重随机选取一个遗物。
+    /// 已持有的遗物权重降低（默认降至 20%），避免重复出现。
+    /// </summary>
+    /// <param name="pool">候选遗物列表</param>
+    /// <param name="ownedWeightMultiplier">已持有遗物的权重倍率（0~1），默认 0.2 即降至 20%</param>
+    public static RelicData PickWeightedRelic(System.Collections.Generic.List<RelicData> pool, float ownedWeightMultiplier = 0.2f)
+    {
+        if (pool == null || pool.Count == 0) return null;
+
+        // 获取当前已持有的遗物 id 集合
+        System.Collections.Generic.HashSet<string> ownedIds = new System.Collections.Generic.HashSet<string>();
+        if (FightManager.Instance != null && FightManager.Instance.relicList != null)
+        {
+            foreach (var relic in FightManager.Instance.relicList)
+            {
+                if (relic != null && !string.IsNullOrEmpty(relic.id))
+                    ownedIds.Add(relic.id);
+            }
+        }
+
+        // 所有权重相同 → 直接等概率随机
+        if (ownedIds.Count == 0)
+            return pool[Random.Range(0, pool.Count)];
+
+        // 计算加权总权重
+        float totalWeight = 0f;
+        System.Collections.Generic.List<float> cumulativeWeights = new System.Collections.Generic.List<float>();
+        foreach (var r in pool)
+        {
+            bool owned = !string.IsNullOrEmpty(r.id) && ownedIds.Contains(r.id);
+            float w = owned ? ownedWeightMultiplier : 1f;
+            totalWeight += w;
+            cumulativeWeights.Add(totalWeight);
+        }
+
+        // 所有遗物都已持有且权重极低 → 仍然随机一个
+        float roll = Random.Range(0f, totalWeight);
+        for (int i = 0; i < pool.Count; i++)
+        {
+            if (roll < cumulativeWeights[i])
+                return pool[i];
+        }
+
+        return pool[pool.Count - 1];
     }
 }

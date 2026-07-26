@@ -1,128 +1,189 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MapUI : UIBase
 {
+    [Header("锁定状态图片")]
+    public Sprite lockedSprite;          // 未解锁时显示的图片（Main.png）
+    public Color lockedColor = new Color(0.451f, 0.451f, 0.451f); // 灰色 #737373
+    public string lockedNameText = "未知"; // 未解锁时显示的名称
+
+    /// <summary>
+    /// 岛屿节点信息
+    /// </summary>
+    private class IslandNodeInfo
+    {
+        public int islandIndex;           // 岛屿索引
+        public Image nodeImage;           // 岛屿的 Image 组件
+        public Sprite originalSprite;     // 原始图片
+        public Color originalColor;       // 原始颜色
+        public Button button;             // 按钮组件
+        public TextMeshProUGUI nameText;  // 名称文本组件
+        public string originalNameText;   // 原始名称文本
+    }
+
     public Button returnBtn;   // 返回按钮
     private List<UIBase> hiddenUIs = new List<UIBase>(); // 记录被隐藏的 UI
     private bool justStartedFromLogin = false; // 标记是否刚从LoginUI开始
-    private bool hasStartedGame = false; // 标记游戏是否已经开始（用于区分首次进入和战斗中打开）
+    private bool hasStartedGame = false; // 标记游戏是否已经开始
+    private List<IslandNodeInfo> islandNodes = new List<IslandNodeInfo>();
 
     private void Awake()
     {
-        // 原有返回按钮逻辑
         if (returnBtn == null)
             returnBtn = transform.Find("ReturnBtn")?.GetComponent<Button>();
         if (returnBtn != null)
             returnBtn.onClick.AddListener(OnReturnClick);
 
-        // 绑定所有岛屿按钮
-        BindIslandButtons();
+        // 收集所有岛屿节点
+        CollectIslandNodes();
+        // 应用初始解锁状态
+        RefreshUnlockState();
     }
 
-    private void BindIslandButtons()
+    /// <summary>
+    /// 收集所有岛屿节点的引用
+    /// </summary>
+    private void CollectIslandNodes()
     {
+        islandNodes.Clear();
         Transform content = transform.Find("Scroll View/Viewport/Content");
-        if (content == null)
-        {
-            Debug.LogError("MapUI: 未找到 Scroll View/Viewport/Content");
-            return;
-        }
+        if (content == null) return;
 
         for (int i = 0; i < content.childCount; i++)
         {
             Transform island = content.GetChild(i);
             if (island.name.StartsWith("Island_"))
             {
+                // Image 组件在子节点 "Image" 上，不在根节点
+                Transform imageTrans = island.Find("Image");
+                Image nodeImage = imageTrans?.GetComponent<Image>();
                 Button btn = island.Find("Button")?.GetComponent<Button>();
+                // Name 文本在子节点 "Name" 上
+                Transform nameTrans = island.Find("Name");
+                TextMeshProUGUI nameText = nameTrans?.GetComponent<TextMeshProUGUI>();
+
+                IslandNodeInfo info = new IslandNodeInfo
+                {
+                    islandIndex = i,
+                    nodeImage = nodeImage,
+                    originalSprite = nodeImage != null ? nodeImage.sprite : null,
+                    originalColor = nodeImage != null ? nodeImage.color : Color.white,
+                    button = btn,
+                    nameText = nameText,
+                    originalNameText = nameText != null ? nameText.text : ""
+                };
+
                 if (btn != null)
                 {
                     int index = i;
-                    bool unlocked = RoleManager.Instance.IsIslandUnlocked(index);
-
-                    // 设置按钮状态
-                    btn.interactable = unlocked;
-                    // 设置灰色样式（可选）
-                    ColorBlock colors = btn.colors;
-                    colors.disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-                    btn.colors = colors;
-
-                    if (unlocked)
-                    {
-                        // 清除旧监听，避免重复添加
-                        btn.onClick.RemoveAllListeners();
-                        btn.onClick.AddListener(() => OnIslandButtonClick(index));
-                    }
-                    // 如果未解锁，不添加点击监听
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(() => OnIslandButtonClick(index));
                 }
+
+                islandNodes.Add(info);
             }
+        }
+    }
+
+    /// <summary>
+    /// 刷新所有岛屿按钮的解锁状态
+    /// </summary>
+    public void RefreshUnlockState()
+    {
+        foreach (var node in islandNodes)
+        {
+            bool isUnlocked = RoleManager.Instance.IsIslandUnlocked(node.islandIndex);
+            bool isCompleted = RoleManager.Instance.IsIslandCompleted(node.islandIndex);
+            ApplyNodeState(node, isUnlocked, isCompleted);
+        }
+    }
+
+    /// <summary>
+    /// 应用岛屿的锁定/解锁状态
+    /// </summary>
+    private void ApplyNodeState(IslandNodeInfo node, bool isUnlocked, bool isCompleted)
+    {
+        if (node.nodeImage != null)
+        {
+            if (isUnlocked)
+            {
+                node.nodeImage.sprite = node.originalSprite;
+                node.nodeImage.color = node.originalColor;
+            }
+            else
+            {
+                if (lockedSprite != null)
+                    node.nodeImage.sprite = lockedSprite;
+                node.nodeImage.color = lockedColor;
+            }
+        }
+
+        if (node.button != null)
+        {
+            // 已通关的岛屿不可点击（保留图片但禁用交互）
+            node.button.interactable = isUnlocked && !isCompleted;
+        }
+
+        // 名称文本：未解锁显示"未知"，解锁后恢复原始名称
+        if (node.nameText != null)
+        {
+            node.nameText.text = isUnlocked ? node.originalNameText : lockedNameText;
         }
     }
 
     private void OnIslandButtonClick(int islandIndex)
     {
-        // 1. 隐藏当前 MapUI（但不销毁）
+        // 已通关的岛屿不可进入
+        if (RoleManager.Instance.IsIslandCompleted(islandIndex))
+        {
+            UIManager.Instance.ShowTip("已通关该地图", new Color(1f, 0.6f, 0.2f));
+            return;
+        }
+
         Hide();
 
-        // 2. 记录当前选择的岛屿索引
         FightManager.Instance.SetCurrentIslandIndex(islandIndex);
-
-        // 3. 显示节点地图 (SlayTheSpireMapUI)
         ShowNodeMap(islandIndex);
     }
 
     private void ShowNodeMap(int islandIndex)
     {
-        // 检查是否已存在 SlayTheSpireMapUI
         SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
 
         if (nodeMapUI == null)
         {
-            // 不存在，则创建新的
             nodeMapUI = UIManager.Instance.ShowUI<SlayTheSpireMapUI>("SlayTheSpireMapUI") as SlayTheSpireMapUI;
         }
         else
         {
-            // 已存在，直接显示（不重置状态）
-            // 是否生成新地图由 SlayTheSpireMapUI 内部的 hasVisitedNodes 检查决定
             nodeMapUI.Show();
         }
 
-        // 设置节点地图关闭时的回调：关闭后返回 MapUI
-        nodeMapUI.OnClosed = () =>
-        {
-            Show(); // 重新显示 MapUI
-        };
-
-        // 传递岛屿索引给节点地图
-        nodeMapUI.SetIslandIndex(islandIndex);
+        nodeMapUI.EnterNewIsland(islandIndex);
     }
 
     private void OnReturnClick()
     {
-        // 恢复隐藏的UI
         RestoreHiddenUIs();
-        Close(); // 关闭 MapUI
+        Close();
     }
 
-    // 从LoginUI进入时调用,重置所有游戏状态
     public void OnNewGameStarted()
     {
-        // 重置SlayTheSpireMapUI的状态
         SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
         if (nodeMapUI != null)
         {
             nodeMapUI.ResetMapState();
         }
 
-        // 隐藏返回按钮（从LoginUI进入时）
         if (returnBtn != null)
         {
             returnBtn.gameObject.SetActive(false);
         }
 
-        // 标记为刚从LoginUI开始和游戏已开始
         justStartedFromLogin = true;
         hasStartedGame = true;
     }
@@ -132,11 +193,12 @@ public class MapUI : UIBase
         base.Show();
         transform.SetAsLastSibling();
 
-        // 检查FightUI是否存在，如果存在则隐藏（战斗过程中）
+        // 每次显示时刷新岛屿解锁状态
+        RefreshUnlockState();
+
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
         bool isInBattle = fightUI != null && fightUI.gameObject.activeInHierarchy;
 
-        // 如果刚从LoginUI开始,重置SlayTheSpireMapUI
         if (justStartedFromLogin)
         {
             SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
@@ -145,22 +207,18 @@ public class MapUI : UIBase
                 nodeMapUI.ResetMapState();
             }
             justStartedFromLogin = false;
-            hasStartedGame = true; // 标记游戏已经开始
+            hasStartedGame = true;
 
-            // 隐藏返回按钮（从LoginUI进入时）
             if (returnBtn != null)
             {
                 returnBtn.gameObject.SetActive(false);
             }
         }
 
-        // 如果在战斗中，隐藏战斗相关的UI（这个判断要独立执行，不管是否刚从LoginUI开始）
         if (hasStartedGame && isInBattle)
         {
-            // 游戏已开始且在战斗中，隐藏战斗相关的UI
             HideFightUIs();
 
-            // 显示返回按钮（战斗过程中进入时）
             if (returnBtn != null)
             {
                 returnBtn.gameObject.SetActive(true);
@@ -168,26 +226,18 @@ public class MapUI : UIBase
         }
     }
 
-    // 隐藏战斗相关的UI
     private void HideFightUIs()
     {
         hiddenUIs.Clear();
 
-        // 隐藏FightUI
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-
-        if (fightUI != null)
+        if (fightUI != null && fightUI.gameObject.activeInHierarchy)
         {
-            // 检查FightUI是否真的存在并处于活动状态
-            if (fightUI.gameObject.activeInHierarchy)
-            {
-                hiddenUIs.Add(fightUI);
-                fightUI.Hide();
-            }
+            hiddenUIs.Add(fightUI);
+            fightUI.Hide();
         }
     }
 
-    // 恢复隐藏的UI
     private void RestoreHiddenUIs()
     {
         foreach (UIBase ui in hiddenUIs)

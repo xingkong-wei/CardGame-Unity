@@ -19,6 +19,7 @@ public class TreasureUI : UIBase
 
     [Header("特效")]
     public GameObject openEffectPrefab;
+    public Transform effectSpawnPoint; // 特效生成位置
 
     public System.Action OnClosed;
 
@@ -84,8 +85,7 @@ public class TreasureUI : UIBase
         closedObj.SetActive(false);
         openObj.SetActive(true);
 
-        if (openEffectPrefab != null)
-            Instantiate(openEffectPrefab, openObj.transform.position, Quaternion.identity, transform);
+        // 特效暂时不使用
 
         ShowReward();
     }

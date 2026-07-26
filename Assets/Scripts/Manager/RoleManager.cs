@@ -24,6 +24,9 @@ public class RoleManager
     // 解锁的最大岛屿索引
     private int maxUnlockedIsland = 0;
 
+    // 已通关的岛屿索引（击败Boss后标记，不可再进入）
+    private int completedIsland = -1;
+
     public void Init()
     {
         cardList = new List<DeckCard>();
@@ -47,6 +50,26 @@ public class RoleManager
     public bool IsIslandUnlocked(int islandIndex)
     {
         return islandIndex <= maxUnlockedIsland;
+    }
+
+    /// <summary>
+    /// 岛屿是否已通关（击败了该岛屿的 Boss）
+    /// </summary>
+    public bool IsIslandCompleted(int islandIndex)
+    {
+        return islandIndex <= completedIsland;
+    }
+
+    /// <summary>
+    /// 标记当前岛屿为已通关（击败 Boss 后调用）
+    /// </summary>
+    public void MarkIslandCompleted(int islandIndex)
+    {
+        if (islandIndex > completedIsland)
+        {
+            completedIsland = islandIndex;
+            SaveCompletedIsland();
+        }
     }
 
     public void UnlockNextIsland()
@@ -125,9 +148,16 @@ public class RoleManager
         PlayerPrefs.Save();
     }
 
+    private void SaveCompletedIsland()
+    {
+        PlayerPrefs.SetInt("CompletedIsland", completedIsland);
+        PlayerPrefs.Save();
+    }
+
     private void LoadUnlockData()
     {
         maxUnlockedIsland = PlayerPrefs.GetInt("MaxUnlockedIsland", 0);
+        completedIsland = PlayerPrefs.GetInt("CompletedIsland", -1);
     }
 
     /// <summary>

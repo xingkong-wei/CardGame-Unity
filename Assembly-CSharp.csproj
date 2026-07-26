@@ -280,7 +280,6 @@
     <Compile Include="Assets\Scripts\UI\UIEventTrigger.cs" />
     <Compile Include="Assets\Scripts\Manager\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Data\GameConfig.cs" />
-    <Compile Include="Assets\Scripts\Debug\ShopPreview.cs" />
     <Compile Include="Assets\Scripts\Relics\ArchmagusEye.cs" />
     <Compile Include="Assets\Scripts\Map\MapViewUI.cs" />
     <Compile Include="Assets\Scripts\Map\DottedLineRenderer.cs" />
@@ -299,6 +298,7 @@
     <Compile Include="Assets\Scripts\Tools\EffectDebugTool.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\SoulSecureElixirPotion.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\Map\MysteryNodeResolver.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\MeditationCard.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\EnergyPotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\GamblerBrewPotion.cs" />

@@ -523,7 +523,22 @@ public class FightUI : UIBase
     //地图按钮事件
     private void OnMapBtnClick()
     {
-        UIManager.Instance.ShowUI<MapUI>("MapUI");
+        OpenNodeMapForObservation();
+    }
+
+    /// <summary>
+    /// 打开节点地图观察（战斗中、商店中通用）
+    /// </summary>
+    public static void OpenNodeMapForObservation()
+    {
+        SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
+        if (nodeMapUI == null)
+            nodeMapUI = UIManager.Instance.ShowUI<SlayTheSpireMapUI>("SlayTheSpireMapUI") as SlayTheSpireMapUI;
+        else
+            nodeMapUI.Show();
+
+        int islandIndex = FightManager.Instance.GetCurrentIslandIndex();
+        nodeMapUI.OpenForObservation(islandIndex);
     }
 
     //重置计时器（公开方法，供外部调用）

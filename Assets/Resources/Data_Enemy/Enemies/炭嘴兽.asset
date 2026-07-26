@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 451b49c1e33f27941831c97795f79b4f, type: 3}
-  m_Name: "炭嘴兽"
+  m_Name: "\u70AD\u5634\u517D"
   m_EditorClassIdentifier: 
   id: 10011
-  enemyName: "炭嘴兽"
-  maxHp: 100
+  enemyName: "\u70AD\u5634\u517D"
+  maxHp: 28
   modelPath: Model/Tentacle Monster-Red
   idleAnim: Idle
   hitAnim: TakeDamage
   attack: 15
   attackAnim: ProjectileAttack=BiteAttack
-  flightAttackAnim: 
   defense: 50
   defenseAnim: Roar
-  flightDefenseAnim: 
   defenseEffectPath: Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 0.7
     duration: 1.5
+  flightAttackAnim: 
+  flightDefenseAnim: 
   useFlightAnim: 0
   flightThreshold: 0
   flightIdleAnim: 

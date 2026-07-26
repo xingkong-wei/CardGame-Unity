@@ -9,7 +9,7 @@ namespace Map
         public MapConfig config;
         public MapView view;
 
-        public Map CurrentMap { get; private set; }
+        public Map CurrentMap { get; set; }
 
         private void Start()
         {

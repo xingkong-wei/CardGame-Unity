@@ -42,6 +42,6 @@ public class TreasureConfigData
         }
 
         if (pool.Count == 0) return null;
-        return pool[Random.Range(0, pool.Count)];
+        return PotionDropManager.PickWeightedRelic(pool);
     }
 }

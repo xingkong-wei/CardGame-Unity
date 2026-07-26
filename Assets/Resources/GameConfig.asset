@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 100
   curHp: 100
   maxPowerCount: 3
-  initialCoin: 888
+  initialCoin: 999
   killCoinReward: 25
   drawCardsPerTurn: 5
   maxHandSize: 10
@@ -30,12 +30,8 @@ MonoBehaviour:
     count: 1
   initialPotions:
   - {fileID: 11400000, guid: 468d66c3a5656dd46b918f6acbe72d74, type: 2}
-  - {fileID: 11400000, guid: 1338ddaebc3385945b87c58cab548fd1, type: 2}
-  - {fileID: 11400000, guid: b67326d398c12c0429d200db91b1e7ed, type: 2}
   initialRelics:
   - {fileID: 11400000, guid: 3f0c79f36c23b4c4fbd6bff01451fa60, type: 2}
-  - {fileID: 11400000, guid: 94fe94d02c7e2c0409f2c51d83d537a2, type: 2}
-  - {fileID: 11400000, guid: d17a3f854cdabda49b342fb23d6e2b84, type: 2}
   smallChest:
     goldMin: 30
     goldMax: 33

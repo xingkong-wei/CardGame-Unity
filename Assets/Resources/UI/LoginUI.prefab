@@ -1086,8 +1086,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u724C\u5492"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 35c5278341d7d0741b47f75718d3e2bc, type: 2}
-  m_sharedMaterial: {fileID: -1289839061869632072, guid: 35c5278341d7d0741b47f75718d3e2bc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 75535bc9ca65c5245a8d81b29cc23005, type: 2}
+  m_sharedMaterial: {fileID: 3055491612344439586, guid: 75535bc9ca65c5245a8d81b29cc23005, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

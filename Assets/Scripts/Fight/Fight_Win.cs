@@ -39,47 +39,49 @@ public class Fight_Win : FightUnit
 
     private void OnRewardSelected()
     {
-        // 触发战斗胜利事件，更新节点状态
         Vector2Int nodePoint = FightManager.Instance.GetCurrentNodePoint();
         GameEvents.OnBattleVictory?.Invoke(nodePoint);
         SelectCardUI.OnClosed -= OnRewardSelected;
 
-        // 清理战斗界面手牌
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
         if (fightUI != null)
         {
             fightUI.ClearAllCards();
         }
 
-        // 隐藏战斗界面（不销毁，保留计时器）
         UIManager.Instance.HideUI("FightUI");
 
-        // 解锁地图，允许继续点击节点
-        if (MapPlayerTracker.Instance != null)
-        {
-            MapPlayerTracker.Instance.Locked = false;
-        }
+        Map.NodeType nodeType = FightManager.Instance.GetCurrentNodeType();
+        bool isBoss = nodeType == Map.NodeType.Boss;
 
-        // 重新显示节点地图（SlayTheSpireMapUI）
-        SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
-        if (nodeMapUI != null)
+        if (isBoss)
         {
-            // 隐藏关闭按钮（战斗胜利后）
-            nodeMapUI.SetHideCloseBtn(true);
-            nodeMapUI.Show();
+            // Boss 战胜利 → 直接返回 MapUI（下一岛屿已解锁）
+            SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
+            if (nodeMapUI != null)
+                nodeMapUI.Hide();
+
+            MapUI mapUI = UIManager.Instance.GetUI<MapUI>("MapUI");
+            if (mapUI != null)
+                mapUI.Show();
+            else
+                UIManager.Instance.ShowUI<MapUI>("MapUI");
         }
         else
         {
-            // 节点地图不存在，返回MapUI
-            MapUI mapUI = UIManager.Instance.GetUI<MapUI>("MapUI");
-            if (mapUI != null)
+            // 非 Boss 战 → 返回节点地图继续探索（无关闭按钮）
+            SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
+            if (nodeMapUI != null)
             {
-                mapUI.Show();
+                nodeMapUI.ReopenAfterVictory();
             }
             else
             {
-                // MapUI也不存在，创建新的MapUI
-                UIManager.Instance.ShowUI<MapUI>("MapUI");
+                MapUI mapUI = UIManager.Instance.GetUI<MapUI>("MapUI");
+                if (mapUI != null)
+                    mapUI.Show();
+                else
+                    UIManager.Instance.ShowUI<MapUI>("MapUI");
             }
         }
     }

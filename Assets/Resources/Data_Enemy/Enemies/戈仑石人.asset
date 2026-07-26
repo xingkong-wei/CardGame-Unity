@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10003
   enemyName: "\u6208\u4ED1\u77F3\u4EBA"
-  maxHp: 1000
+  maxHp: 1
   modelPath: Model/Golem
   idleAnim: idle
   hitAnim: hit

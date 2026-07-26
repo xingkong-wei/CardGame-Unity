@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10008
   enemyName: "\u7070\u70EC\u86DB"
-  maxHp: 52
+  maxHp: 26
   modelPath: Model/Hell Creeper-Purple
   idleAnim: Idle
   hitAnim: TakeDamage

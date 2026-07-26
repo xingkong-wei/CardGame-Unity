@@ -1,41 +1,35 @@
 using Map;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening; // 引入 DOTween
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class SlayTheSpireMapUI : UIBase
 {
-    public System.Action OnClosed; // 关闭回调
+    public System.Action OnClosed;
 
     private MapManager mapManager;
     private MapView mapView;
     private Button closeBtn;
-    private CanvasGroup canvasGroup; // 用于控制淡出
-    private int currentIslandIndex = -1;  // 记录当前岛屿
-    private bool isFirstOpen = true;  // 标记是否是第一次打开该地图
-    private List<UIBase> hiddenUIs = new List<UIBase>(); // 记录被隐藏的 UI
-    private bool hideCloseBtn = false; // 是否隐藏关闭按钮（战斗胜利后）
+    private CanvasGroup canvasGroup;
+    private int currentIslandIndex = -1;
+
+    // 观察模式下被隐藏的 UI 列表
+    private List<UIBase> hiddenUIs = new List<UIBase>();
+    // 记录被隐藏 UI 的原始 GameObject 引用（用于 SetActive 恢复，避免触发 Show 逻辑）
+    private List<GameObject> hiddenObjects = new List<GameObject>();
 
     private void Awake()
     {
-        // 获取或添加 CanvasGroup 组件（用于淡出）
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
-        // 查找关闭按钮
         closeBtn = transform.Find("CloseBtn")?.GetComponent<Button>();
         if (closeBtn != null)
-        {
             closeBtn.onClick.AddListener(OnCloseButtonClick);
-        }
-        else
-        {
-            Debug.LogWarning("SlayTheSpireMapUI: 未找到 CloseBtn 按钮");
-        }
 
         TryGetMapComponents();
     }
@@ -50,144 +44,203 @@ public class SlayTheSpireMapUI : UIBase
 
     private void OnCloseButtonClick()
     {
-        CloseWithAnimation(); // 调用带动画的关闭
+        CloseWithAnimation();
     }
 
-    // 带动画的关闭
     private void CloseWithAnimation()
     {
-        // 禁用按钮交互，避免动画期间重复点击
         if (closeBtn != null) closeBtn.interactable = false;
 
-        // 恢复隐藏的UI
-        RestoreHiddenUIs();
-
-        // 播放淡出动画（同时可缩小）
         Sequence seq = DOTween.Sequence();
-        seq.Append(canvasGroup.DOFade(0f, 0.2f));      // 淡出
-        seq.Join(transform.DOScale(0.9f, 0.2f));       // 轻微缩小
+        seq.Append(canvasGroup.DOFade(0f, 0.2f));
+        seq.Join(transform.DOScale(0.9f, 0.2f));
         seq.OnComplete(() =>
         {
-            // 动画完成后，调用基类 Hide 隐藏对象，并触发回调
-            base.Hide(); // 隐藏 GameObject，不销毁
+            if (this == null || gameObject == null) return;
+            base.Hide();
+            RestorePreviousUI();
             OnClosed?.Invoke();
         });
     }
 
-
-    // 重置地图状态（用于重新开始游戏）
     public void ResetMapState()
     {
-        isFirstOpen = true;
+        for (int i = 0; i < 23; i++)
+        {
+            string key = GetMapSaveKey(i);
+            if (PlayerPrefs.HasKey(key))
+                PlayerPrefs.DeleteKey(key);
+        }
+        if (PlayerPrefs.HasKey("Map"))
+            PlayerPrefs.DeleteKey("Map");
+        PlayerPrefs.Save();
     }
 
-    // 重写Show方法，确保UI正确显示
-    public override void Show()
-    {
-        base.Show();
-        transform.SetAsLastSibling();
+    private string GetMapSaveKey(int islandIndex) => $"Map_Island_{islandIndex}";
 
-        // 重置CanvasGroup的alpha值（因为关闭时将其设置为0）
-        if (canvasGroup != null)
+    // ===== 场景1：从 MapUI 选择岛屿进入 =====
+
+    public void EnterNewIsland(int islandIndex)
+    {
+        currentIslandIndex = islandIndex;
+
+        OnClosed = () =>
         {
-            canvasGroup.alpha = 1f;
+            MapUI mapUI = UIManager.Instance.GetUI<MapUI>("MapUI");
+            if (mapUI != null)
+            {
+                mapUI.Show();
+                mapUI.RefreshUnlockState();
+            }
+        };
+
+        // 清除旧数据，生成新地图
+        string key = GetMapSaveKey(islandIndex);
+        if (PlayerPrefs.HasKey(key))
+            PlayerPrefs.DeleteKey(key);
+        PlayerPrefs.Save();
+
+        ResetDisplay();
+        ShowCloseBtn();
+
+        TryGetMapComponents();
+        if (mapManager == null) return;
+
+        mapManager.CurrentMap = null;
+        mapManager.GenerateNewMap();
+        SaveCurrentMap();
+
+        if (MapPlayerTracker.Instance != null)
+            MapPlayerTracker.Instance.Locked = false;
+    }
+
+    // ===== 场景2~4：事件中按 MapBtn 观察地图 =====
+
+    public void OpenForObservation(int islandIndex)
+    {
+        currentIslandIndex = islandIndex;
+
+        // 用 SetActive(false) 隐藏事件UI（避免触发它们的 Show 逻辑）
+        hiddenObjects.Clear();
+        HideObject<FightUI>("FightUI");
+        HideObject<ShopUI>("ShopUI");
+        HideObject<TreasureUI>("TreasureUI");
+        HideObject<RestSiteUI>("RestSiteUI");
+        HideObject<SelectCardUI>("SelectCardUI");
+
+        OnClosed = null;
+
+        ResetDisplay();
+        ShowCloseBtn();
+
+        TryGetMapComponents();
+        if (mapManager == null) return;
+
+        // 优先用内存中的 CurrentMap
+        if (mapManager.CurrentMap != null)
+        {
+            mapView.ShowMap(mapManager.CurrentMap);
+        }
+        else
+        {
+            string key = GetMapSaveKey(islandIndex);
+            if (PlayerPrefs.HasKey(key))
+            {
+                string mapJson = PlayerPrefs.GetString(key);
+                Map.Map map = Newtonsoft.Json.JsonConvert.DeserializeObject<Map.Map>(mapJson);
+                if (map != null)
+                {
+                    mapManager.CurrentMap = map;
+                    mapView.ShowMap(map);
+                }
+            }
         }
 
-        // 重置缩放
-        transform.localScale = Vector3.one;
+        // 锁定节点
+        if (MapPlayerTracker.Instance != null)
+            MapPlayerTracker.Instance.Locked = true;
+    }
 
-        // 恢复关闭按钮交互
+    private void HideObject<T>(string name) where T : UIBase
+    {
+        T ui = UIManager.Instance.GetUI<T>(name);
+        if (ui != null && ui.gameObject.activeSelf)
+        {
+            ui.gameObject.SetActive(false);
+            hiddenObjects.Add(ui.gameObject);
+        }
+    }
+
+    private void RestorePreviousUI()
+    {
+        // 用 SetActive(true) 恢复（不触发 Show 逻辑，避免商店刷新等）
+        foreach (GameObject obj in hiddenObjects)
+        {
+            if (obj != null)
+                obj.SetActive(true);
+        }
+        hiddenObjects.Clear();
+    }
+
+    // ===== 场景5：非Boss胜利后，节点地图重新显示 =====
+
+    public void ReopenAfterVictory()
+    {
+        // 重置显示状态
+        ResetDisplay();
+        HideCloseBtn();
+
+        // 刷新地图视图（确保节点正确显示）
+        TryGetMapComponents();
+        if (mapManager != null && mapManager.CurrentMap != null && mapView != null)
+        {
+            mapView.ShowMap(mapManager.CurrentMap);
+        }
+
+        if (MapPlayerTracker.Instance != null)
+            MapPlayerTracker.Instance.Locked = false;
+    }
+
+    // ===== 辅助方法 =====
+
+    private void ResetDisplay()
+    {
+        if (canvasGroup != null)
+            canvasGroup.alpha = 1f;
+        transform.localScale = Vector3.one;
+        // 确保 GameObject 是激活状态
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+    }
+
+    private void ShowCloseBtn()
+    {
         if (closeBtn != null)
         {
             closeBtn.interactable = true;
+            closeBtn.gameObject.SetActive(true);
         }
+    }
 
-        // 如果需要隐藏关闭按钮
-        if (hideCloseBtn && closeBtn != null)
+    private void HideCloseBtn()
+    {
+        if (closeBtn != null)
         {
             closeBtn.gameObject.SetActive(false);
         }
     }
 
-    // 设置是否隐藏关闭按钮
-    public void SetHideCloseBtn(bool hide)
+    private void SaveCurrentMap()
     {
-        hideCloseBtn = hide;
-        if (closeBtn != null)
-        {
-            closeBtn.gameObject.SetActive(!hide);
-        }
+        if (mapManager == null || mapManager.CurrentMap == null) return;
+        string json = Newtonsoft.Json.JsonConvert.SerializeObject(mapManager.CurrentMap, Newtonsoft.Json.Formatting.Indented,
+            new Newtonsoft.Json.JsonSerializerSettings { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+        PlayerPrefs.SetString(GetMapSaveKey(currentIslandIndex), json);
+        PlayerPrefs.Save();
     }
 
-    public void SetIslandIndex(int index)
-    {
-        currentIslandIndex = index;  // 记录
+    // ===== 节点点击 =====
 
-        // 重置CanvasGroup的alpha值（因为关闭时将其设置为0）
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 1f;
-        }
-
-        // 重置缩放
-        transform.localScale = Vector3.one;
-
-        // 恢复关闭按钮交互和显示（正常打开时显示关闭按钮）
-        if (closeBtn != null)
-        {
-            closeBtn.interactable = true;
-            closeBtn.gameObject.SetActive(true);
-            hideCloseBtn = false; // 重置为不隐藏
-        }
-
-        // 隐藏战斗UI（如果战斗进行中）
-        HideFightUIs();
-
-        // 获取 MapManager
-        if (mapManager == null)
-            mapManager = GetComponentInChildren<MapManager>();
-
-        if (mapManager != null)
-        {
-            // 检查地图是否已经被访问过（有节点在path中）
-            bool hasVisitedNodes = mapManager.CurrentMap != null && mapManager.CurrentMap.path.Count > 0;
-
-            // 检查是否有保存的地图数据
-            bool hasSavedMap = PlayerPrefs.HasKey("Map");
-
-            if (hasVisitedNodes || hasSavedMap)
-            {
-                // 已经有节点被访问过或保存了地图数据，保持当前地图状态
-                MapPlayerTracker.Instance.Locked = true; // 锁定地图，不允许点击
-                isFirstOpen = false; // 确保标记为非首次打开
-            }
-            else if (isFirstOpen)
-            {
-                // 没有访问记录且是第一次打开，生成新地图
-                // 清除之前保存的地图数据
-                if (PlayerPrefs.HasKey("Map"))
-                {
-                    PlayerPrefs.DeleteKey("Map");
-                    PlayerPrefs.Save();
-                }
-
-                // 生成新地图
-                mapManager.GenerateNewMap();
-                isFirstOpen = false;
-            }
-            else
-            {
-                // 不是第一次打开但没有访问记录（战斗中打开），保持地图状态
-                MapPlayerTracker.Instance.Locked = true; // 锁定地图，不允许点击
-            }
-        }
-        else
-        {
-            Debug.LogWarning("SlayTheSpireMapUI: 未找到 MapManager 组件");
-        }
-    }
-
-    // 节点被点击时触发战斗
     public void OnNodeClicked(MapNode node)
     {
         if (node == null) return;
@@ -211,6 +264,8 @@ public class SlayTheSpireMapUI : UIBase
 
         if (currentIslandIndex >= 0 && IsBossNode(node))
         {
+            RoleManager.Instance.MarkIslandCompleted(currentIslandIndex);
+
             int nextIsland = currentIslandIndex + 1;
             if (!RoleManager.Instance.IsIslandUnlocked(nextIsland))
             {
@@ -219,49 +274,90 @@ public class SlayTheSpireMapUI : UIBase
             }
         }
 
-        // RestSite 节点特殊处理
         if (node.Node.nodeType == NodeType.RestSite)
         {
             UIManager.Instance.ShowUI<RestSiteUI>("RestSiteUI");
             return;
         }
 
-        // Store 节点特殊处理
         if (node.Node.nodeType == NodeType.Store)
         {
-            Hide(); // 先隐藏地图
+            Hide();
             ShopUI shopUI = UIManager.Instance.ShowUI<ShopUI>("ShopUI") as ShopUI;
             if (shopUI != null)
                 shopUI.OnClosed += OnShopClosed;
             return;
         }
 
-        // Treasure 节点特殊处理
         if (node.Node.nodeType == NodeType.Treasure)
         {
             Hide();
             TreasureUI treasureUI = UIManager.Instance.ShowUI<TreasureUI>("TreasureUI") as TreasureUI;
             if (treasureUI != null)
-                treasureUI.OnClosed += () => { Show(); mapView?.SetAttainableNodes(); };
+                treasureUI.OnClosed += () =>
+                {
+                    ResetDisplay();
+                    TryGetMapComponents();
+                    if (mapManager != null && mapManager.CurrentMap != null && mapView != null)
+                        mapView.ShowMap(mapManager.CurrentMap);
+                };
+            return;
+        }
+
+        if (node.Node.nodeType == NodeType.Mystery)
+        {
+            HandleMysteryNode();
             return;
         }
 
         FightManager.Instance.SetCurrentIslandIndex(currentIslandIndex);
         FightManager.Instance.ChangeType(FightType.Init);
 
-        // 保存地图状态
-        if (mapManager != null)
+        SaveCurrentMap();
+    }
+
+    private void HandleMysteryNode()
+    {
+        MysteryResult result = MysteryNodeResolver.Instance.RollResult();
+        MysteryNodeResolver.Instance.RecordResult(result);
+
+        switch (result)
         {
-            mapManager.SaveMap();
+            case MysteryResult.Monster:
+                FightManager.Instance.SetCurrentIslandIndex(currentIslandIndex);
+                FightManager.Instance.ChangeType(FightType.Init);
+                break;
+
+            case MysteryResult.Shop:
+                Hide();
+                ShopUI shopUI = UIManager.Instance.ShowUI<ShopUI>("ShopUI") as ShopUI;
+                if (shopUI != null)
+                    shopUI.OnClosed += OnShopClosed;
+                break;
+
+            case MysteryResult.Treasure:
+                Hide();
+                TreasureUI treasureUI = UIManager.Instance.ShowUI<TreasureUI>("TreasureUI") as TreasureUI;
+                if (treasureUI != null)
+                    treasureUI.OnClosed += () =>
+                    {
+                        ResetDisplay();
+                        TryGetMapComponents();
+                        if (mapManager != null && mapManager.CurrentMap != null && mapView != null)
+                            mapView.ShowMap(mapManager.CurrentMap);
+                    };
+                break;
         }
     }
 
     private void OnShopClosed()
     {
-        // 商店关闭后重新显示地图
-        Show();
-        if (mapView != null)
-            mapView.SetAttainableNodes();
+        ResetDisplay();
+        TryGetMapComponents();
+        if (mapManager != null && mapManager.CurrentMap != null && mapView != null)
+            mapView.ShowMap(mapManager.CurrentMap);
+        if (MapPlayerTracker.Instance != null)
+            MapPlayerTracker.Instance.Locked = false;
     }
 
     private bool IsBossNode(MapNode node)
@@ -276,19 +372,13 @@ public class SlayTheSpireMapUI : UIBase
         return node.Node.point == bossNode.point;
     }
 
-    // 如果外部直接调用 Close，也使用动画关闭（可选）
     public override void Close()
     {
-        // 开始播放关闭动画（原有逻辑）
         StartCoroutine(CloseWithAnimationCoroutine());
     }
 
     private IEnumerator CloseWithAnimationCoroutine()
     {
-        // 恢复隐藏的UI
-        RestoreHiddenUIs();
-
-        // 淡出动画（或你的其他动画）
         CanvasGroup cg = GetComponent<CanvasGroup>();
         if (cg != null)
         {
@@ -304,54 +394,9 @@ public class SlayTheSpireMapUI : UIBase
             cg.alpha = 0;
         }
 
-        // 动画完成，执行隐藏而不是销毁
-        base.Hide();           // 隐藏 GameObject，不销毁
-        OnClosed?.Invoke();    // 触发回调（让 MapUI 重新显示）
-    }
-
-    private bool IsIslandCompleted()
-    {
-        if (mapManager == null || mapManager.CurrentMap == null)
-            return false;
-
-        Map.Map currentMap = mapManager.CurrentMap;  // 明确使用 Map.Map 类型
-
-        // 获取Boss节点
-        Map.Node bossNode = currentMap.GetBossNode();
-        if (bossNode == null)
-            return false;
-
-        // 检查路径中是否包含Boss节点的位置
-        return currentMap.path.Any(p => p.Equals(bossNode.point));
-    }
-
-    // 隐藏战斗相关的UI
-    private void HideFightUIs()
-    {
-        hiddenUIs.Clear();
-
-        // 隐藏FightUI
-        FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-        if (fightUI != null && fightUI.gameObject.activeSelf)
-        {
-            hiddenUIs.Add(fightUI);
-            fightUI.Hide();
-        }
-
-        // 如果需要，可以添加其他战斗相关的UI
-        // 例如：PlotUI, CardCollectionUI等
-    }
-
-    // 恢复隐藏的UI
-    private void RestoreHiddenUIs()
-    {
-        foreach (UIBase ui in hiddenUIs)
-        {
-            if (ui != null)
-            {
-                ui.Show();
-            }
-        }
-        hiddenUIs.Clear();
+        if (this == null || gameObject == null) yield break;
+        base.Hide();
+        RestorePreviousUI();
+        OnClosed?.Invoke();
     }
 }

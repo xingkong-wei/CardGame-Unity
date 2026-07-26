@@ -71,7 +71,7 @@ public class ShopUI : UIBase
         }
 
         // Invemtory 按钮
-        if (mapBtn != null) mapBtn.onClick.AddListener(() => UIManager.Instance.ShowUI<MapUI>("MapUI"));
+        if (mapBtn != null) mapBtn.onClick.AddListener(FightUI.OpenNodeMapForObservation);
         if (plotBtn != null) plotBtn.onClick.AddListener(() => UIManager.Instance.ShowUI<PlotUI>("PlotUI"));
         if (cardBtn != null) cardBtn.onClick.AddListener(() => CardCollectionUI.ShowCardList(CardListType.Collection, "集卡簿"));
         if (setBtn != null) setBtn.onClick.AddListener(() =>
@@ -153,7 +153,27 @@ public class ShopUI : UIBase
             if (r.rarity == RelicRarity.Starter) continue;
             pool.Add(r);
         }
-        return PickRandom(pool, count);
+        return PickWeightedRandom(pool, count);
+    }
+
+    /// <summary>
+    /// 按权重不放回随机选取（已持有遗物权重降低）
+    /// </summary>
+    private List<RelicData> PickWeightedRandom(List<RelicData> pool, int count)
+    {
+        List<RelicData> result = new List<RelicData>();
+        List<RelicData> remaining = new List<RelicData>(pool);
+
+        for (int i = 0; i < count && remaining.Count > 0; i++)
+        {
+            RelicData picked = PotionDropManager.PickWeightedRelic(remaining);
+            if (picked != null)
+            {
+                result.Add(picked);
+                remaining.Remove(picked);
+            }
+        }
+        return result;
     }
 
     private List<PotionData> PickRandomPotions(PotionData[] all, int count)
