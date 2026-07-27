@@ -16,7 +16,7 @@ MonoBehaviour:
   description: "\u53F2\u83B1\u59C6\u653B\u51FB\u7279\u6548"
   attackEffects:
   - effectName: attack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Bang
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: 0}

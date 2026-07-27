@@ -16,7 +16,7 @@ MonoBehaviour:
   description: "\u7070\u70EC\u86DB\u653B\u51FB\u7279\u6548"
   attackEffects:
   - effectName: BiteAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Bang
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: 0}
@@ -25,7 +25,7 @@ MonoBehaviour:
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
   - effectName: ProjectileAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions/NukeConeExplosion/NukeConeExplosionGreen
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Explosions/NukeExplosion/NukeExplosionGreen
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0, y: 1, z: 1}
@@ -34,7 +34,7 @@ MonoBehaviour:
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
   - effectName: ClawAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Bang
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: 0}
@@ -43,7 +43,8 @@ MonoBehaviour:
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
   - effectName: BreathAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Flamethrower/Soft/Alpha Blend/FlamethrowerAlphaBlendGreen
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Flamethrower/Soft/Alpha
+      Blend/FlamethrowerAlphaBlendGreen
     spawnPositionType: 4
     spawnTransformPath: RigMouthGizmo
     positionOffset: {x: 0, y: -0.1, z: 0}

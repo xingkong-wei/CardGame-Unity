@@ -22,7 +22,7 @@ MonoBehaviour:
   bgIcon: Icon/CardBg/RedCard
   icon: Icon/AttackCard/45
   expend: 1
-  arg0: 6
+  arg0: 60
   effects: Effects/GreenBloodExplosion
   damageSource: 0
   damagePercent: 1

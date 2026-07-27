@@ -23,14 +23,14 @@ MonoBehaviour:
   attackAnim: BiteAttack=ProjectileAttack=ClawAttack=BreathAttack
   attackVariance: 0.2
   defense: 6
-  defenseVariance: 0.15
   defenseAnim: CastSpell
-  defenseEffectPath: Epic Toon FX/Prefabs/Interactive/Level Up/Cylinder/LevelupCylinderBlue
+  defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Nova/MagicNovaYellow
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     effectScale: 1.1
     duration: 1.5
+  defenseVariance: 0.15
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
   flightIdleAnim: 
   flightHitAnim: 
   healAnim: CastSpell
-  healEffectPath: Epic Toon FX/Prefabs/Interactive/Level Up/Cylinder/LevelupCylinderGreen
+  healEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Nova/MagicNovaGreen
   healEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: 0, y: 0, z: 0}

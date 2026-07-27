@@ -130,71 +130,71 @@ public class EnemyManager
     {
         enemyList = new List<Enemy>();
 
-        // 根据节点类型确定需要加载的敌人等级
-        EnemyTier targetTier = NodeTypeToEnemyTier(nodeType);
+        // 根据节点类型确定需要的关卡分类
+        LevelCategory targetCategory = NodeTypeToLevelCategory(nodeType);
 
         if (levelToIslandMap.Count == 0)
             InitializeLevelToIslandMap();
 
         LoadCompletedLevels();
 
+        // 收集该岛屿中匹配分类的关卡
         List<int> availableLevels = new List<int>();
         List<int> weights = new List<int>();
 
         if (islandLevelsMap.ContainsKey(islandIndex))
         {
-            availableLevels = islandLevelsMap[islandIndex];
-            foreach (int levelId in availableLevels)
+            foreach (int levelId in islandLevelsMap[islandIndex])
             {
+                // 按关卡分类筛选（在关卡级别筛选，不在敌人级别）
+                LevelConfig cfg = LevelConfigManager.Instance.GetLevelById(levelId);
+                if (cfg == null || cfg.category != targetCategory)
+                    continue;
+
                 int weight = levelWeights.ContainsKey(levelId) ? levelWeights[levelId] : 100;
+                availableLevels.Add(levelId);
                 weights.Add(weight);
             }
         }
 
         if (availableLevels.Count == 0)
         {
-            Debug.LogError($"岛屿 {islandIndex} 没有可用的关卡");
+            Debug.LogWarning($"岛屿 {islandIndex} 没有可用的 {targetCategory} 关卡");
             return;
         }
 
         int randomLevelId = GetWeightedRandom(availableLevels, weights);
         SaveCompletedLevel(randomLevelId);
 
-        // 优先使用 ScriptableObject 配置
+        // 加载关卡配置并生成敌人（不按敌人 tier 二次筛选）
         LevelConfig levelCfg = LevelConfigManager.Instance.GetLevelById(randomLevelId);
         if (levelCfg != null)
         {
-            SpawnEnemiesFromConfig(levelCfg, targetTier);
+            SpawnEnemiesFromConfig(levelCfg);
         }
         else
         {
-            SpawnEnemiesFromTxt(randomLevelId.ToString(), targetTier);
+            SpawnEnemiesFromTxt(randomLevelId.ToString());
         }
     }
 
     /// <summary>
-    /// 节点类型 → 敌人等级映射
+    /// 节点类型 → 关卡分类映射
     /// </summary>
-    private EnemyTier NodeTypeToEnemyTier(Map.NodeType nodeType)
+    private LevelCategory NodeTypeToLevelCategory(Map.NodeType nodeType)
     {
         switch (nodeType)
         {
-            case Map.NodeType.EliteEnemy:
-                return EnemyTier.Elite;
-            case Map.NodeType.Boss:
-                return EnemyTier.Boss;
-            case Map.NodeType.MinorEnemy:
-            case Map.NodeType.Mystery:
-                return EnemyTier.Normal;
-            default:
-                return EnemyTier.Normal;
+            case Map.NodeType.EliteEnemy: return LevelCategory.Elite;
+            case Map.NodeType.Boss:       return LevelCategory.Boss;
+            default:                      return LevelCategory.Normal;
         }
     }
 
     /// <summary>
-    /// 从 ScriptableObject 关卡配置生成敌人（按等级筛选）
+    /// 从 ScriptableObject 关卡配置生成敌人
     /// </summary>
-    private void SpawnEnemiesFromConfig(LevelConfig cfg, EnemyTier targetTier)
+    private void SpawnEnemiesFromConfig(LevelConfig cfg)
     {
         foreach (var entry in cfg.enemies)
         {
@@ -204,19 +204,14 @@ public class EnemyManager
                 Debug.LogError($"找不到敌人数据 ID: {entry.enemyId}");
                 continue;
             }
-
-            // 按敌人等级筛选：只加载匹配等级的敌人
-            if (enemyDataSO.tier != targetTier)
-                continue;
-
             SpawnEnemy(enemyDataSO, entry.position);
         }
     }
 
     /// <summary>
-    /// 从旧 txt 格式生成敌人（兼容，按等级筛选）
+    /// 从旧 txt 格式生成敌人（兼容）
     /// </summary>
-    private void SpawnEnemiesFromTxt(string levelId, EnemyTier targetTier)
+    private void SpawnEnemiesFromTxt(string levelId)
     {
         Dictionary<string, string> data = GameConfigManager.Instance.GetLevelById(levelId);
         if (data == null)
@@ -239,10 +234,6 @@ public class EnemyManager
                 Debug.LogError($"找不到敌人数据 ID: {enemyId}");
                 continue;
             }
-
-            // 按敌人等级筛选
-            if (enemyDataSO.tier != targetTier)
-                continue;
 
             float x = float.Parse(posArr[0]);
             float y = float.Parse(posArr[1]);

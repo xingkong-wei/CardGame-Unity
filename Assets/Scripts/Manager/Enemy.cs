@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
     private const int FORCE_ATTACK_THRESHOLD = 3;
 
     // 防御特效路径
-    private string defenseEffectPath = "Effects/Magic circle 18";
+    private string defenseEffectPath = "Effects/MagicEffect/Prefabs/Magic circle 18";
 
     // 回血特效路径
     private string healEffectPath;
@@ -250,7 +250,7 @@ public class Enemy : MonoBehaviour
         flightHitAnimName = string.IsNullOrEmpty(enemyData.flightHitAnim) ? hitAnimName : enemyData.flightHitAnim;
 
         // 防御特效
-        defenseEffectPath = string.IsNullOrEmpty(enemyData.defenseEffectPath) ? "Effects/Magic circle 18" : enemyData.defenseEffectPath;
+        defenseEffectPath = string.IsNullOrEmpty(enemyData.defenseEffectPath) ? "Effects/MagicEffect/Prefabs/Magic circle 18" : enemyData.defenseEffectPath;
 
         // 回血特效
         healEffectPath = enemyData.healEffectPath;
@@ -362,7 +362,7 @@ public class Enemy : MonoBehaviour
         {
             new AttackEffectData {
                 effectName = "Bite Attack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 12",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 12",
                 spawnPositionType = 0,
                 effectScale = 1.5f,
                 delayTime = 0.3f,
@@ -371,7 +371,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "Breath Attack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 13",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 13",
                 spawnPositionType = 2,
                 effectScale = 2f,
                 delayTime = 0.4f,
@@ -379,7 +379,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "Head Attack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 14",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 14",
                 spawnPositionType = 1,
                 effectScale = 1.5f,
                 delayTime = 0.3f,
@@ -387,7 +387,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "ProjectileAttack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 15",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 15",
                 spawnPositionType = 1,
                 effectScale = 1f,
                 delayTime = 0.2f,
@@ -395,7 +395,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "FireBreathAttack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 18",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 18",
                 spawnPositionType = 2,
                 effectScale = 2.5f,
                 delayTime = 0.5f,
@@ -403,7 +403,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "CastSpell",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 16",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 16",
                 spawnPositionType = 0,
                 effectScale = 2f,
                 delayTime = 0.2f,
@@ -412,7 +412,7 @@ public class Enemy : MonoBehaviour
             },
             new AttackEffectData {
                 effectName = "attack",
-                effectPrefabPath = "MagicEffect/Prefabs/Magic circle 12",
+                effectPrefabPath = "Effects/MagicEffect/Prefabs/Magic circle 12",
                 spawnPositionType = 0,
                 effectScale = 1f,
                 delayTime = 0.3f,

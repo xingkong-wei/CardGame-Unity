@@ -15,6 +15,16 @@ public class EnemySpawnEntry
 }
 
 /// <summary>
+/// 关卡分类（对应节点类型）
+/// </summary>
+public enum LevelCategory
+{
+    Normal, // 普通关卡（小怪节点、？节点）
+    Elite,  // 精英关卡（精英节点）
+    Boss    // Boss关卡（Boss节点）
+}
+
+/// <summary>
 /// 关卡配置 ScriptableObject（替代 level.txt）
 /// 在 Unity 中右键 → Create → Level/LevelConfig 创建
 /// </summary>
@@ -30,6 +40,10 @@ public class LevelConfig : ScriptableObject
 
     [Tooltip("所属岛屿索引")]
     public int islandIndex;
+
+    [Header("关卡分类")]
+    [Tooltip("关卡类型：普通/精英/Boss，对应地图节点类型")]
+    public LevelCategory category = LevelCategory.Normal;
 
     [Header("敌人配置")]
     [Tooltip("本关卡中的所有敌人")]

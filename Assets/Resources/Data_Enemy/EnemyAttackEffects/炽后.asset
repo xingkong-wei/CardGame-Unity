@@ -16,7 +16,7 @@ MonoBehaviour:
   description: 
   attackEffects:
   - effectName: ProjectileAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions/NukeConeExplosion/NukeConeExplosionFire
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Explosions/NukeExplosion/NukeExplosionFire
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: -0.4, y: 0.8, z: 1}
@@ -25,7 +25,7 @@ MonoBehaviour:
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
   - effectName: ClawAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions/NukeConeExplosion/NukeConeExplosionFire
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Explosions/NukeExplosion/NukeExplosionFire
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0.4, y: 0.8, z: 1}

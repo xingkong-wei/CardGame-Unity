@@ -23,14 +23,14 @@ MonoBehaviour:
   attackAnim: BiteAttack=FireBreathAttack=ProjectileAttack
   attackVariance: 0.15
   defense: 6
-  defenseVariance: 0.15
   defenseAnim: CastSpell
-  defenseEffectPath: MagicEffect/Prefabs/Magic circle 14
+  defenseEffectPath: Effects/MagicEffect/Magic circle 14
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 1
     duration: 2
+  defenseVariance: 0.15
   flightAttackAnim: FlyBiteAttackLow=FlyBiteAttackHigh=FlyFireBreathAttackLow=FlyFireBreathAttackHigh=FlyProjectileAttackLow=FlyProjectileAttackHigh
   flightDefenseAnim: FlyCastSpell
   useFlightAnim: 1
@@ -38,7 +38,7 @@ MonoBehaviour:
   flightIdleAnim: FlyIdle
   flightHitAnim: FlyTakeDamage
   healAnim: CastSpell
-  healEffectPath: MagicEffect/Prefabs/Magic circle 17
+  healEffectPath: Effects/MagicEffect/Magic circle 14
   healEffectParams:
     positionOffset: {x: 0, y: 0.1, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
