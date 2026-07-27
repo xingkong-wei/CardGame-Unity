@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 58
   modelPath: Model/Succubus-Red
   tier: 1
+  scriptName: SuccubusQueenEnemy
   idleAnim: FlyIdle
   hitAnim: TakeDamage
   attack: 10
@@ -24,6 +25,7 @@ MonoBehaviour:
   attackVariance: 0.15
   defense: 14
   defenseAnim: CastSpell01
+  initialDefense: 0
   defenseEffectPath: Effects/MagicEffect/Magic circle 19
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}

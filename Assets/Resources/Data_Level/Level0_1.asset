@@ -15,6 +15,7 @@ MonoBehaviour:
   levelId: 1
   levelName: 1
   islandIndex: 0
+  category: 0
   enemies:
   - enemyId: 10000
     position: {x: 1.5, y: 0, z: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 24
   modelPath: Model/Golem
   tier: 0
+  scriptName: GolemEnemy
   idleAnim: idle
   hitAnim: hit
   attack: 12
@@ -24,6 +25,7 @@ MonoBehaviour:
   attackVariance: 0.2
   defense: 0
   defenseAnim: attack
+  initialDefense: 0
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}

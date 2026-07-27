@@ -104,6 +104,7 @@
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXFireProjectile.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\HighlightExample.cs" />
+    <Compile Include="Assets\Scripts\Enemy\BallDragonEnemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\SeparatorExample.cs" />
     <Compile Include="Assets\Scripts\Fight\Fight_Win.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Assets\Scripts\Potion\Uncommon\SovereignGlarePotion.cs" />
     <Compile Include="Assets\Scripts\Data\AttackEffectConfig.cs" />
     <Compile Include="Assets\OneLine\RectEx\ColumnExtensions.cs" />
+    <Compile Include="Assets\Scripts\Enemy\RiftDragonflyEnemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Card\AbilityCard\Power.cs" />
     <Compile Include="Assets\Scripts\UI\Window\ElementSelectUI.cs" />
@@ -179,7 +181,9 @@
     <Compile Include="Assets\Scripts\Map\MapConfig.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\BerserkPotion.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\NestedArrayExample.cs" />
+    <Compile Include="Assets\Scripts\Enemy\MoltenColossusEnemy.cs" />
     <Compile Include="Assets\Scripts\UI\Window\LossUI.cs" />
+    <Compile Include="Assets\Scripts\Enemy\SuccubusQueenEnemy.cs" />
     <Compile Include="Assets\Scripts\UI\Window\RewardInterfaceUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\FeatheringPotion.cs" />
@@ -191,11 +195,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\Scripts\UI\Window\FightUI.cs" />
+    <Compile Include="Assets\Scripts\Enemy\GolemEnemy.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\MagicMissileCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\ArrayLengthAttribute.cs" />
     <Compile Include="Assets\Scripts\Data\PotionData.cs" />
     <Compile Include="Assets\Scripts\Card\InspireCard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
+    <Compile Include="Assets\Scripts\Enemy\SlimeEnemy.cs" />
     <Compile Include="Assets\Scripts\Relics\ThunderHorn.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\FortifyPotion.cs" />
@@ -242,6 +248,7 @@
     <Compile Include="Assets\Scripts\Potion\Common\FirePotion.cs" />
     <Compile Include="Assets\Scripts\UI\Window\StoryUI.cs" />
     <Compile Include="Assets\Scripts\UI\Window\ShopUI.cs" />
+    <Compile Include="Assets\Scripts\Enemy\AshSpiderEnemy.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\SpiritBindEssencePotion.cs" />
     <Compile Include="Assets\Scripts\Fight\FightInit.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
@@ -256,6 +263,7 @@
     <Compile Include="Assets\OneLine\OneLine\Example\Benchmark\Scripts\SeparateFieldsBenchmark.cs" />
     <Compile Include="Assets\OneLine\RectEx\RowExtensions.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\RootArrayExample.cs" />
+    <Compile Include="Assets\Scripts\Enemy\TurtleShellEnemy.cs" />
     <Compile Include="Assets\Scripts\UI\Window\MapUI.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\GuardianElixirPotion.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyDataManager.cs" />
@@ -285,6 +293,7 @@
     <Compile Include="Assets\Scripts\Data\GameConfig.cs" />
     <Compile Include="Assets\Scripts\Relics\ArchmagusEye.cs" />
     <Compile Include="Assets\Scripts\Map\MapViewUI.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\MucusCard.cs" />
     <Compile Include="Assets\Scripts\Map\DottedLineRenderer.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\BottledSpritePotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\DuplicatePotion.cs" />
@@ -326,6 +335,7 @@
     <Compile Include="Assets\Scripts\UI\Window\RestSiteUI.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FlamestrikeCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\ExtendedGenericTest.cs" />
+    <Compile Include="Assets\Scripts\Enemy\RockImpEnemy.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCardItem.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\HideLabelAttribute.cs" />
     <Compile Include="Assets\Scripts\Relics\FrostHeart.cs" />
@@ -337,8 +347,10 @@
     <Compile Include="Assets\Scripts\UI\UIBase.cs" />
     <Compile Include="Assets\MagicEffect\Demo magiс circles Vol 2\CameraHolder.cs" />
     <Compile Include="Assets\Scripts\Card\AbilityCard\SpiritFocusCard.cs" />
+    <Compile Include="Assets\Scripts\Enemy\FlameDragonEnemy.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\Nested\NestedSimpleExample.cs" />
     <Compile Include="Assets\Scripts\Relics\FusionFurnace.cs" />
+    <Compile Include="Assets\Scripts\Enemy\CarbonBeastEnemy.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\SkillPotion.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\ChainLightningCard.cs" />
     <Compile Include="Assets\Epic Toon FX\Scripts\ETFXPitchRandomizer.cs" />

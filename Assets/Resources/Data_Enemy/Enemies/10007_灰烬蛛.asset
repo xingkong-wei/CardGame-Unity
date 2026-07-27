@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 44
   modelPath: Model/Hell Creeper-Purple
   tier: 1
+  scriptName: AshSpiderEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
   attack: 18
@@ -24,6 +25,7 @@ MonoBehaviour:
   attackVariance: 0.2
   defense: 6
   defenseAnim: CastSpell
+  initialDefense: 0
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Nova/MagicNovaYellow
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}

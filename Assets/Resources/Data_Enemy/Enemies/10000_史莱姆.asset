@@ -16,13 +16,15 @@ MonoBehaviour:
   enemyName: "\u53F2\u83B1\u59C6"
   maxHp: 15
   modelPath: Model/Slime
+  initialDefense: 0
   tier: 0
+  scriptName: SlimeEnemy
   idleAnim: idle
   hitAnim: hit
   attack: 7
   attackAnim: attack
   attackVariance: 0.2
-  defense: 0
+  defense: 5
   defenseAnim: attack
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:

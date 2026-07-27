@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 72
   modelPath: Model/Fire Dragon-Red
   tier: 2
+  scriptName: FlameDragonEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
   attack: 22
@@ -24,6 +25,7 @@ MonoBehaviour:
   attackVariance: 0.15
   defense: 6
   defenseAnim: CastSpell
+  initialDefense: 0
   defenseEffectPath: Effects/MagicEffect/Magic circle 14
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}

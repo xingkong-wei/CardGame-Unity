@@ -19,10 +19,16 @@ public class EnemyData : ScriptableObject
     [Tooltip("最大生命值")]
     public int maxHp;
     public string modelPath;
+    [Tooltip("登场时自带的护盾值")]
+    public int initialDefense;
 
     [Header(" 等级分类 ")]
     [Tooltip("敌人等级：普通/精英/Boss")]
     public EnemyTier tier = EnemyTier.Normal;
+
+    [Header(" 脚本绑定 ")]
+    [Tooltip("敌人专属脚本类名（如 SlimeEnemy / TurtleShellEnemy），留空使用基类 Enemy")]
+    public string scriptName;
 
     [Header(" 动画 - 通用 ")]
     public string idleAnim;
@@ -37,14 +43,15 @@ public class EnemyData : ScriptableObject
     public float attackVariance = 0.2f;
 
     [Header(" 防御配置 ")]
-    [Tooltip("基础防御力（实际值为此值的 80%~120%）")]
+    [Tooltip("防御动作时获得的护盾值（实际值为此值的 80%~120%）")]
     public int defense;
     public string defenseAnim;
     public string defenseEffectPath;
     public EffectParams defenseEffectParams = new EffectParams();
     [Range(0f, 1f)]
-    [Tooltip("防御力随机波动比例（0=固定，0.2=±20%）")]
+    [Tooltip("护盾随机波动比例（0=固定，0.2=±20%）")]
     public float defenseVariance = 0.2f;
+    
 
     [Header(" 飞行配置 ")]
     public string flightAttackAnim;

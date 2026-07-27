@@ -244,7 +244,7 @@ public class EnemyManager
     }
 
     /// <summary>
-    /// 生成单个敌人
+    /// 生成单个敌人（通过 scriptName 字段反射创建子类实例）
     /// </summary>
     private void SpawnEnemy(EnemyData data, Vector3 position)
     {
@@ -256,7 +256,17 @@ public class EnemyManager
         }
 
         GameObject obj = Object.Instantiate(enemyPrefab);
-        Enemy enemy = obj.AddComponent<Enemy>();
+
+        // 通过 scriptName 反射创建敌人子类，未指定则使用基类 Enemy
+        System.Type enemyType = typeof(Enemy);
+        if (!string.IsNullOrEmpty(data.scriptName))
+        {
+            System.Type resolvedType = System.Type.GetType(data.scriptName);
+            if (resolvedType != null && typeof(Enemy).IsAssignableFrom(resolvedType))
+                enemyType = resolvedType;
+        }
+
+        Enemy enemy = (Enemy)obj.AddComponent(enemyType);
         enemy.Init(data);
         enemyList.Add(enemy);
         obj.transform.position = position;

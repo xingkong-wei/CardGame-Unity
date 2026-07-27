@@ -16,13 +16,15 @@ MonoBehaviour:
   enemyName: "\u6F6E\u606F\u9F9F"
   maxHp: 20
   modelPath: Model/TurtleShell
+  initialDefense: 5
   tier: 0
+  scriptName: TurtleShellEnemy
   idleAnim: idle
   hitAnim: hit
   attack: 6
   attackAnim: attack
   attackVariance: 0.2
-  defense: 10
+  defense: 5
   defenseAnim: attack
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:

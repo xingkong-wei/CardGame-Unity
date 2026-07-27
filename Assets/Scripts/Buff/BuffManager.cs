@@ -305,6 +305,13 @@ public class BuffManager
             RemoveStatus(StatusType.Weak, 1);
         }
 
+        // 缩小：回合结束时减少一层
+        int shrink = GetStack(StatusType.Shrink);
+        if (shrink > 0)
+        {
+            RemoveStatus(StatusType.Shrink, 1);
+        }
+
         // 金属化
         int metallicize = GetStack(StatusType.Metallicize);
         if (metallicize > 0)
@@ -371,6 +378,11 @@ public class BuffManager
         int weak = GetStack(StatusType.Weak);
         if (weak > 0)
             modifiedDamage = Mathf.CeilToInt(modifiedDamage * (1f - weak * 0.25f));
+
+        // 缩小：每层减少30%伤害（乘法叠加）
+        int shrink = GetStack(StatusType.Shrink);
+        if (shrink > 0)
+            modifiedDamage = Mathf.CeilToInt(modifiedDamage * 0.7f);
 
         return modifiedDamage;
     }

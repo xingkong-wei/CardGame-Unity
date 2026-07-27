@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: 3
   levelName: 3
-  islandIndex: 0
+  islandIndex: 1
+  category: 0
   enemies:
   - enemyId: 10002
     position: {x: 1.5, y: 0, z: 2}
