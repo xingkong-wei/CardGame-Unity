@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451b49c1e33f27941831c97795f79b4f, type: 3}
+  m_Name: "10009_\u7194\u6838\u5DE8\u50CF"
+  m_EditorClassIdentifier: 
+  id: 10009
+  enemyName: "\u7194\u6838\u5DE8\u50CF"
+  maxHp: 80
+  modelPath: Model/Fire Demon-Red
+  tier: 2
+  idleAnim: Idle
+  hitAnim: TakeDamage
+  attack: 17
+  attackAnim: MeleeAttack01=MeleeAttack02=ShockwaveAttack=FireBreathAttack=CrushAttack
+  attackVariance: 0.15
+  defense: 25
+  defenseVariance: 0.15
+  defenseAnim: CastSpell
+  defenseEffectPath: MagicEffect/Prefabs/Magic circle 14
+  defenseEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 1
+    duration: 2
+  flightAttackAnim: 
+  flightDefenseAnim: 
+  useFlightAnim: 0
+  flightThreshold: 0
+  flightIdleAnim: 
+  flightHitAnim: 
+  healAnim: CastSpell
+  healEffectPath: MagicEffect/Prefabs/Magic circle 14
+  healEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 1
+    duration: 2

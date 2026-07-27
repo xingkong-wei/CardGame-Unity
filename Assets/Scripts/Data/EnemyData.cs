@@ -1,27 +1,50 @@
 using UnityEngine;
 
+/// <summary>
+/// 敌人等级分类
+/// </summary>
+public enum EnemyTier
+{
+    Normal,  // 普通敌人（小怪节点、？节点）
+    Elite,   // 精英敌人（精英节点）
+    Boss     // Boss（Boss节点）
+}
+
 [CreateAssetMenu(fileName = "新敌人", menuName = "Enemy/EnemyData")]
 public class EnemyData : ScriptableObject
 {
     [Header(" 基础信息 ")]
     public int id;
     public string enemyName;
+    [Tooltip("最大生命值")]
     public int maxHp;
     public string modelPath;
+
+    [Header(" 等级分类 ")]
+    [Tooltip("敌人等级：普通/精英/Boss")]
+    public EnemyTier tier = EnemyTier.Normal;
 
     [Header(" 动画 - 通用 ")]
     public string idleAnim;
     public string hitAnim;
 
     [Header(" 攻击配置 ")]
+    [Tooltip("基础攻击力（实际值为此值的 80%~120%）")]
     public int attack;
     public string attackAnim;
+    [Range(0f, 1f)]
+    [Tooltip("攻击力随机波动比例（0=固定，0.2=±20%）")]
+    public float attackVariance = 0.2f;
 
     [Header(" 防御配置 ")]
+    [Tooltip("基础防御力（实际值为此值的 80%~120%）")]
     public int defense;
     public string defenseAnim;
     public string defenseEffectPath;
     public EffectParams defenseEffectParams = new EffectParams();
+    [Range(0f, 1f)]
+    [Tooltip("防御力随机波动比例（0=固定，0.2=±20%）")]
+    public float defenseVariance = 0.2f;
 
     [Header(" 飞行配置 ")]
     public string flightAttackAnim;
@@ -56,6 +79,6 @@ public class EffectParams
     [Tooltip("特效缩放")]
     public float effectScale = 1f;
     
-    [Tooltip("持续时间（秒），0表示使用默认值2秒）")]
+    [Tooltip("持续时间（秒），0表示使用默认值2秒")]
     public float duration = 2f;
 }

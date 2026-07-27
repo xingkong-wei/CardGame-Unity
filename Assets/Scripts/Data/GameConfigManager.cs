@@ -28,9 +28,11 @@ public class GameConfigManager
         //加载所有卡牌类型
         LoadCardTypeData();
 
-        //加载关卡数据（保留 txt 方式）
+        //加载关卡数据（优先使用 ScriptableObject，兼容旧 txt）
+        LevelConfigManager.Instance.Init();
         textAsset = Resources.Load<TextAsset>("Data/level");
-        levelData = new GameConfigData(textAsset.text);
+        if (textAsset != null)
+            levelData = new GameConfigData(textAsset.text);
     }
 
     //加载卡牌数据

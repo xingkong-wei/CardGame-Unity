@@ -102,7 +102,6 @@
     <Compile Include="Assets\OneLine\OneLine\Editor\OneLinePropertyDrawer.cs" />
     <Compile Include="Assets\OneLine\OneLine\Editor\Utils\NullableObjectExtension.cs" />
     <Compile Include="Assets\OneLine\OneLine\Editor\Drawers\CustomDrawer.cs" />
-    <Compile Include="Assets\Editor\MyEditor.cs" />
     <Compile Include="Assets\OneLine\OneLine\Editor\Settings\SettingsEditor.cs" />
     <Compile Include="Assets\OneLine\OneLine\Editor\Settings\DefaultSettingsLayer.cs" />
     <Compile Include="A:\MCP\unity-ai-assistant-product\UnityPlugin\Editor\Tools\Checkpoint\RestoreCheckpoint.cs">
@@ -502,10 +501,6 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.2.6\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Excel">
-      <HintPath>Assets\Plugins\ExcelResolutionForUnity\Excel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.5.2\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
       <Private>False</Private>
@@ -536,10 +531,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.11\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Assets\Plugins\ExcelResolutionForUnity\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">

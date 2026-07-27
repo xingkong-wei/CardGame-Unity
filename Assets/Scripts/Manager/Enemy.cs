@@ -543,19 +543,34 @@ public class Enemy : MonoBehaviour
 
         SetRandomAction();
 
-        //初始化数值
-        //Hp      Attack      Defend
-        if (!int.TryParse(data["Attack"], out Attack))
+        //初始化数值（从 EnemyData 读取，加入随机波动）
+        if (enemyDataSO != null)
         {
-            Debug.LogError($"敌人攻击力解析失败: {data["Attack"]}");
-            Attack = 0;
+            Attack = RandomizeValue(enemyDataSO.attack, enemyDataSO.attackVariance);
+            Defend = RandomizeValue(enemyDataSO.defense, enemyDataSO.defenseVariance);
+            CurHp = enemyDataSO.maxHp;
+            MaxHp = CurHp;
         }
-        if (!int.TryParse(data["Hp"], out CurHp))
+        else
         {
-            Debug.LogError($"敌人生命值解析失败: {data["Hp"]}");
-            CurHp = 100;
+            // 兼容旧字典方式
+            if (!int.TryParse(data["Attack"], out Attack))
+            {
+                Debug.LogError($"敌人攻击力解析失败: {data["Attack"]}");
+                Attack = 0;
+            }
+            if (!int.TryParse(data["Hp"], out CurHp))
+            {
+                Debug.LogError($"敌人生命值解析失败: {data["Hp"]}");
+                CurHp = 100;
+            }
+            MaxHp = CurHp;
+            if (!int.TryParse(data["Defend"], out Defend))
+            {
+                Debug.LogError($"敌人防御力解析失败: {data["Defend"]}");
+                Defend = 0;
+            }
         }
-        MaxHp = CurHp;
         isFlightMode = false; // 重置飞行模式
         // 检查动画参数是否存在，避免警告
         if (ani.parameterCount > 0)
@@ -568,12 +583,6 @@ public class Enemy : MonoBehaviour
                     break;
                 }
             }
-        }
-        
-        if (!int.TryParse(data["Defend"], out Defend))
-        {
-            Debug.LogError($"敌人防御力解析失败: {data["Defend"]}");
-            Defend = 0;
         }
 
         UpdateHp();
@@ -779,8 +788,8 @@ public class Enemy : MonoBehaviour
     // 受击动画播放完后返回待机动画
     private IEnumerator ReturnToIdleAfterHit()
     {
-        yield return new WaitForSeconds(0.5f); // 等待受击动画播放
-        ani.CrossFade(GetCurrentIdleAnim(), 0f, 0, 0f); // 0秒过渡，从0帧开始
+        yield return new WaitForSeconds(0.5f);
+        SafeCrossFade(GetCurrentIdleAnim(), 0f);
     }
 
     //隐藏攻击和防御图标
@@ -796,23 +805,22 @@ public class Enemy : MonoBehaviour
     {
         HideAction();
 
-        //播放对应动画（使用 CrossFade 让过渡条件生效）
+        //播放对应动画（使用 SafeCrossFade 避免状态不存在的错误）
         switch (type)
         {
             case ActionType.Attack:
                 currentAttackAnimName = GetRandomAttackAnim();
-                ani.CrossFade(currentAttackAnimName, 0.2f);
-                // 播放攻击特效（带延迟）
+                SafeCrossFade(currentAttackAnimName, 0.2f);
                 PlayAttackEffect(currentAttackAnimName);
                 break;
             case ActionType.Defend:
-                ani.CrossFade(GetRandomDefenseAnim(), 0.2f);
+                SafeCrossFade(GetRandomDefenseAnim(), 0.2f);
                 break;
             case ActionType.Heal:
-                ani.CrossFade(GetHealAnim(), 0.2f);
+                SafeCrossFade(GetHealAnim(), 0.2f);
                 break;
             default:
-                ani.CrossFade(GetCurrentIdleAnim(), 0.2f);
+                SafeCrossFade(GetCurrentIdleAnim(), 0.2f);
                 break;
         }
 
@@ -877,9 +885,7 @@ public class Enemy : MonoBehaviour
         }
 
         //返回待机状态
-
-        ani.CrossFade(GetCurrentIdleAnim(), 0f, 0, 0f); // 0秒过渡，从0帧开始
-        ani.Play(GetCurrentIdleAnim()); // 播放当前模式的待机动画
+        SafeCrossFade(GetCurrentIdleAnim(), 0f);
     }
 
     //敌人被销毁时自动销毁其UI物体
@@ -1210,5 +1216,34 @@ public class Enemy : MonoBehaviour
         // 设置持续时间
         float duration = effectData.duration > 0 ? effectData.duration : 2f;
         Destroy(effectObj, duration);
+    }
+
+
+
+    /// <summary>
+    /// 安全播放动画（动画状态不存在时回退到 idle）
+    /// </summary>
+    private void SafeCrossFade(string animName, float fadeTime)
+    {
+        if (ani == null) return;
+        if (ani.HasState(0, Animator.StringToHash(animName)))
+        {
+            ani.CrossFade(animName, fadeTime);
+        }
+    }
+
+    /// <summary>
+    /// 根据基础值和波动比例生成随机值
+    /// </summary>
+    /// <param name="baseValue">基础值</param>
+    /// <param name="variance">波动比例（0~1），如 0.2 表示 ±20%</param>
+    /// <returns>随机后的值</returns>
+    private int RandomizeValue(int baseValue, float variance)
+    {
+        if (variance <= 0f || baseValue <= 0)
+            return baseValue;
+
+        float ratio = Random.Range(1f - variance, 1f + variance);
+        return Mathf.Max(1, Mathf.RoundToInt(baseValue * ratio));
     }
 }

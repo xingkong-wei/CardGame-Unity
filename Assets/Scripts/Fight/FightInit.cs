@@ -30,9 +30,10 @@ public class FightInit : FightUnit
         //切换bgm
         AudioManager.Instance.PlayBGM("battle");
 
-        // 根据地图选择的岛屿索引加载敌人
+        // 根据岛屿索引和节点类型加载敌人
         int islandIndex = FightManager.Instance.GetCurrentIslandIndex();
-        EnemyManager.Instance.LoadRes(islandIndex);
+        Map.NodeType nodeType = FightManager.Instance.GetCurrentNodeType();
+        EnemyManager.Instance.LoadRes(islandIndex, nodeType);
 
         // 隐藏节点地图UI
         UIManager.Instance.HideUI("SlayTheSpireMapUI");

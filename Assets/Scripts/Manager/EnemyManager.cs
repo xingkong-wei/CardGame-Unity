@@ -59,39 +59,39 @@ public class EnemyManager
         levelToIslandMap.Clear();
         islandLevelsMap.Clear();
 
-        // 从level.txt中读取所有关卡，直接使用Island列
-        // 这样可以灵活地为每个岛屿分配任意数量的关卡
-
-        int levelsPerIsland = 3; // 每个岛屿分配3个关卡（仅用于没有Island列时的默认分配）
-
-        // 从10001开始，检查每个关卡是否存在
-        for (int levelId = 10001; levelId < 10001 + 100; levelId++) // 最多检查100个关卡
+        // 优先从 LevelConfigManager（ScriptableObject）读取
+        foreach (var cfg in LevelConfigManager.Instance.GetAllLevels())
         {
-            // 检查关卡是否存在于配置中
-            Dictionary<string, string> levelData = GameConfigManager.Instance.GetLevelById(levelId.ToString());
-            if (levelData != null)
+            if (cfg == null) continue;
+
+            levelToIslandMap[cfg.levelId] = cfg.islandIndex;
+
+            if (!islandLevelsMap.ContainsKey(cfg.islandIndex))
+                islandLevelsMap[cfg.islandIndex] = new List<int>();
+            islandLevelsMap[cfg.islandIndex].Add(cfg.levelId);
+        }
+
+        // 兼容旧 txt 格式
+        if (islandLevelsMap.Count == 0)
+        {
+            int levelsPerIsland = 3;
+            for (int levelId = 10001; levelId < 10001 + 100; levelId++)
             {
-                // 优先从Island列读取所属岛屿
-                int islandIndex = -1;
-                if (levelData.ContainsKey("Island"))
+                Dictionary<string, string> levelData = GameConfigManager.Instance.GetLevelById(levelId.ToString());
+                if (levelData != null)
                 {
-                    int.TryParse(levelData["Island"], out islandIndex);
-                }
-                else
-                {
-                    // 如果没有Island列，使用默认分配方式
-                    islandIndex = (levelId - 10001) / levelsPerIsland;
-                }
+                    int islandIndex = -1;
+                    if (levelData.ContainsKey("Island"))
+                        int.TryParse(levelData["Island"], out islandIndex);
+                    else
+                        islandIndex = (levelId - 10001) / levelsPerIsland;
 
-                // 记录关卡到岛屿的映射
-                levelToIslandMap[levelId] = islandIndex;
+                    levelToIslandMap[levelId] = islandIndex;
 
-                // 添加到岛屿的关卡列表
-                if (!islandLevelsMap.ContainsKey(islandIndex))
-                {
-                    islandLevelsMap[islandIndex] = new List<int>();
+                    if (!islandLevelsMap.ContainsKey(islandIndex))
+                        islandLevelsMap[islandIndex] = new List<int>();
+                    islandLevelsMap[islandIndex].Add(levelId);
                 }
-                islandLevelsMap[islandIndex].Add(levelId);
             }
         }
     }
@@ -126,32 +126,26 @@ public class EnemyManager
     }
 
     //加载敌人资源
-    //加载敌人资源
-    public void LoadRes(int islandIndex)
+    public void LoadRes(int islandIndex, Map.NodeType nodeType = Map.NodeType.MinorEnemy)
     {
         enemyList = new List<Enemy>();
 
-        // 首次调用时初始化关卡映射
-        if (levelToIslandMap.Count == 0)
-        {
-            InitializeLevelToIslandMap();
-        }
+        // 根据节点类型确定需要加载的敌人等级
+        EnemyTier targetTier = NodeTypeToEnemyTier(nodeType);
 
-        // 加载已完成的关卡权重
+        if (levelToIslandMap.Count == 0)
+            InitializeLevelToIslandMap();
+
         LoadCompletedLevels();
 
-        // 从映射中获取该岛屿的可用关卡
         List<int> availableLevels = new List<int>();
         List<int> weights = new List<int>();
 
         if (islandLevelsMap.ContainsKey(islandIndex))
         {
             availableLevels = islandLevelsMap[islandIndex];
-
-            // 为每个关卡分配权重
             foreach (int levelId in availableLevels)
             {
-                // 获取权重：已通过的关卡权重10，未通过的权重100
                 int weight = levelWeights.ContainsKey(levelId) ? levelWeights[levelId] : 100;
                 weights.Add(weight);
             }
@@ -163,39 +157,82 @@ public class EnemyManager
             return;
         }
 
-        // 基于权重随机选择关卡
         int randomLevelId = GetWeightedRandom(availableLevels, weights);
-        string selectedLevelIdStr = randomLevelId.ToString();
-
-        //保存已完成的关卡
         SaveCompletedLevel(randomLevelId);
 
-        //获取关卡表
-        Dictionary<string, string> selectedLevelData = GameConfigManager.Instance.GetLevelById(selectedLevelIdStr);
-
-        if (selectedLevelData == null)
+        // 优先使用 ScriptableObject 配置
+        LevelConfig levelCfg = LevelConfigManager.Instance.GetLevelById(randomLevelId);
+        if (levelCfg != null)
         {
-            Debug.LogError($"关卡配置未找到：{selectedLevelIdStr}");
+            SpawnEnemiesFromConfig(levelCfg, targetTier);
+        }
+        else
+        {
+            SpawnEnemiesFromTxt(randomLevelId.ToString(), targetTier);
+        }
+    }
+
+    /// <summary>
+    /// 节点类型 → 敌人等级映射
+    /// </summary>
+    private EnemyTier NodeTypeToEnemyTier(Map.NodeType nodeType)
+    {
+        switch (nodeType)
+        {
+            case Map.NodeType.EliteEnemy:
+                return EnemyTier.Elite;
+            case Map.NodeType.Boss:
+                return EnemyTier.Boss;
+            case Map.NodeType.MinorEnemy:
+            case Map.NodeType.Mystery:
+                return EnemyTier.Normal;
+            default:
+                return EnemyTier.Normal;
+        }
+    }
+
+    /// <summary>
+    /// 从 ScriptableObject 关卡配置生成敌人（按等级筛选）
+    /// </summary>
+    private void SpawnEnemiesFromConfig(LevelConfig cfg, EnemyTier targetTier)
+    {
+        foreach (var entry in cfg.enemies)
+        {
+            EnemyData enemyDataSO = EnemyDataManager.Instance.GetEnemyDataById(entry.enemyId);
+            if (enemyDataSO == null)
+            {
+                Debug.LogError($"找不到敌人数据 ID: {entry.enemyId}");
+                continue;
+            }
+
+            // 按敌人等级筛选：只加载匹配等级的敌人
+            if (enemyDataSO.tier != targetTier)
+                continue;
+
+            SpawnEnemy(enemyDataSO, entry.position);
+        }
+    }
+
+    /// <summary>
+    /// 从旧 txt 格式生成敌人（兼容，按等级筛选）
+    /// </summary>
+    private void SpawnEnemiesFromTxt(string levelId, EnemyTier targetTier)
+    {
+        Dictionary<string, string> data = GameConfigManager.Instance.GetLevelById(levelId);
+        if (data == null)
+        {
+            Debug.LogError($"关卡配置未找到：{levelId}");
             return;
         }
 
-        //解析id信息
-        string[] enemyIds = selectedLevelData["EnemyIds"].Split('=');
-
-        //解析位置信息
-        string[] enemyPos = selectedLevelData["Pos"].Split('=');
+        string[] enemyIds = data["EnemyIds"].Split('=');
+        string[] enemyPos = data["Pos"].Split('=');
 
         for (int i = 0; i < enemyIds.Length; i++)
         {
             string enemyId = enemyIds[i];
             string[] posArr = enemyPos[i].Split(',');
 
-            //解析位置
-            float x = float.Parse(posArr[0]);
-            float y = float.Parse(posArr[1]);
-            float z = float.Parse(posArr[2]);
-
-            //根据敌人id获取敌人数据（从ScriptableObject）
             EnemyData enemyDataSO = EnemyDataManager.Instance.GetEnemyDataById(enemyId);
             if (enemyDataSO == null)
             {
@@ -203,26 +240,35 @@ public class EnemyManager
                 continue;
             }
 
-            //根据资源路径加载对应的敌人模型
-            GameObject enemyPrefab = Resources.Load<GameObject>(enemyDataSO.modelPath);
-            if (enemyPrefab == null)
-            {
-                Debug.LogError($"敌人模型加载失败: {enemyDataSO.modelPath}");
+            // 按敌人等级筛选
+            if (enemyDataSO.tier != targetTier)
                 continue;
-            }
-            GameObject obj = Object.Instantiate(enemyPrefab) as GameObject;
 
-            //添加敌人脚本
-            Enemy enemy = obj.AddComponent<Enemy>();
+            float x = float.Parse(posArr[0]);
+            float y = float.Parse(posArr[1]);
+            float z = float.Parse(posArr[2]);
 
-            //存储敌人信息（使用ScriptableObject初始化）
-            enemy.Init(enemyDataSO);
-
-            //存储敌人对象
-            enemyList.Add(enemy);
-
-            obj.transform.position = new Vector3(x, y, z);
+            SpawnEnemy(enemyDataSO, new Vector3(x, y, z));
         }
+    }
+
+    /// <summary>
+    /// 生成单个敌人
+    /// </summary>
+    private void SpawnEnemy(EnemyData data, Vector3 position)
+    {
+        GameObject enemyPrefab = Resources.Load<GameObject>(data.modelPath);
+        if (enemyPrefab == null)
+        {
+            Debug.LogError($"敌人模型加载失败: {data.modelPath}");
+            return;
+        }
+
+        GameObject obj = Object.Instantiate(enemyPrefab);
+        Enemy enemy = obj.AddComponent<Enemy>();
+        enemy.Init(data);
+        enemyList.Add(enemy);
+        obj.transform.position = position;
     }
 
 

@@ -129,6 +129,7 @@
     <Compile Include="Assets\Scripts\Potion\Rare\WitheredMistVenomPotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\EasilyInjuredPotion.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\ExtendedClassTest.cs" />
+    <Compile Include="Assets\Scripts\Data\LevelConfigManager.cs" />
     <Compile Include="Assets\Scripts\Card\CardItem.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\FallenAngelBountyPotion.cs" />
     <Compile Include="Assets\Scripts\GameEvents.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Assets\Scripts\Potion\Common\CurePotion.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\OneLine\RectEx\GridExtensions.cs" />
+    <Compile Include="Assets\Scripts\Data\LevelConfig.cs" />
     <Compile Include="Assets\Scripts\Manager\Enemy.cs" />
     <Compile Include="Assets\Scripts\Relics\FrostTalisman.cs" />
     <Compile Include="Assets\Scripts\Map\MapLayer.cs" />
@@ -378,7 +380,6 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Shaders\MADFINGER-Unlit-Scroll2Layers-Sine-AlphaBlend-No-Amp.shader" />
     <None Include="Assets\Fire Creatures Pack\Fire Dragon\Read me.txt" />
-    <None Include="Assets\Resources\Data\level.txt" />
     <None Include="Assets\Arts\Simple Toon\Shaders\STDefault.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking_FollowingCharacters.txt" />
@@ -731,20 +732,12 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.2.6\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Excel">
-      <HintPath>Assets\Plugins\ExcelResolutionForUnity\Excel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.11\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Assets\Plugins\ExcelResolutionForUnity\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">

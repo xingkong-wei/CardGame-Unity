@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451b49c1e33f27941831c97795f79b4f, type: 3}
+  m_Name: "10001_\u6F6E\u606F\u9F9F"
+  m_EditorClassIdentifier: 
+  id: 10001
+  enemyName: "\u6F6E\u606F\u9F9F"
+  maxHp: 20
+  modelPath: Model/TurtleShell
+  tier: 0
+  idleAnim: idle
+  hitAnim: hit
+  attack: 6
+  attackAnim: attack
+  attackVariance: 0.2
+  defense: 10
+  defenseVariance: 0.15
+  defenseAnim: attack
+  defenseEffectPath: MagicEffect/Prefabs/Magic circle 13
+  defenseEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 1
+    duration: 2
+  flightAttackAnim: 
+  flightDefenseAnim: 
+  useFlightAnim: 0
+  flightThreshold: 0
+  flightIdleAnim: 
+  flightHitAnim: 
+  healAnim: attack
+  healEffectPath: MagicEffect/Prefabs/Magic circle 13
+  healEffectParams:
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: -90, y: 0, z: 0}
+    effectScale: 1
+    duration: 2
