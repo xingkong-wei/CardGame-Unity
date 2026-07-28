@@ -103,8 +103,8 @@
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\CustomPropertyDrawerExample.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXFireProjectile.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\HighlightExample.cs" />
     <Compile Include="Assets\Scripts\Enemy\BallDragonEnemy.cs" />
+    <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\HighlightExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\SeparatorExample.cs" />
     <Compile Include="Assets\Scripts\Fight\Fight_Win.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXLoopScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\AgilityPotion.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\DizzinessCard.cs" />
     <Compile Include="Assets\Scripts\GameApp.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FrostNovaCard.cs" />
     <Compile Include="Assets\Scripts\Map\MapConfig.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Assets\Scripts\Relics\ThunderMark.cs" />
     <Compile Include="Assets\Scripts\Relics\PhilosopherStone.cs" />
     <Compile Include="Assets\Scripts\Relics\RelicManager.cs" />
+    <Compile Include="Assets\Scripts\Buff\StatusDisplayDB.cs" />
     <Compile Include="Assets\Scripts\Relics\ElementBracers.cs" />
     <Compile Include="Assets\Scripts\Map\MinMax.cs" />
     <Compile Include="Assets\OneLine\RectEx\MoveToExtensions.cs" />
@@ -313,6 +315,7 @@
     <Compile Include="Assets\Scripts\Potion\Rare\SoulSecureElixirPotion.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXProjectileScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\Buff\StatusCallbacks.cs" />
     <Compile Include="Assets\Scripts\Map\MysteryNodeResolver.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\MeditationCard.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\EnergyPotion.cs" />
@@ -332,10 +335,10 @@
     <Compile Include="Assets\OneLine\OneLine\Example\Overview\Scripts\Overview.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\FetterPotion.cs" />
     <Compile Include="Assets\Scripts\Map\UI Lines\Utilities\CableCurve.cs" />
+    <Compile Include="Assets\Scripts\Enemy\RockImpEnemy.cs" />
     <Compile Include="Assets\Scripts\UI\Window\RestSiteUI.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FlamestrikeCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\ExtendedGenericTest.cs" />
-    <Compile Include="Assets\Scripts\Enemy\RockImpEnemy.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCardItem.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\HideLabelAttribute.cs" />
     <Compile Include="Assets\Scripts\Relics\FrostHeart.cs" />

@@ -313,25 +313,10 @@ public class EnemyManager
             enemyList[i].SetRandomAction();
         }
 
-        // 敌人回合结束：处理敌人状态效果
+        // 敌人回合结束：触发敌人状态效果（通过 StatusCallbacks 驱动）
         for (int i = 0; i < enemyList.Count; i++)
         {
-            // 易伤、虚弱、缩小递减，枷锁本回合结束后全部移除
-            if (enemyList[i].GetStatusStack(StatusType.Vulnerable) > 0)
-                enemyList[i].RemoveStatus(StatusType.Vulnerable, 1);
-            if (enemyList[i].GetStatusStack(StatusType.Weak) > 0)
-                enemyList[i].RemoveStatus(StatusType.Weak, 1);
-            if (enemyList[i].GetStatusStack(StatusType.Shrink) > 0)
-                enemyList[i].RemoveStatus(StatusType.Shrink, 1);
-            if (enemyList[i].GetStatusStack(StatusType.Fetter) > 0)
-                enemyList[i].RemoveStatus(StatusType.Fetter, 99);
-
-            // 寂灭：每层失去9点生命
-            int voidDust = enemyList[i].GetStatusStack(StatusType.VoidDust);
-            if (voidDust > 0 && enemyList[i].CurHp > 0)
-            {
-                enemyList[i].Hit(9 * voidDust);
-            }
+            enemyList[i].OnEnemyTurnEnd();
         }
 
         // 回合结束触发Buff效果（金属化、流血、中毒等）- 冰亲和度已在玩家回合结束时处理

@@ -124,23 +124,10 @@ public class FightUI : UIBase
         //只有玩家回合才能切换
         if (FightManager.Instance.fightUnit is Fight_PlayerTurn)
         {
-            // 玩家回合结束：覆甲提供护盾
-            int platedArmor = BuffManager.Instance.GetStack(StatusType.PlatedArmor);
-            if (platedArmor > 0)
-            {
-                FightManager.Instance.DefenseCount += platedArmor;
-                UpdateDefense();
-            }
-
-            // 玩家回合结束：添加冰亲和度护甲
-            int iceAffinity = BuffManager.Instance.GetStack(StatusType.IceAffinity);
-            if (iceAffinity > 0)
-            {
-                FightManager.Instance.DefenseCount += iceAffinity;
-                UpdateDefense();
-            }
-
             // 冥想效果不结束，持续到第一张法术牌打出
+
+            // 玩家回合结束：触发Buff效果
+            BuffManager.Instance.OnPlayerTurnEnd();
 
             // 玩家回合结束：触发遗物效果
             RelicManager.Instance.TriggerTurnEnd();
@@ -348,7 +335,7 @@ public class FightUI : UIBase
 
     //删除卡牌物体
     /// <param name="item">要删除的卡牌</param>
-    /// <param name="isUsed">是否是被使用（true=消耗卡入废牌堆），false=回合结束丢弃（消耗卡入弃牌堆）</param>
+    /// <param name="isUsed">是否是被使用（true=消耗卡入废牌堆），false=回合结束丢弃</param>
     public void RemoveCard(CardItem item, bool isUsed = true)
     {
         AudioManager.Instance.PlayEffect("Cards/cardShove");
@@ -357,19 +344,27 @@ public class FightUI : UIBase
 
         DeckCard dc = item.sourceDeckCard ?? new DeckCard(item.data);
 
-        if (item.data != null && item.data.IsConsumeCard())
+        bool toExhaustPile = false; // 是否入废牌堆
+
+        if (item.data != null)
         {
-            if (isUsed)
+            // 消耗卡：使用时入废牌堆，回合结束丢弃时入弃牌堆
+            if (item.data.IsConsumeCard())
             {
-                FightCardManager.Instance.MarkCardAsConsumed(dc.instanceId);
-                FightCardManager.Instance.consumeCardList.Add(dc);
-                UpdateConsumeCardCount();
+                toExhaustPile = isUsed;
             }
-            else
+            // 虚无卡：回合结束时（isUsed=false）入废牌堆
+            else if (item.data.IsEtherealCard() && !isUsed)
             {
-                FightCardManager.Instance.usedCardList.Add(dc);
-                UpdateUsedCardCount();
+                toExhaustPile = true;
             }
+        }
+
+        if (toExhaustPile)
+        {
+            FightCardManager.Instance.MarkCardAsConsumed(dc.instanceId);
+            FightCardManager.Instance.consumeCardList.Add(dc);
+            UpdateConsumeCardCount();
         }
         else
         {
@@ -384,7 +379,7 @@ public class FightUI : UIBase
         UpdateCardItemPos();
 
         //卡牌移到对应堆效果（废牌堆在左边，弃牌堆在右边）
-        Vector2 targetPos = (item.data != null && item.data.IsConsumeCard() && isUsed) 
+        Vector2 targetPos = toExhaustPile
             ? new Vector2(-1000, -700) 
             : new Vector2(1000, -700);
         item.GetComponent<RectTransform>().DOAnchorPos(targetPos, 0.25f);

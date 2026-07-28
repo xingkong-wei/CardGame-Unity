@@ -32,7 +32,7 @@ MonoBehaviour:
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 1
     duration: 2
-  defenseVariance: 0.15
+  defenseVariance: 0.2
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0

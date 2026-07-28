@@ -35,12 +35,14 @@ public class EnemyData : ScriptableObject
     public string hitAnim;
 
     [Header(" 攻击配置 ")]
-    [Tooltip("基础攻击力（实际值为此值的 80%~120%）")]
+    [Tooltip("基础攻击力（实际值为此值的 80%~120%）。如果配置了「多段攻击伤害」，则各动画使用对应值")]
     public int attack;
     public string attackAnim;
     [Range(0f, 1f)]
     [Tooltip("攻击力随机波动比例（0=固定，0.2=±20%）")]
     public float attackVariance = 0.2f;
+    [Tooltip("按动画名配置不同伤害值，key=动画名, value=伤害。留空则所有攻击使用上方 attack")]
+    public AttackDamageEntry[] attackDamages;
 
     [Header(" 防御配置 ")]
     [Tooltip("防御动作时获得的护盾值（实际值为此值的 80%~120%）")]
@@ -68,6 +70,18 @@ public class EnemyData : ScriptableObject
     public string healAnim;
     public string healEffectPath;
     public EffectParams healEffectParams = new EffectParams();
+}
+
+/// <summary>
+/// 攻击伤害配置（按动画名映射）
+/// </summary>
+[System.Serializable]
+public class AttackDamageEntry
+{
+    [Tooltip("对应攻击动画名")]
+    public string animName;
+    [Tooltip("伤害值")]
+    public int damage;
 }
 
 /// <summary>

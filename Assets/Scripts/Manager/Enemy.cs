@@ -301,15 +301,56 @@ public class Enemy : MonoBehaviour
 
     protected virtual void PerformAttack()
     {
-        int modifiedAttack = Attack;
-        int weakStack = GetStatusStack(StatusType.Weak);
-        if (weakStack > 0) modifiedAttack = Mathf.CeilToInt(modifiedAttack * (1f - weakStack * 0.25f));
-        int shrinkStack = GetStatusStack(StatusType.Shrink);
-        if (shrinkStack > 0) modifiedAttack = Mathf.CeilToInt(modifiedAttack * 0.7f);
-        int fetterStack = GetStatusStack(StatusType.Fetter);
-        modifiedAttack = Mathf.Max(0, modifiedAttack - fetterStack);
+        int modifiedAttack = ModifyAttackDamage(Attack);
         FightManager.Instance.GetPlayerHit(modifiedAttack, this);
         Camera.main.DOShakePosition(0.1f, 0.2f, 5, 45);
+    }
+
+    /// <summary>
+    /// 根据动画名获取攻击伤害值
+    /// 优先从 EnemyData.attackDamages 查找，找不到则使用默认 Attack
+    /// </summary>
+    public int GetAttackDamageForAnim(string animName)
+    {
+        if (enemyDataSO != null && enemyDataSO.attackDamages != null)
+        {
+            foreach (var entry in enemyDataSO.attackDamages)
+            {
+                if (entry.animName == animName)
+                    return entry.damage;
+            }
+        }
+        return Attack;
+    }
+
+    /// <summary>敌人攻击伤害修正（通过状态回调计算）</summary>
+    public int ModifyAttackDamage(int baseDamage)
+    {
+        int result = baseDamage;
+        foreach (var kvp in statusDict)
+        {
+            if (kvp.Value <= 0) continue;
+            var temp = new StatusEffect(kvp.Key, kvp.Value);
+            StatusCallbacks.Inject(temp);
+            if (temp.modifyAttackDamage != null)
+                result = temp.modifyAttackDamage(temp, result);
+        }
+        return result;
+    }
+
+    /// <summary>敌人受到伤害修正（通过状态回调计算）</summary>
+    public int ModifyTakenDamage(int baseDamage)
+    {
+        int result = baseDamage;
+        foreach (var kvp in statusDict)
+        {
+            if (kvp.Value <= 0) continue;
+            var temp = new StatusEffect(kvp.Key, kvp.Value);
+            StatusCallbacks.Inject(temp);
+            if (temp.modifyTakenDamage != null)
+                result = temp.modifyTakenDamage(temp, result);
+        }
+        return result;
     }
 
     protected virtual void PerformHeal()
@@ -324,8 +365,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Hit(int val)
     {
-        if (GetStatusStack(StatusType.Vulnerable) > 0)
-            val = Mathf.CeilToInt(val * 1.25f);
+        val = ModifyTakenDamage(val);
 
         if (Defend >= val)
         {
@@ -509,6 +549,23 @@ public class Enemy : MonoBehaviour
         foreach (var kvp in statusDict)
             if (kvp.Value > 0) valid[kvp.Key] = kvp.Value;
         return valid;
+    }
+
+    /// <summary>
+    /// 敌人回合结束时触发状态效果（递减、伤害等）
+    /// 通过 StatusCallbacks 注册的行为驱动，新增状态无需修改此处
+    /// </summary>
+    public void OnEnemyTurnEnd()
+    {
+        // 快照遍历，防止回调中修改 statusDict
+        var snapshot = new Dictionary<StatusType, int>(statusDict);
+        foreach (var kvp in snapshot)
+        {
+            if (kvp.Value <= 0) continue;
+            var temp = new StatusEffect(kvp.Key, kvp.Value);
+            StatusCallbacks.Inject(temp);
+            temp.onEnemyTurnEnd?.Invoke(temp, this);
+        }
     }
 
     private void InitializeStatusUI()

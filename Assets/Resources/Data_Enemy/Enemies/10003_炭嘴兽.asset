@@ -14,25 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10003
   enemyName: "\u70AD\u5634\u517D"
-  maxHp: 30
+  maxHp: 63
   modelPath: Model/Tentacle Monster-Red
+  initialDefense: 0
   tier: 0
   scriptName: CarbonBeastEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
-  attack: 14
+  attack: 13
   attackAnim: ProjectileAttack=BiteAttack
-  attackVariance: 0.2
+  attackVariance: 0
+  attackDamages:
+  - animName: ProjectileAttack
+    damage: 4
   defense: 5
-  defenseVariance: 0.2
   defenseAnim: Roar
-  initialDefense: 0
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 0.7
     duration: 1.5
+  defenseVariance: 0
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0

@@ -44,24 +44,20 @@ public class BuffManager
     /// </summary>
     public void AddStatus(StatusType type, int stack = 1, int duration = -1)
     {
-        int iceAdd = 0; // 实际增加的冰亲和度层数
+        bool isAffinity = IsAffinityType(type);
+        int iceAdd = 0;
 
-        // 亲和度类型：本回合获得的亲和度翻倍（叠加翻倍 = 原有 + 新获得×2）
-        if (type == StatusType.FireAffinity ||
-            type == StatusType.IceAffinity ||
-            type == StatusType.LightningAffinity)
+        // 亲和度类型：调用 modifyAffinityGain 回调处理翻倍等逻辑
+        if (isAffinity)
         {
-            int affinityDouble = GetStack(StatusType.AffinityDouble);
-            if (affinityDouble > 0)
-            {
-                stack *= Mathf.RoundToInt(Mathf.Pow(2, affinityDouble));
-            }
+            StatusEffect tempAffinity = new StatusEffect(type, 0);
+            StatusCallbacks.Inject(tempAffinity);
+            if (tempAffinity.modifyAffinityGain != null)
+                stack = tempAffinity.modifyAffinityGain(tempAffinity, stack);
 
-            // 允许外部修改亲和度获得值
             stack = OnAffinityModify?.Invoke(type, stack) ?? stack;
         }
 
-        // 亲和度有上限（只限制新增部分，不限制原有层数）
         int maxStack = GetMaxStack(type);
         
         StatusEffect existing = statusEffects.Find(s => s.type == type);
@@ -77,18 +73,24 @@ public class BuffManager
             }
             existing.UpdateDescription();
             iceAdd = actualAdd;
+
+            // 触发 onAdded 回调
+            existing.onAdded?.Invoke(existing, actualAdd);
         }
         else
         {
             int actualStack = Mathf.Min(stack, maxStack);
             StatusEffect newEffect = new StatusEffect(type, actualStack, duration);
+            StatusCallbacks.Inject(newEffect);
             statusEffects.Add(newEffect);
             iceAdd = actualStack;
+
+            newEffect.onAdded?.Invoke(newEffect, actualStack);
         }
 
         OnBuffChanged?.Invoke();
 
-        // 极地风暴：按实际获得的冰亲和度层数触发多次伤害
+        // 极地风暴
         if (type == StatusType.IceAffinity && iceAdd > 0)
         {
             TriggerPolarStorm(iceAdd);
@@ -100,16 +102,21 @@ public class BuffManager
     /// </summary>
     private int GetMaxStack(StatusType type)
     {
-        // 亲和度上限：聚灵/遗物可提升
-        if (type == StatusType.FireAffinity || 
-            type == StatusType.IceAffinity || 
-            type == StatusType.LightningAffinity)
+        if (IsAffinityType(type))
         {
             int baseMax = GetStack(StatusType.SpiritFocus) > 0 ? 15 : 10;
             int relicMax = RelicManager.Instance.GetAffinityMaxStack();
             return Mathf.Max(baseMax, relicMax);
         }
         return int.MaxValue;
+    }
+
+    /// <summary>是否为亲和度类型</summary>
+    private bool IsAffinityType(StatusType type)
+    {
+        return type == StatusType.FireAffinity ||
+               type == StatusType.IceAffinity ||
+               type == StatusType.LightningAffinity;
     }
 
     /// <summary>
@@ -120,7 +127,7 @@ public class BuffManager
         StatusEffect effect = statusEffects.Find(s => s.type == type);
         if (effect == null) return;
 
-        int iceRemoved = 0; // 实际移除的冰亲和度层数
+        int iceRemoved = 0;
         int actuallyRemoved = 0;
 
         if (stack < 0 || effect.stack <= stack)
@@ -140,13 +147,16 @@ public class BuffManager
         OnBuffChanged?.Invoke();
 
         // 亲和度消耗事件
-        if (actuallyRemoved > 0 && (type == StatusType.FireAffinity ||
-            type == StatusType.IceAffinity || type == StatusType.LightningAffinity))
+        if (actuallyRemoved > 0 && IsAffinityType(type))
         {
             OnAffinityConsumed?.Invoke(type, actuallyRemoved);
+            effect.onAffinityConsumed?.Invoke(effect, actuallyRemoved);
         }
 
-        // 极地风暴：按实际消耗的冰亲和度层数触发多次伤害
+        // 触发 onRemoved 回调
+        effect.onRemoved?.Invoke(effect, actuallyRemoved);
+
+        // 极地风暴
         if (type == StatusType.IceAffinity && iceRemoved > 0 && GetStack(StatusType.PolarStorm) > 0)
         {
             TriggerPolarStorm(iceRemoved);
@@ -185,97 +195,22 @@ public class BuffManager
     /// </summary>
     public void OnTurnStart()
     {
-        // 元素主宰：每层每回合获得火、冰、电亲和度各1层
-        int elementalDominance = GetStack(StatusType.ElementalDominance);
-        if (elementalDominance > 0)
-        {
-            AddStatus(StatusType.FireAffinity, elementalDominance);
-            AddStatus(StatusType.IceAffinity, elementalDominance);
-            AddStatus(StatusType.LightningAffinity, elementalDominance);
-            UIManager.Instance.ShowTip($"火、冰、电亲和 +{elementalDominance}", Color.yellow);
-        }
+        // 快照遍历，防止回调中修改 statusEffects 集合
+        var snapshot = GetAllStatus();
+        foreach (var effect in snapshot)
+            effect.onTurnStart?.Invoke(effect);
 
-        // 法术共鸣：每回合获得亲和度最高的元素（层数=获得次数）
-        int spellResonance = GetStack(StatusType.SpellResonance);
-        if (spellResonance > 0)
-        {
-            StatusType maxAffinity = GetRandomTopAffinity();
-            AddStatus(maxAffinity, spellResonance);
-            UIManager.Instance.ShowTip($"法术共鸣 +{spellResonance} {GetAffinityName(maxAffinity)}", Color.yellow);
-        }
+        OnBuffChanged?.Invoke();
+    }
 
-        // 君威之睨：每层每回合开始获得力量
-        int sovereignGlare = GetStack(StatusType.SovereignGlare);
-        if (sovereignGlare > 0)
-        {
-            AddStatus(StatusType.Strength, sovereignGlare);
-        }
-
-        // 守护神汁：下回合开始时获得护盾
-        if (HasStatus(StatusType.GuardianElixir))
-        {
-            FightManager.Instance.DefenseCount += 10;
-            FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-            fightUI?.UpdateDefense();
-            RemoveStatus(StatusType.GuardianElixir, 99);
-        }
-
-        // 力量爆发（临时）
-        int rage = GetStack(StatusType.Rage);
-        if (rage > 0)
-        {
-            AddStatus(StatusType.Strength, rage, 1);
-        }
-
-        // 覆甲：回合开始时减少1层
-        int platedArmor = GetStack(StatusType.PlatedArmor);
-        if (platedArmor > 0)
-        {
-            RemoveStatus(StatusType.PlatedArmor, 1);
-        }
-
-        // 圣辉酊液：回合开始时额外获得1点能量，然后减少1层
-        int holyTinct = GetStack(StatusType.HolyTinct);
-        if (holyTinct > 0)
-        {
-            FightManager.Instance.CurPowerCount += 1;
-            FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-            fightUI?.UpdatePower();
-            RemoveStatus(StatusType.HolyTinct, 1);
-        }
-
-        // 启明凝露：回合开始时额外抽1张牌，然后减少1层
-        int dawn = GetStack(StatusType.DawnCondensedDew);
-        if (dawn > 0)
-        {
-            FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-            if (fightUI != null)
-            {
-                fightUI.CreateCardItem(1);
-                fightUI.UpdateCardItemPos();
-                fightUI.UpdateCardCount();
-            }
-            RemoveStatus(StatusType.DawnCondensedDew, 1);
-        }
-
-        // 再生：每层恢复1点生命，回合开始后减少1层
-        int regen = GetStack(StatusType.Regeneration);
-        if (regen > 0 && FightManager.Instance.CurHp > 0)
-        {
-            int healAmount = Mathf.Min(regen, FightManager.Instance.MaxHp - FightManager.Instance.CurHp);
-            if (healAmount > 0)
-            {
-                FightManager.Instance.CurHp += healAmount;
-                UIManager.Instance.ShowTip($"再生 +{healAmount}", Color.green);
-            }
-
-            // 回合开始后减少1层再生
-            RemoveStatus(StatusType.Regeneration, 1);
-
-            // 刷新血量显示
-            FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
-            fightUI?.UpdateHp();
-        }
+    /// <summary>
+    /// 玩家回合结束时触发效果
+    /// </summary>
+    public void OnPlayerTurnEnd()
+    {
+        var snapshot = GetAllStatus();
+        foreach (var effect in snapshot)
+            effect.onPlayerTurnEnd?.Invoke(effect);
 
         OnBuffChanged?.Invoke();
     }
@@ -285,104 +220,26 @@ public class BuffManager
     /// </summary>
     public void OnTurnEnd()
     {
-        // 复制：回合结束时移除（仅持续本回合）
-        if (HasStatus(StatusType.Duplicate))
-        {
-            RemoveStatus(StatusType.Duplicate, 99);
-        }
-
-        // 易伤：回合结束时减少一层
-        int vulnerable = GetStack(StatusType.Vulnerable);
-        if (vulnerable > 0)
-        {
-            RemoveStatus(StatusType.Vulnerable, 1);
-        }
-
-        // 虚弱：回合结束时减少一层
-        int weak = GetStack(StatusType.Weak);
-        if (weak > 0)
-        {
-            RemoveStatus(StatusType.Weak, 1);
-        }
-
-        // 缩小：回合结束时减少一层
-        int shrink = GetStack(StatusType.Shrink);
-        if (shrink > 0)
-        {
-            RemoveStatus(StatusType.Shrink, 1);
-        }
-
-        // 金属化
-        int metallicize = GetStack(StatusType.Metallicize);
-        if (metallicize > 0)
-        {
-            FightManager.Instance.DefenseCount += metallicize;
-            UIManager.Instance.ShowTip($"金属化 +{metallicize}", Color.cyan);
-        }
-
-        // 流血
-        int bleeding = GetStack(StatusType.Bleeding);
-        if (bleeding > 0)
-        {
-            FightManager.Instance.GetPlayerHit(bleeding);
-            UIManager.Instance.ShowTip($"流血 -{bleeding}", Color.red);
-        }
-
-        // 中毒
-        int poison = GetStack(StatusType.Poison);
-        if (poison > 0)
-        {
-            FightManager.Instance.GetPlayerHit(poison);
-            UIManager.Instance.ShowTip($"中毒 -{poison}", Color.green);
-        }
-
-        // 燃烧
-        int burning = GetStack(StatusType.Burning);
-        if (burning > 0)
-        {
-            FightManager.Instance.GetPlayerHit(burning);
-            UIManager.Instance.ShowTip($"燃烧 -{burning}", new Color(1f, 0.5f, 0f));
-        }
-
-        // 诅咒
-        int curse = GetStack(StatusType.Curse);
-        if (curse > 0)
-        {
-            int curseDamage = Mathf.CeilToInt(FightManager.Instance.MaxHp * curse / 100f);
-            FightManager.Instance.GetPlayerHit(curseDamage);
-            UIManager.Instance.ShowTip($"诅咒 -{curseDamage}", Color.magenta);
-        }
+        var snapshot = GetAllStatus();
+        foreach (var effect in snapshot)
+            effect.onTurnEnd?.Invoke(effect);
 
         ReduceDuration();
         OnBuffChanged?.Invoke();
     }
 
     /// <summary>
-    /// 攻击时修改伤害（力量/虚弱/魔能）
+    /// 攻击时修改伤害（力量/虚弱/魔能/缩小）
     /// </summary>
     public int ModifyAttackDamage(int baseDamage, bool includeWandCharging = true)
     {
         int modifiedDamage = baseDamage;
 
-        // 力量
-        int strength = GetStack(StatusType.Strength);
-        if (strength > 0)
-            modifiedDamage += strength;
-
-        // 魔能（每层+1伤害，类似杀戮尖塔）
-        int power = GetStack(StatusType.Power);
-        if (power > 0)
-            modifiedDamage += power;
-
-        // 虚弱
-        int weak = GetStack(StatusType.Weak);
-        if (weak > 0)
-            modifiedDamage = Mathf.CeilToInt(modifiedDamage * (1f - weak * 0.25f));
-
-        // 缩小：每层减少30%伤害（乘法叠加）
-        int shrink = GetStack(StatusType.Shrink);
-        if (shrink > 0)
-            modifiedDamage = Mathf.CeilToInt(modifiedDamage * 0.7f);
+        foreach (var effect in statusEffects)
+        {
+            if (effect.modifyAttackDamage != null)
+                modifiedDamage = effect.modifyAttackDamage(effect, modifiedDamage);
+        }
 
         return modifiedDamage;
     }
@@ -394,10 +251,11 @@ public class BuffManager
     {
         int modifiedDamage = ModifyAttackDamage(baseDamage);
 
-        // 火亲和度：每层+1伤害（仅限法术攻击）
-        int fireAffinity = GetStack(StatusType.FireAffinity);
-        if (fireAffinity > 0)
-            modifiedDamage += fireAffinity;
+        foreach (var effect in statusEffects)
+        {
+            if (effect.modifySpellDamage != null)
+                modifiedDamage = effect.modifySpellDamage(effect, modifiedDamage);
+        }
 
         return modifiedDamage;
     }
@@ -407,9 +265,15 @@ public class BuffManager
     /// </summary>
     public int ModifyTakenDamage(int originalDamage)
     {
-        if (GetStack(StatusType.Vulnerable) > 0)
-            return Mathf.CeilToInt(originalDamage * 1.25f);
-        return originalDamage;
+        int result = originalDamage;
+
+        foreach (var effect in statusEffects)
+        {
+            if (effect.modifyTakenDamage != null)
+                result = effect.modifyTakenDamage(effect, result);
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -417,16 +281,8 @@ public class BuffManager
     /// </summary>
     public void OnDealDamage(int damage)
     {
-        int lifesteal = GetStack(StatusType.Lifesteal);
-        if (lifesteal > 0)
-        {
-            int healAmount = Mathf.Min(lifesteal, FightManager.Instance.MaxHp - FightManager.Instance.CurHp);
-            if (healAmount > 0)
-            {
-                FightManager.Instance.CurHp += healAmount;
-                UIManager.Instance.ShowTip($"吸血 +{healAmount}", Color.red);
-            }
-        }
+        foreach (var effect in statusEffects)
+            effect.onDealDamage?.Invoke(effect, damage);
     }
 
     /// <summary>
@@ -434,20 +290,13 @@ public class BuffManager
     /// </summary>
     public int ModifyDefenseGain(int baseDefense)
     {
-        if (HasStatus(StatusType.LockedArmor))
-            return 0;
-
         int result = baseDefense;
 
-        // 脆弱：每层减少25%格挡
-        int frail = GetStack(StatusType.Frail);
-        if (frail > 0)
-            result = Mathf.CeilToInt(result * (1f - frail * 0.25f));
-
-        // 敏捷：每层 +1 格挡
-        int agility = GetStack(StatusType.Agility);
-        if (agility > 0)
-            result += agility;
+        foreach (var effect in statusEffects)
+        {
+            if (effect.modifyDefenseGain != null)
+                result = effect.modifyDefenseGain(effect, result);
+        }
 
         return Mathf.Max(result, 0);
     }
@@ -457,11 +306,15 @@ public class BuffManager
     /// </summary>
     public int GetExtraDrawCards()
     {
-        int focus = GetStack(StatusType.Focus);
-        int lightningAffinity = GetStack(StatusType.LightningAffinity);
-        // 电亲和度：每层+0.5，向上取整
-        int lightningBonus = Mathf.CeilToInt(lightningAffinity * 0.5f);
-        return focus + lightningBonus;
+        int extra = 0;
+
+        foreach (var effect in statusEffects)
+        {
+            if (effect.getExtraDrawCards != null)
+                extra += effect.getExtraDrawCards(effect);
+        }
+
+        return extra;
     }
 
     /// <summary>
@@ -687,17 +540,7 @@ public class BuffManager
     /// </summary>
     public string GetAffinityName(StatusType type)
     {
-        switch (type)
-        {
-            case StatusType.FireAffinity:
-                return "火亲和";
-            case StatusType.IceAffinity:
-                return "冰亲和";
-            case StatusType.LightningAffinity:
-                return "电亲和";
-            default:
-                return type.ToString();
-        }
+        return StatusDisplayDB.Get(type).name;
     }
 
     /// <summary>

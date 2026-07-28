@@ -148,4 +148,10 @@ public class CardData : ScriptableObject
     {
         return HasCardType("消耗");
     }
+
+    /// <summary>是否是虚无卡牌（回合结束时还在手上则消耗）</summary>
+    public bool IsEtherealCard()
+    {
+        return HasCardType("虚无");
+    }
 }
