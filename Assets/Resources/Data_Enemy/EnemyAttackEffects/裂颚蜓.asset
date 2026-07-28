@@ -16,16 +16,18 @@ MonoBehaviour:
   description: "\u88C2\u9102\u8713\u653B\u51FB\u7279\u6548"
   attackEffects:
   - effectName: BreathAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Bang
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion
     spawnPositionType: 3
+    spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: 0}
     effectScale: 1
     delayTime: 0.5
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
   - effectName: BiteAttack
-    effectPrefabPath: Epic Toon FX/Prefabs/Combat/Explosions (Text)/Bang
+    effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion
     spawnPositionType: 3
+    spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: 0}
     effectScale: 1
     delayTime: 0.5

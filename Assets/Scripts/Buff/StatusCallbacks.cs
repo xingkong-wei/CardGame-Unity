@@ -148,7 +148,7 @@ public static class StatusCallbacks
                 break;
 
             case StatusType.Weak:
-                effect.onTurnEnd = e =>
+                effect.onPlayerTurnEnd = e =>
                 {
                     BuffManager.Instance.RemoveStatus(StatusType.Weak, 1);
                 };

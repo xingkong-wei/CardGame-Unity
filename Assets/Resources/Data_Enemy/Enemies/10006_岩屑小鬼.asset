@@ -14,31 +14,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10006
   enemyName: "\u5CA9\u5C51\u5C0F\u9B3C"
-  maxHp: 20
+  maxHp: 47
   modelPath: Model/Rock Hurler-Pink
+  initialDefense: 0
   tier: 0
   scriptName: RockImpEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
-  attack: 8
+  attack: 0
   attackAnim: MeleeAttack=ThrowRockAttack
-  attackVariance: 0.2
-  defense: 3
-  defenseVariance: 0.2
+  attackVariance: 0
+  attackDamages:
+  - animName: MeleeAttack
+    damage: 7
+  - animName: ThrowRockAttack
+    damage: 6
+  defense: 6
   defenseAnim: CastSpell
-  initialDefense: 0
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 0.8
     duration: 1.5
+  defenseVariance: 0
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0
   flightThreshold: 0
   flightIdleAnim: 
   flightHitAnim: 
+  healAmount: 0
+  healVariance: 0
   healAnim: CastSpell
   healEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraGreen
   healEffectParams:

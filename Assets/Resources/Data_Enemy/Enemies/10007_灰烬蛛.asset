@@ -14,31 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10007
   enemyName: "\u7070\u70EC\u86DB"
-  maxHp: 44
+  maxHp: 75
   modelPath: Model/Hell Creeper-Purple
+  initialDefense: 0
   tier: 1
   scriptName: AshSpiderEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
-  attack: 18
+  attack: 0
   attackAnim: BiteAttack=ProjectileAttack=ClawAttack=BreathAttack
-  attackVariance: 0.2
-  defense: 6
+  attackVariance: 0
+  attackDamages:
+  - animName: ProjectileAttack
+    damage: 14
+  - animName: BiteAttack
+    damage: 9
+  - animName: ClawAttack
+    damage: 7
+  - animName: BreathAttac
+    damage: 6
+  defense: 12
   defenseAnim: CastSpell
-  initialDefense: 0
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Nova/MagicNovaYellow
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     effectScale: 1.1
     duration: 1.5
-  defenseVariance: 0.15
+  defenseVariance: 0
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0
   flightThreshold: 0
   flightIdleAnim: 
   flightHitAnim: 
+  healAmount: 11
+  healVariance: 0
   healAnim: CastSpell
   healEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Nova/MagicNovaGreen
   healEffectParams:

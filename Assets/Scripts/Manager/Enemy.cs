@@ -355,7 +355,15 @@ public class Enemy : MonoBehaviour
 
     protected virtual void PerformHeal()
     {
-        int healAmount = Mathf.CeilToInt(MaxHp * 0.1f);
+        int healAmount;
+        if (enemyDataSO != null && enemyDataSO.healAmount > 0)
+        {
+            healAmount = RandomizeValue(enemyDataSO.healAmount, enemyDataSO.healVariance);
+        }
+        else
+        {
+            healAmount = Mathf.CeilToInt(MaxHp * 0.1f);
+        }
         CurHp = Mathf.Min(CurHp + healAmount, MaxHp);
         UpdateHp();
         PlayHealEffect();
@@ -365,6 +373,14 @@ public class Enemy : MonoBehaviour
 
     public virtual void Hit(int val)
     {
+        // 荆棘反伤：敌人有荆棘时反弹给攻击者（玩家）
+        int thorns = GetStatusStack(StatusType.Thorns);
+        if (thorns > 0)
+        {
+            FightManager.Instance.GetPlayerHit(thorns);
+            UIManager.Instance.ShowTip($"荆棘反伤 -{thorns}", Color.green);
+        }
+
         val = ModifyTakenDamage(val);
 
         if (Defend >= val)

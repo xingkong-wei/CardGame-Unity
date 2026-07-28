@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u5CA9\u5C51\u5C0F\u9B3C"
   m_EditorClassIdentifier: 
   version: 1.0
-  description: 
+  description: "\u5CA9\u5C51\u5C0F\u9B3C"
   attackEffects:
   - effectName: MeleeAttack
     effectPrefabPath: Effects/Epic Toon FX/Prefabs/Combat/Blood/Red/BloodExplosion

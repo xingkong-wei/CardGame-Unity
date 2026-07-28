@@ -67,6 +67,11 @@ public class EnemyData : ScriptableObject
     public string flightHitAnim;
 
     [Header(" 回血配置 ")]
+    [Tooltip("回血量（为0则使用默认10%最大生命值）")]
+    public int healAmount;
+    [Range(0f, 1f)]
+    [Tooltip("回血量随机波动比例")]
+    public float healVariance;
     public string healAnim;
     public string healEffectPath;
     public EffectParams healEffectParams = new EffectParams();
