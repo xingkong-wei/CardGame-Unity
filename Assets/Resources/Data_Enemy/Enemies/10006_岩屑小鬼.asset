@@ -35,7 +35,7 @@ MonoBehaviour:
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 0.8
+    effectScale: 0.7
     duration: 1.5
   defenseVariance: 0
   flightAttackAnim: 
@@ -46,10 +46,10 @@ MonoBehaviour:
   flightHitAnim: 
   healAmount: 0
   healVariance: 0
-  healAnim: CastSpell
-  healEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraGreen
+  healAnim: 
+  healEffectPath: 
   healEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
-    rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 0.8
-    duration: 1.5
+    rotationOffset: {x: 0, y: 0, z: 0}
+    effectScale: 0.1
+    duration: 0

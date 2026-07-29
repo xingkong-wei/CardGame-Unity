@@ -135,12 +135,12 @@ public static class StatusCallbacks
                 break;
 
             case StatusType.Vulnerable:
-                effect.onTurnEnd = e =>
+                effect.onTurnStart = e =>
                 {
                     BuffManager.Instance.RemoveStatus(StatusType.Vulnerable, 1);
                 };
                 effect.modifyTakenDamage = (e, dmg) => Mathf.CeilToInt(dmg * 1.25f);
-                // 敌人端：易伤在敌人回合结束时递减
+                // 敌人端：易伤在敌人回合开始时递减（敌人回合在玩家回合之后）
                 effect.onEnemyTurnEnd = (e, enemy) =>
                 {
                     enemy.RemoveStatus(StatusType.Vulnerable, 1);
@@ -225,6 +225,10 @@ public static class StatusCallbacks
                 break;
 
             case StatusType.Frail:
+                effect.onPlayerTurnEnd = e =>
+                {
+                    BuffManager.Instance.RemoveStatus(StatusType.Frail, 1);
+                };
                 effect.modifyDefenseGain = (e, dmg) => Mathf.CeilToInt(dmg * (1f - e.stack * 0.25f));
                 break;
 
@@ -295,6 +299,28 @@ public static class StatusCallbacks
                 {
                     if (enemy.CurHp > 0)
                         enemy.Hit(9 * e.stack);
+                };
+                break;
+
+            // ========== Dizzy：每回合只能打2张牌，回合结束减1层 ==========
+            case StatusType.Dizzy:
+                effect.onPlayerTurnEnd = e =>
+                {
+                    BuffManager.Instance.RemoveStatus(StatusType.Dizzy, 1);
+                };
+                break;
+
+            // ========== Fear：攻击伤害-6，攻击后减1层 ==========
+            case StatusType.Fear:
+                effect.modifyAttackDamage = (e, dmg) => Mathf.Max(0, dmg - 6);
+                break;
+
+            // ========== Scorch：每层回合结束时受到1点伤害，层数不减少 ==========
+            case StatusType.Scorch:
+                effect.onPlayerTurnEnd = e =>
+                {
+                    FightManager.Instance.GetPlayerHit(e.stack);
+                    UIManager.Instance.ShowTip($"灼烧 -{e.stack}", new Color(1f, 0.4f, 0f));
                 };
                 break;
         }

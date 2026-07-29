@@ -197,6 +197,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\Scripts\UI\Window\FightUI.cs" />
     <Compile Include="Assets\Scripts\Enemy\GolemEnemy.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\SnakeVenomCard.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\MagicMissileCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\ArrayLengthAttribute.cs" />
     <Compile Include="Assets\Scripts\Data\PotionData.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Assets\Scripts\Relics\PactCodex.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyData.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXMouseOrbit.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\IntertwineCard.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\BreakArmorStrikeCard.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\FirePotion.cs" />
     <Compile Include="Assets\Scripts\UI\Window\StoryUI.cs" />
@@ -351,6 +353,7 @@
     <Compile Include="Assets\MagicEffect\Demo magiс circles Vol 2\CameraHolder.cs" />
     <Compile Include="Assets\Scripts\Card\AbilityCard\SpiritFocusCard.cs" />
     <Compile Include="Assets\Scripts\Enemy\FlameDragonEnemy.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\PosionBlisterCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\Nested\NestedSimpleExample.cs" />
     <Compile Include="Assets\Scripts\Relics\FusionFurnace.cs" />
     <Compile Include="Assets\Scripts\Enemy\CarbonBeastEnemy.cs" />
@@ -394,7 +397,6 @@
     <None Include="Assets\Shaders\outline.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Shaders\MADFINGER-Unlit-Scroll2Layers-Sine-AlphaBlend-No-Amp.shader" />
-    <None Include="Assets\Fire Creatures Pack\Fire Dragon\Read me.txt" />
     <None Include="Assets\Arts\Simple Toon\Shaders\STDefault.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking_FollowingCharacters.txt" />

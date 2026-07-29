@@ -242,6 +242,29 @@ public class FightUI : UIBase
     }
 
 
+    /// <summary>直接创建指定卡牌到手牌（不消耗抽牌堆）</summary>
+    public void CreateCardItem(CardData cardData)
+    {
+        if (cardData == null) return;
+
+        GameObject obj = Instantiate(Resources.Load("UI/CardItem"), transform) as GameObject;
+        obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000, -700);
+
+        DeckCard dc = new DeckCard(cardData);
+        System.Type cardType = System.Type.GetType(cardData.scriptName);
+        if (cardType != null && typeof(CardItem).IsAssignableFrom(cardType))
+        {
+            CardItem item = obj.AddComponent(cardType) as CardItem;
+            item.Init(cardData, dc);
+            cardItemList.Add(item);
+        }
+        else
+        {
+            Debug.LogError($"无法创建卡牌脚本类型: {cardData.scriptName}");
+            Destroy(obj);
+        }
+    }
+
     //创建卡牌物体
     public void CreateCardItem(int Count)
     {
@@ -392,6 +415,12 @@ public class FightUI : UIBase
     //删除所有卡牌（带动画效果）- 回合结束时的丢弃
     public void RemoveAllCards()
     {
+        // 先触发回合结束钩子（如缠绕：造成伤害）
+        for (int i = cardItemList.Count - 1; i >= 0; i--)
+        {
+            cardItemList[i]?.OnPlayerTurnEndInHand();
+        }
+
         for (int i = cardItemList.Count - 1; i >= 0; i--)
         {
             RemoveCard(cardItemList[i], false); // false = 回合结束丢弃，消耗卡入弃牌堆

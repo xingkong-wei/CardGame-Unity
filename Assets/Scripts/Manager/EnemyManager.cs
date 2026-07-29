@@ -302,6 +302,12 @@ public class EnemyManager
     //执行所有敌人的行为
     public IEnumerator DoAllEnemyAction()
     {
+        // 敌人回合开始：触发状态效果（如易伤递减）
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            enemyList[i].OnEnemyTurnStart();
+        }
+
         for (int i = 0; i < enemyList.Count; i++)
         {
             yield return FightManager.Instance.StartCoroutine(enemyList[i].DoAction());

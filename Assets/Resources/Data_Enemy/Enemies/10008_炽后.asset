@@ -14,35 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10008
   enemyName: "\u70BD\u540E"
-  maxHp: 58
+  maxHp: 68
   modelPath: Model/Succubus-Red
+  initialDefense: 0
   tier: 1
   scriptName: SuccubusQueenEnemy
   idleAnim: FlyIdle
   hitAnim: TakeDamage
-  attack: 10
+  attack: 8
   attackAnim: ProjectileAttack=ClawAttack
-  attackVariance: 0.15
-  defense: 14
+  attackVariance: 0
+  attackDamages:
+  - animName: ProjectileAttack
+    damage: 4
+  defense: 8
   defenseAnim: CastSpell01
-  initialDefense: 0
   defenseEffectPath: Effects/MagicEffect/Magic circle 19
   defenseEffectParams:
-    positionOffset: {x: 0, y: 0, z: 0}
-    rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 2
-    duration: 2
-  defenseVariance: 0.15
+    positionOffset: {x: 0, y: 2.3, z: 0}
+    rotationOffset: {x: -180, y: 0, z: 0}
+    effectScale: 1.2
+    duration: 1.3
+  defenseVariance: 0
   flightAttackAnim: 
   flightDefenseAnim: 
   useFlightAnim: 0
   flightThreshold: 0
   flightIdleAnim: 
   flightHitAnim: 
+  healAmount: 7
+  healVariance: 0
   healAnim: CastSpell02
   healEffectPath: Effects/MagicEffect/Magic circle 19
   healEffectParams:
-    positionOffset: {x: 0, y: 0, z: 0}
-    rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 2
-    duration: 2
+    positionOffset: {x: 0, y: 2.3, z: 0}
+    rotationOffset: {x: -180, y: 0, z: 0}
+    effectScale: 1.2
+    duration: 1.3

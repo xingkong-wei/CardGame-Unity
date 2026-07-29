@@ -100,6 +100,9 @@ public static class StatusDisplayDB
         { StatusType.GuardianElixir,   new StatusDisplayData { name = "守护神汁", descriptionTemplate = "下回合开始时获得 10 点护盾",              iconPath = "Icon/Ability/GuardianElixir"  , displayType = StatusDisplayType.Buff    } },
         { StatusType.LuckyBlock,       new StatusDisplayData { name = "幸运",     descriptionTemplate = "抵挡下 {0} 次伤害",                     iconPath = "Icon/Ability/LuckyBlock"      , displayType = StatusDisplayType.Buff    } },
         { StatusType.Fetter,           new StatusDisplayData { name = "枷锁",     descriptionTemplate = "每层降低攻击力 {0} 点",                  iconPath = "Icon/Ability/Fetter"          , displayType = StatusDisplayType.Debuff  } },
+        { StatusType.Dizzy,            new StatusDisplayData { name = "眩晕",     descriptionTemplate = "每回合只能打出2张牌，回合结束减少1层",    iconPath = "Icon/Ability/Dizzy"           , displayType = StatusDisplayType.Debuff  } },
+        { StatusType.Fear,             new StatusDisplayData { name = "恐惧",     descriptionTemplate = "下一次攻击伤害-6，攻击后减少1层",         iconPath = "Icon/Ability/Fear"            , displayType = StatusDisplayType.Debuff  } },
+        { StatusType.Scorch,           new StatusDisplayData { name = "灼烧",     descriptionTemplate = "每层回合结束时受到1点伤害，层数不减少",    iconPath = "Icon/Ability/Scorch"          , displayType = StatusDisplayType.Debuff  } },
     };
 
     /// <summary>获取指定类型的数据（未配置则返回默认值）</summary>

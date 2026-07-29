@@ -24,13 +24,14 @@ MonoBehaviour:
   attack: 7
   attackAnim: attack
   attackVariance: 0
+  attackDamages: []
   defense: 6
   defenseAnim: attack
   defenseEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraBlue
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 1
+    effectScale: 0.9
     duration: 2
   defenseVariance: 0
   flightAttackAnim: 
@@ -39,10 +40,12 @@ MonoBehaviour:
   flightThreshold: 0
   flightIdleAnim: 
   flightHitAnim: 
-  healAnim: attack
-  healEffectPath: Effects/Epic Toon FX/Prefabs/Combat/Magic/Aura/MagicAuraGreen
+  healAmount: 0
+  healVariance: 0
+  healAnim: 
+  healEffectPath: 
   healEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
-    rotationOffset: {x: -90, y: 0, z: 0}
+    rotationOffset: {x: 0, y: 0, z: 0}
     effectScale: 0.8
-    duration: 2
+    duration: 0

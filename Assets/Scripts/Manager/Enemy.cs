@@ -304,6 +304,10 @@ public class Enemy : MonoBehaviour
         int modifiedAttack = ModifyAttackDamage(Attack);
         FightManager.Instance.GetPlayerHit(modifiedAttack, this);
         Camera.main.DOShakePosition(0.1f, 0.2f, 5, 45);
+
+        // 恐惧：攻击后减1层
+        if (HasStatus(StatusType.Fear))
+            RemoveStatus(StatusType.Fear, 1);
     }
 
     /// <summary>
@@ -501,6 +505,12 @@ public class Enemy : MonoBehaviour
 
     // ===== 飞行 =====
 
+    /// <summary>切换到飞行模式时触发，子类可重写更新行动意图和图标</summary>
+    protected virtual void OnFlightModeChanged()
+    {
+        UpdateActionIcon();
+    }
+
     protected void CheckFlightMode()
     {
         if (isFlightMode) return;
@@ -513,6 +523,7 @@ public class Enemy : MonoBehaviour
         {
             isFlightMode = true;
             if (HasAnimatorParameter("isFlying")) ani.SetBool("isFlying", true);
+            OnFlightModeChanged();
         }
     }
 
@@ -565,6 +576,21 @@ public class Enemy : MonoBehaviour
         foreach (var kvp in statusDict)
             if (kvp.Value > 0) valid[kvp.Key] = kvp.Value;
         return valid;
+    }
+
+    /// <summary>
+    /// 敌人回合开始时触发状态效果
+    /// </summary>
+    public void OnEnemyTurnStart()
+    {
+        var snapshot = new Dictionary<StatusType, int>(statusDict);
+        foreach (var kvp in snapshot)
+        {
+            if (kvp.Value <= 0) continue;
+            var temp = new StatusEffect(kvp.Key, kvp.Value);
+            StatusCallbacks.Inject(temp);
+            temp.onEnemyTurnEnd?.Invoke(temp, this);
+        }
     }
 
     /// <summary>

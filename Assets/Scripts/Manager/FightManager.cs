@@ -26,6 +26,7 @@ public class FightManager : MonoBehaviour
     [HideInInspector] public int CurPowerCount;//当前能量
     [HideInInspector] public int DefenseCount;//防御值
     [HideInInspector] public int CoinAmount { get; private set; } // 当前金币
+    [HideInInspector] public int cardsPlayedThisTurn; // 本回合已打出的牌数
 
     private static int savedCoinAmount = -1; // 持久化金币
 

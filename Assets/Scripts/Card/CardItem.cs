@@ -317,6 +317,14 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             return false;
         }
 
+        // 眩晕：每回合只能打出2张牌
+        if (BuffManager.Instance.HasStatus(StatusType.Dizzy) && FightManager.Instance.cardsPlayedThisTurn >= 2)
+        {
+            UIManager.Instance.ShowTip("眩晕：本回合只能打出2张牌", Color.red);
+            CancelUsing();
+            return false;
+        }
+
         int cost = GetCost();
 
         if (cost > FightManager.Instance.CurPowerCount)
@@ -328,6 +336,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         // 扣费并删除卡牌
         FightManager.Instance.CurPowerCount -= cost;
+        FightManager.Instance.cardsPlayedThisTurn++;
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
         if (fightUI != null)
         {
@@ -486,6 +495,13 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected virtual void OnCardUsed()
     {
         useState = CardUseState.None;
+    }
+
+    /// <summary>
+    /// 回合结束时若该牌仍在手上触发 - 子类重写实现（如缠绕：造成伤害）
+    /// </summary>
+    public virtual void OnPlayerTurnEndInHand()
+    {
     }
 
     /// <summary>

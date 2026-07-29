@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 325f1696c9d53a540b95058ab90ed563, type: 3}
-  m_Name: Level0_0
+  m_Script: {fileID: 11500000, guid: 56ca92f9bcaae1641b77e81bb1907c0b, type: 3}
+  m_Name: "\u7729\u6655"
   m_EditorClassIdentifier: 
-  levelId: 0
-  levelName: 0
-  islandIndex: 0
-  category: 0
-  enemies:
-  - enemyId: 10010
-    position: {x: 0, y: 0, z: 0}
+  statusType: 43
+  displayName: "\u7729\u6655"
+  description: "\u672C\u56DE\u5408\u53EA\u80FD\u6253\u51FA2\u5F20\u724C"
+  iconPath: Icon/Ability/Dizzy
+  displayType: 1
+  stackFormat: +{0}

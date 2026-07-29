@@ -70,6 +70,11 @@ public class AttackCardItem : CardItem
             damage *= 3;
             BuffManager.Instance.RemoveStatus(StatusType.GiantGrowth, 1);
         }
+        // 恐惧：攻击后减1层（伤害-6已在 ModifyAttackDamage 中通过回调处理）
+        if (BuffManager.Instance.HasStatus(StatusType.Fear))
+        {
+            BuffManager.Instance.RemoveStatus(StatusType.Fear, 1);
+        }
         return damage;
     }
 
@@ -293,6 +298,11 @@ public class AttackCardItem : CardItem
                             StartCoroutine(PerformMultiHit(hitEnemy, val2, times, effectPath));
                         OnCardUsed();
                     }
+                }
+                else
+                {
+                    // 使用失败（眩晕限制等），取消攻击选中状态
+                    CancelAttackSelect();
                 }
 
                 hitEnemy.OnUnSelect();

@@ -475,6 +475,7 @@ MonoBehaviour:
   MaxPowerCount: 0
   CurPowerCount: 0
   DefenseCount: 0
+  cardsPlayedThisTurn: 0
   potionList: []
   relicList: []
 --- !u!1001 &1258291406

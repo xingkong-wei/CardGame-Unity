@@ -18,6 +18,7 @@ public class Fight_PlayerTurn : FightUnit
         {
             //回复行动力
             FightManager.Instance.CurPowerCount = GameConfig.Instance.maxPowerCount;
+            FightManager.Instance.cardsPlayedThisTurn = 0;
 
             // 回合开始触发Buff效果（护甲强化、再生等）——在能量重置之后，确保Buff加的能量不被覆盖
             BuffManager.Instance.OnTurnStart();

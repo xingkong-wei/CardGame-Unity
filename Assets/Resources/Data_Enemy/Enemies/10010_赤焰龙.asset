@@ -14,35 +14,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10010
   enemyName: "\u8D64\u7130\u9F99"
-  maxHp: 72
+  maxHp: 341
   modelPath: Model/Fire Dragon-Red
+  initialDefense: 0
   tier: 2
   scriptName: FlameDragonEnemy
   idleAnim: Idle
   hitAnim: TakeDamage
-  attack: 22
+  attack: 0
   attackAnim: BiteAttack=FireBreathAttack=ProjectileAttack
-  attackVariance: 0.15
-  defense: 6
+  attackVariance: 0
+  attackDamages:
+  - animName: BiteAttack
+    damage: 12
+  - animName: FireBreathAttack
+    damage: 8
+  - animName: ProjectileAttack
+    damage: 10
+  - animName: FlyBiteAttackLow
+    damage: 20
+  - animName: FlyBiteAttackHigh
+    damage: 6
+  - animName: FlyFireBreathAttackLow
+    damage: 15
+  - animName: FlyFireBreathAttackHigh
+    damage: 10
+  - animName: FlyProjectileAttackLow
+    damage: 13
+  - animName: FlyProjectileAttackHigh
+    damage: 5
+  defense: 13
   defenseAnim: CastSpell
-  initialDefense: 0
   defenseEffectPath: Effects/MagicEffect/Magic circle 14
   defenseEffectParams:
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: -90, y: 0, z: 0}
     effectScale: 1
     duration: 2
-  defenseVariance: 0.15
+  defenseVariance: 0
   flightAttackAnim: FlyBiteAttackLow=FlyBiteAttackHigh=FlyFireBreathAttackLow=FlyFireBreathAttackHigh=FlyProjectileAttackLow=FlyProjectileAttackHigh
   flightDefenseAnim: FlyCastSpell
   useFlightAnim: 1
   flightThreshold: 0.5
   flightIdleAnim: FlyIdle
   flightHitAnim: FlyTakeDamage
-  healAnim: CastSpell
-  healEffectPath: Effects/MagicEffect/Magic circle 14
+  healAmount: 0
+  healVariance: 0
+  healAnim: 0
+  healEffectPath: 0
   healEffectParams:
-    positionOffset: {x: 0, y: 0.1, z: 0}
-    rotationOffset: {x: -90, y: 0, z: 0}
-    effectScale: 1
-    duration: 2
+    positionOffset: {x: 0, y: 0, z: 0}
+    rotationOffset: {x: 0, y: 0, z: 0}
+    effectScale: 0.1
+    duration: 0

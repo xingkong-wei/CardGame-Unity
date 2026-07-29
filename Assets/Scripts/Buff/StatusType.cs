@@ -109,6 +109,12 @@ public enum StatusType
     Shrink,
     /// <summary>超巨化：下1张攻击牌造成3倍伤害（可跨回合保留）</summary>
     GiantGrowth,
+    /// <summary>眩晕（玩家）：每回合只能打出2张牌，回合结束时减少1层</summary>
+    Dizzy,
+    /// <summary>恐惧：下一次攻击伤害-6（可跨回合保留），攻击后减少1层</summary>
+    Fear,
+    /// <summary>灼烧：每层在玩家回合结束时受到1点伤害，层数不减少</summary>
+    Scorch,
 }
 
 /// <summary>

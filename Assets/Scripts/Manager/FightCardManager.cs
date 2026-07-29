@@ -47,27 +47,6 @@ public class FightCardManager
     //初始化
     public void Init()
     {
-        // 缓存原始牌组的 instanceId，用于识别额外卡牌
-        var deckIds = new HashSet<int>();
-        foreach (var dc in RoleManager.Instance.cardList)
-        {
-            if (dc != null) deckIds.Add(dc.instanceId);
-        }
-
-        // 保存弃牌堆中非原始牌组的卡（战斗中塞入的，如眩晕/黏液）
-        List<DeckCard> extraCards = new List<DeckCard>();
-        if (usedCardList != null)
-        {
-            foreach (var dc in usedCardList)
-            {
-                if (dc?.cardData == null) continue;
-                if (consumedInstanceIds.Contains(dc.instanceId)) continue;
-                if (usedAbilityInstanceIds.Contains(dc.instanceId)) continue;
-                if (!deckIds.Contains(dc.instanceId))
-                    extraCards.Add(dc);
-            }
-        }
-
         if (cardList == null) cardList = new List<DeckCard>();
         else cardList.Clear();
         if (usedCardList == null) usedCardList = new List<DeckCard>();
@@ -88,13 +67,6 @@ public class FightCardManager
             int idx = Random.Range(0, tempList.Count);
             cardList.Add(tempList[idx]);
             tempList.RemoveAt(idx);
-        }
-
-        // 把战斗中塞入的额外卡牌随机插入抽牌堆
-        foreach (var extra in extraCards)
-        {
-            int insertIndex = Random.Range(0, cardList.Count + 1);
-            cardList.Insert(insertIndex, extra);
         }
     }
 
