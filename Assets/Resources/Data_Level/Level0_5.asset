@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: 5
   levelName: 5
-  islandIndex: 1
+  islandIndex: 0
   category: 0
   enemies:
   - enemyId: 10005
