@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7a9226fb17801409459bd1345cfb0a, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  maxHp: 1000
-  curHp: 1000
+  maxHp: 100
+  curHp: 100
   maxPowerCount: 3
-  initialCoin: 999
+  initialCoin: 99
   killCoinReward: 25
   drawCardsPerTurn: 5
   maxHandSize: 10

@@ -17,5 +17,5 @@ MonoBehaviour:
   islandIndex: 1
   category: 0
   enemies:
-  - enemyId: 10006
+  - enemyId: 10005
     position: {x: 0, y: 0, z: 0}
