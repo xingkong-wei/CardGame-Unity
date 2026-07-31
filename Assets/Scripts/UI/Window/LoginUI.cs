@@ -6,6 +6,7 @@ public class LoginUI : UIBase
 {
     [Header("按钮")]
     public Button startBtn;
+    public Button newBtn;
     public Button quitBtn;
     public Button setBtn;
     public Button encyclpediaBtn;
@@ -13,6 +14,7 @@ public class LoginUI : UIBase
     private void Awake()
     {
         startBtn.onClick.AddListener(() => onStartGameBtn(startBtn.gameObject, null));
+        newBtn.onClick.AddListener(() => onNewGameBtn(newBtn.gameObject, null));
         quitBtn.onClick.AddListener(() => onExitGameBtn(quitBtn.gameObject, null));
         setBtn.onClick.AddListener(() => onSetGameBtn(setBtn.gameObject, null));
         encyclpediaBtn.onClick.AddListener(() => onEncyclpediaBtn(encyclpediaBtn.gameObject, null));
@@ -68,6 +70,38 @@ public class LoginUI : UIBase
     {
         Close(); // 关闭登录界面
         UIManager.Instance.ShowUI<GameSettingUI_Login>("GameSettingUI_Login");
+    }
+
+    //新游戏按钮事件（清除所有存档数据）
+    private void onNewGameBtn(GameObject obj, PointerEventData pData)
+    {
+        SaveManager.ClearAllGameData();
+        FightCardManager.Instance.ResetForNewGame();
+        RoleManager.Instance.Init();
+        RoleManager.Instance.ApplyUpgradesToDeck();
+        FightUI.ResetBattleTimer();
+        FightManager.ResetHp();
+        FightManager.Instance.relicList.Clear();
+        FightManager.Instance.potionList.Clear();
+
+        // 清除所有岛屿地图
+        for (int i = 0; i < 10; i++)
+        {
+            string mapKey = $"Map_Island_{i}";
+            if (PlayerPrefs.HasKey(mapKey))
+                PlayerPrefs.DeleteKey(mapKey);
+        }
+        PlayerPrefs.DeleteKey("Map");
+        PlayerPrefs.DeleteKey("UpgradedCardIds");
+        PlayerPrefs.DeleteKey("SavedCurHp");
+        PlayerPrefs.DeleteKey("SavedMaxHp");
+        PlayerPrefs.DeleteKey("SavedCoinAmount");
+        PlayerPrefs.DeleteKey("SavedIslandIndex");
+        PlayerPrefs.Save();
+
+        Close();
+        MapUI mapUI = UIManager.Instance.ShowUI<MapUI>("MapUI") as MapUI;
+        mapUI.OnNewGameStarted();
     }
 
     //图鉴按钮事件

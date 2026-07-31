@@ -41,7 +41,7 @@ public class GameConfigManager
         cardDataList.Clear();
         cardDataDict.Clear();
 
-        CardData[] cards = Resources.LoadAll<CardData>("Date_Card/Card");
+        CardData[] cards = Resources.LoadAll<CardData>("Data_Card/Card");
         foreach (CardData card in cards)
         {
             cardDataList.Add(card);
@@ -62,7 +62,7 @@ public class GameConfigManager
         cardTypeList.Clear();
         cardTypeDict.Clear();
 
-        CardTypeData[] types = Resources.LoadAll<CardTypeData>("Date_Card/CardType");
+        CardTypeData[] types = Resources.LoadAll<CardTypeData>("Data_Card/CardType");
         foreach (CardTypeData type in types)
         {
             cardTypeList.Add(type);

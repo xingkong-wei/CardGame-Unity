@@ -13,27 +13,61 @@ namespace Map
 
         private void Start()
         {
-            if (PlayerPrefs.HasKey("Map"))
+            // 如果 CurrentMap 已经被外部加载（如继续游戏时恢复），直接显示即可
+            if (CurrentMap != null)
             {
-                string mapJson = PlayerPrefs.GetString("Map");
+                view?.ShowMap(CurrentMap);
+                return;
+            }
+
+            // 尝试从持久化数据加载地图
+            string mapJson = null;
+
+            // 优先从存档中读取当前岛屿索引
+            int islandIndex = -1;
+            if (SaveManager.HasSave())
+            {
+                GameSaveData saveData = SaveManager.Load();
+                if (saveData != null)
+                    islandIndex = saveData.currentIslandIndex;
+            }
+            if (islandIndex < 0)
+                islandIndex = FightManager.Instance?.currentIslandIndex ?? 0;
+
+            string islandKey = $"Map_Island_{islandIndex}";
+
+            if (PlayerPrefs.HasKey(islandKey))
+            {
+                mapJson = PlayerPrefs.GetString(islandKey);
+            }
+            else if (PlayerPrefs.HasKey("Map"))
+            {
+                mapJson = PlayerPrefs.GetString("Map");
+            }
+
+            if (!string.IsNullOrEmpty(mapJson))
+            {
                 Map map = JsonConvert.DeserializeObject<Map>(mapJson);
-                // using this instead of .Contains()
-                if (map.path.Any(p => p.Equals(map.GetBossNode().point)))
+                if (map != null)
                 {
-                    // payer has already reached the boss, generate a new map
-                    GenerateNewMap();
-                }
-                else
-                {
-                    CurrentMap = map;
-                    // player has not reached the boss yet, load the current map
-                    view.ShowMap(map);
+                    // 检查是否已到达 Boss
+                    var bossNode = map.GetBossNode();
+                    if (bossNode != null && map.path.Any(p => p.Equals(bossNode.point)))
+                    {
+                        // 已到达 Boss，生成新地图
+                        GenerateNewMap();
+                    }
+                    else
+                    {
+                        CurrentMap = map;
+                        view?.ShowMap(map);
+                    }
+                    return;
                 }
             }
-            else
-            {
-                GenerateNewMap();
-            }
+
+            // 没有可用的地图数据，生成新地图
+            GenerateNewMap();
         }
 
         public void GenerateNewMap()

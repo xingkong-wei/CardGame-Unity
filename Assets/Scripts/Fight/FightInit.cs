@@ -33,7 +33,16 @@ public class FightInit : FightUnit
         // 根据岛屿索引和节点类型加载敌人
         int islandIndex = FightManager.Instance.GetCurrentIslandIndex();
         Map.NodeType nodeType = FightManager.Instance.GetCurrentNodeType();
-        EnemyManager.Instance.LoadRes(islandIndex, nodeType);
+
+        // 读档时使用保存的关卡ID，确保遇到同一组敌人
+        if (SaveManager.IsLoading && EnemyManager.Instance.CurrentLevelId > 0)
+        {
+            EnemyManager.Instance.LoadResByLevelId(EnemyManager.Instance.CurrentLevelId);
+        }
+        else
+        {
+            EnemyManager.Instance.LoadRes(islandIndex, nodeType);
+        }
 
         // 隐藏节点地图UI
         UIManager.Instance.HideUI("SlayTheSpireMapUI");
@@ -60,6 +69,10 @@ public class FightInit : FightUnit
 
         // 触发遗物战斗开始钩子
         RelicManager.Instance.TriggerBattleStart();
+
+        // 战斗初始化完成后存档（SL 读档点，仅正常进入时存档，读档恢复时不覆盖）
+        if (!SaveManager.IsLoading)
+            SaveManager.Save();
     }
 
     public override void OnUpdate()

@@ -26,6 +26,13 @@ public class FightManager : MonoBehaviour
     [HideInInspector] public int CurPowerCount;//当前能量
     [HideInInspector] public int DefenseCount;//防御值
     [HideInInspector] public int CoinAmount { get; private set; } // 当前金币
+
+    /// <summary>设置金币（用于存档恢复）</summary>
+    public void SetCoinAmount(int amount)
+    {
+        CoinAmount = amount;
+        if (savedCoinAmount < 0) savedCoinAmount = amount;
+    }
     [HideInInspector] public int cardsPlayedThisTurn; // 本回合已打出的牌数
 
     private static int savedCoinAmount = -1; // 持久化金币
@@ -36,9 +43,9 @@ public class FightManager : MonoBehaviour
     /// <summary>当前持有的遗物列表（数据）</summary>
     [HideInInspector] public List<RelicData> relicList = new List<RelicData>();
 
-    private int currentIslandIndex; // 当前岛屿索引
-    private Vector2Int currentNodePoint; // 当前节点坐标
-    private Map.NodeType currentNodeType; // 当前节点类型
+    [HideInInspector] public int currentIslandIndex; // 当前岛屿索引
+    [HideInInspector] public Vector2Int currentNodePoint; // 当前节点坐标
+    [HideInInspector] public Map.NodeType currentNodeType; // 当前节点类型
 
     private static int savedMaxHp = 100; // 保存的最大血量（跨岛屿继承），首次使用 GameConfig 值覆盖
     private static int savedCurHp = 100; // 保存的当前血量（同一岛屿内保持）

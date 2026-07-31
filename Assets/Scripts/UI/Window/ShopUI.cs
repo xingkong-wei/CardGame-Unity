@@ -57,6 +57,10 @@ public class ShopUI : UIBase
 
     private const int CARD_REMOVE_PRICE = 100;
     private bool removeUsed;
+    private bool restoringFromSave; // 读档恢复时跳过 GenerateRandomShop
+
+    /// <summary>标记为读档恢复（在 Show() 后调用，跳过下次存档覆盖）</summary>
+    public void MarkRestoring() { restoringFromSave = true; }
 
     private void Start()
     {
@@ -113,9 +117,9 @@ public class ShopUI : UIBase
     {
         ClearAllItems();
 
-        CardData[] allCards = Resources.LoadAll<CardData>("Date_Card");
-        RelicData[] allRelics = Resources.LoadAll<RelicData>("Data_Relics");
-        PotionData[] allPotions = Resources.LoadAll<PotionData>("Date_Potion");
+        CardData[] allCards = Resources.LoadAll<CardData>("Data_Card");
+        RelicData[] allRelics = Resources.LoadAll<RelicData>("Data_Relic");
+        PotionData[] allPotions = Resources.LoadAll<PotionData>("Data_Potion");
 
         List<CardData> cards = PickRandomCards(allCards, 6);
         List<RelicData> relics = PickRandomRelics(allRelics, 3);
@@ -197,7 +201,7 @@ public class ShopUI : UIBase
     private void CreateCardItem(CardData cardData, int price)
     {
         GameObject cardObj = Instantiate(Resources.Load<GameObject>("UI/CardItem"), cardContainer);
-        cardObj.name = cardData.cardName;
+        cardObj.name = cardData.scriptName; // 用 scriptName 便于存档/读档恢复
 
         CardItem[] items = cardObj.GetComponents<CardItem>();
         foreach (var ci in items) Destroy(ci);
@@ -269,7 +273,7 @@ public class ShopUI : UIBase
     private void CreateRelicItem(RelicData relic, int price)
     {
         GameObject obj = Instantiate(Resources.Load<GameObject>("UI/RelicIcon"), relicContainer);
-        obj.name = relic.relicName;
+        obj.name = relic.scriptName; // 用 scriptName 便于存档/读档恢复
         obj.transform.localScale = Vector3.one * itemScale;
 
         RelicIcon ri = obj.GetComponent<RelicIcon>();
@@ -298,6 +302,7 @@ public class ShopUI : UIBase
             UpdateInvemtoryUI();
             RefreshFightUI();
             RefreshPotionUI();
+            SaveShopState();
         });
 
         relicObjects.Add(obj);
@@ -306,7 +311,7 @@ public class ShopUI : UIBase
     private void CreatePotionItem(PotionData potion, int price)
     {
         GameObject obj = Instantiate(Resources.Load<GameObject>("UI/PotionIcon"), potionContainer);
-        obj.name = potion.potionName;
+        obj.name = potion.scriptName; // 用 scriptName 便于存档/读档恢复
         obj.transform.localScale = Vector3.one * itemScale;
 
         RelicIcon ri = obj.GetComponent<RelicIcon>();
@@ -352,6 +357,7 @@ public class ShopUI : UIBase
             UpdateInvemtoryUI();
             RefreshFightUI();
             RefreshPotionUI();
+            SaveShopState();
         });
 
         potionObjects.Add(obj);
@@ -424,6 +430,7 @@ public class ShopUI : UIBase
         cardObjects.Remove(cardObj);
         UpdateInvemtoryUI();
         RefreshFightUI();
+        SaveShopState();
     }
 
     private void OnCardRemoveClicked()
@@ -445,6 +452,7 @@ public class ShopUI : UIBase
         UpdateInvemtoryUI();
         RefreshFightUI();
         RefreshPotionUI();
+        SaveShopState();
         CardCollectionUI.ShowCardList(
             GetPlayerCardDataList(),
             "移除服务",
@@ -552,6 +560,12 @@ public class ShopUI : UIBase
         potionObjects.Clear();
     }
 
+    private void SaveShopState()
+    {
+        if (SaveManager.IsLoading || restoringFromSave) return;
+        SaveManager.Save(SavePhase.Shop);
+    }
+
     private void OnLeaveClick()
     {
         OnClosed?.Invoke();
@@ -561,10 +575,123 @@ public class ShopUI : UIBase
     public override void Show()
     {
         base.Show();
+
         removeUsed = false;
         if (cardRemoveBtn != null) cardRemoveBtn.interactable = true;
         if (cardRemovePriceTxt != null) cardRemovePriceTxt.text = CARD_REMOVE_PRICE.ToString();
         GenerateRandomShop();
         UpdateInvemtoryUI();
+
+        if (!SaveManager.IsLoading && !restoringFromSave)
+            SaveManager.Save(SavePhase.Shop);
+    }
+
+    /// <summary>从存档恢复商店商品（先清空 Show() 生成的随机商品，再重建存档中的商品）</summary>
+    public void RestoreFromSave(GameSaveData data)
+    {
+        ClearAllItems();
+
+        removeUsed = data.shopRemoveUsed;
+        if (cardRemoveBtn != null) cardRemoveBtn.interactable = !removeUsed;
+        if (cardRemovePriceTxt != null) cardRemovePriceTxt.text = removeUsed ? "售罄" : CARD_REMOVE_PRICE.ToString();
+
+        // 恢复卡牌商品（按 scriptName 匹配，因为文件名是 id_中文名 格式）
+        if (data.shopCardIds.Count > 0)
+        {
+            CardData[] allCards = Resources.LoadAll<CardData>("Data_Card");
+            for (int i = 0; i < data.shopCardIds.Count; i++)
+            {
+                CardData card = System.Array.Find(allCards, c => c.scriptName == data.shopCardIds[i]);
+                if (card != null)
+                {
+                    int price = i < data.shopCardPrices.Count ? data.shopCardPrices[i] : 50;
+                    CreateCardItem(card, price);
+                }
+            }
+        }
+
+        // 恢复遗物商品
+        if (data.shopRelicIds.Count > 0)
+        {
+            RelicData[] allRelics = Resources.LoadAll<RelicData>("Data_Relic");
+            for (int i = 0; i < data.shopRelicIds.Count; i++)
+            {
+                RelicData relic = System.Array.Find(allRelics, r => r.scriptName == data.shopRelicIds[i]);
+                if (relic != null)
+                {
+                    int price = i < data.shopRelicPrices.Count ? data.shopRelicPrices[i] : 100;
+                    CreateRelicItem(relic, price);
+                }
+            }
+        }
+
+        // 恢复药水商品
+        if (data.shopPotionIds.Count > 0)
+        {
+            PotionData[] allPotions = Resources.LoadAll<PotionData>("Data_Potion");
+            for (int i = 0; i < data.shopPotionIds.Count; i++)
+            {
+                PotionData potion = System.Array.Find(allPotions, p => p.scriptName == data.shopPotionIds[i]);
+                if (potion != null)
+                {
+                    int price = i < data.shopPotionPrices.Count ? data.shopPotionPrices[i] : 50;
+                    CreatePotionItem(potion, price);
+                }
+            }
+        }
+
+        UpdateInvemtoryUI();
+        restoringFromSave = false; // 恢复完成后重置标志，允许后续购买触发正常存档
+    }
+
+    /// <summary>将商店状态写入存档</summary>
+    public void WriteSaveData(GameSaveData data)
+    {
+        data.shopRemoveUsed = removeUsed;
+        data.shopCardIds.Clear(); data.shopCardPrices.Clear();
+        data.shopRelicIds.Clear(); data.shopRelicPrices.Clear();
+        data.shopPotionIds.Clear(); data.shopPotionPrices.Clear();
+
+        // 保存卡牌商品（通过 cardObjects 列表和价格标签）
+        foreach (var obj in cardObjects)
+        {
+            if (obj == null) continue;
+            string scriptName = obj.name;
+            int price = GetPriceFromLabel(obj);
+            data.shopCardIds.Add(scriptName);
+            data.shopCardPrices.Add(price);
+        }
+
+        // 保存遗物商品
+        foreach (var obj in relicObjects)
+        {
+            if (obj == null) continue;
+            string scriptName = obj.name;
+            int price = GetPriceFromLabel(obj);
+            data.shopRelicIds.Add(scriptName);
+            data.shopRelicPrices.Add(price);
+        }
+
+        // 保存药水商品
+        foreach (var obj in potionObjects)
+        {
+            if (obj == null) continue;
+            string scriptName = obj.name;
+            int price = GetPriceFromLabel(obj);
+            data.shopPotionIds.Add(scriptName);
+            data.shopPotionPrices.Add(price);
+        }
+    }
+
+    private int GetPriceFromLabel(GameObject obj)
+    {
+        Transform priceTf = obj.transform.Find("PriceTxt");
+        if (priceTf != null)
+        {
+            TextMeshProUGUI txt = priceTf.GetComponent<TextMeshProUGUI>();
+            if (txt != null && int.TryParse(txt.text, out int price))
+                return price;
+        }
+        return 0;
     }
 }

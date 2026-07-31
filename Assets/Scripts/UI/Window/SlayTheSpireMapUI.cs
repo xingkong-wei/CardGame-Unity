@@ -186,6 +186,10 @@ public class SlayTheSpireMapUI : UIBase
 
     public void ReopenAfterVictory()
     {
+        // 从 FightManager 恢复岛屿索引（继续游戏后地图 UI 是新创建的，currentIslandIndex 为 -1）
+        if (currentIslandIndex < 0)
+            currentIslandIndex = FightManager.Instance.currentIslandIndex;
+
         // 重置显示状态
         ResetDisplay();
         HideCloseBtn();
@@ -262,6 +266,9 @@ public class SlayTheSpireMapUI : UIBase
         FightManager.Instance.SetCurrentNodePoint(node.Node.point);
         FightManager.Instance.SetCurrentNodeType(node.Node.nodeType);
 
+        // 任何节点点击后立即保存地图（确保 path 不丢失）
+        SaveCurrentMap();
+
         if (currentIslandIndex >= 0 && IsBossNode(node))
         {
             RoleManager.Instance.MarkIslandCompleted(currentIslandIndex);
@@ -312,8 +319,6 @@ public class SlayTheSpireMapUI : UIBase
 
         FightManager.Instance.SetCurrentIslandIndex(currentIslandIndex);
         FightManager.Instance.ChangeType(FightType.Init);
-
-        SaveCurrentMap();
     }
 
     private void HandleMysteryNode()

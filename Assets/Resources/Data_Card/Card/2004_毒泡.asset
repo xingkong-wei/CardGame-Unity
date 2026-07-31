@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb43ccb72097a4e45ad7bba7bb7016f2, type: 3}
-  m_Name: "2005_\u86C7\u6BD2"
+  m_Name: "2004_\u6BD2\u6CE1"
   m_EditorClassIdentifier: 
-  id: 2003
-  cardName: "\u86C7\u6BD2"
+  id: 2004
+  cardName: "\u6BD2\u6CE1"
   rarity: 6
   price: 0
   cardTypes:
   - {fileID: 11400000, guid: 38249bdb96cff0a4c8e828615137baab, type: 2}
-  - {fileID: 11400000, guid: f304a1c1e31643f4cab644e4ab2ccfc9, type: 2}
-  scriptName: SnakeVenomCard
+  scriptName: PosionBlisterCard
   bgIcon: Icon/CardBg/GreyCard
-  icon: Icon/StateCard/SnakeVenom
-  expend: 1
+  icon: Icon/StateCard/PosionBlister
+  expend: 0
   arg0: 0
   effects: 
   damageSource: 0
   damagePercent: 1
-  description: "\u5982\u679C\u56DE\u5408\u7ED3\u675F\u65F6\uFF0C\u8BE5\u724C\u8FD8\u5728\u624B\u4E0A\uFF0C\u5219\u83B7\u5F972\u5C42\u6613\u4F24"
+  description: "\u4E0D\u80FD\u6253\u51FA\uFF0C\u5982\u679C\u56DE\u5408\u7ED3\u675F\u65F6\uFF0C\u8BE5\u724C\u8FD8\u5728\u624B\u4E0A\uFF0C\u5219\u9020\u62103\u70B9\u4F24\u5BB3"
   upgradable: 0
   upgradedExpend: 0
   upgradedArg0: 0

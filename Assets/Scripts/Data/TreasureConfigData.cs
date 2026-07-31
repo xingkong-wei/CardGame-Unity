@@ -19,7 +19,7 @@ public class TreasureConfigData
 
     public RelicData RollRelic()
     {
-        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relics");
+        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relic");
         if (all == null || all.Length == 0) return null;
 
         int totalWeight = commonWeight + uncommonWeight + rareWeight;

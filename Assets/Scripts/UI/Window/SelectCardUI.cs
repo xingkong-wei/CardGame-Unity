@@ -28,6 +28,65 @@ public class SelectCardUI : UIBase
     private bool relicDone = false;
     private PotionData rolledPotion;
     private RelicData rolledRelic;
+    /// <summary>将奖励状态写入存档数据（保存退出用）</summary>
+    public void WriteSaveData(GameSaveData data)
+    {
+        data.rewardPotionId = rolledPotion != null ? rolledPotion.scriptName : "";
+        data.rewardRelicId = rolledRelic != null ? rolledRelic.scriptName : "";
+        data.rewardCardDone = cardDone;
+        data.rewardPotionDone = potionDone;
+        data.rewardRelicDone = relicDone;
+    }
+
+    /// <summary>从存档恢复奖励状态（读档继续用）</summary>
+    public void RestoreFromSave(GameSaveData data)
+    {
+        if (!string.IsNullOrEmpty(data.rewardPotionId))
+        {
+            PotionData[] allPotions = Resources.LoadAll<PotionData>("Data_Potion");
+            rolledPotion = System.Array.Find(allPotions, p => p.scriptName == data.rewardPotionId);
+            TextMeshProUGUI btnText = potionButton?.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            if (rolledPotion != null && btnText != null) btnText.text = rolledPotion.potionName;
+            else if (btnText != null) { btnText.text = "无药水奖励"; potionButton.interactable = false; potionDone = true; }
+        }
+        else
+        {
+            rolledPotion = null;
+            TextMeshProUGUI btnText = potionButton?.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            if (btnText != null) btnText.text = "无药水奖励";
+            if (potionButton != null) potionButton.interactable = false;
+            potionDone = true;
+        }
+
+        if (!string.IsNullOrEmpty(data.rewardRelicId))
+        {
+            RelicData[] allRelics = Resources.LoadAll<RelicData>("Data_Relic");
+            rolledRelic = System.Array.Find(allRelics, r => r.scriptName == data.rewardRelicId);
+            TextMeshProUGUI btnText = relicsButton?.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            if (rolledRelic != null && btnText != null) btnText.text = rolledRelic.relicName;
+            else if (btnText != null) { btnText.text = "无遗物奖励"; relicsButton.interactable = false; relicDone = true; }
+        }
+        else
+        {
+            rolledRelic = null;
+            TextMeshProUGUI btnText = relicsButton?.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+            if (btnText != null) btnText.text = "无遗物奖励";
+            if (relicsButton != null) relicsButton.interactable = false;
+            relicDone = true;
+        }
+
+        cardDone = data.rewardCardDone;
+        potionDone = data.rewardPotionDone;
+        relicDone = data.rewardRelicDone;
+
+        if (cardDone && cardButton != null) cardButton.interactable = false;
+        if (potionDone && potionButton != null) potionButton.interactable = false;
+        if (relicDone && relicsButton != null) relicsButton.interactable = false;
+
+        // 如果全部已完成，直接关闭
+        if (cardDone && potionDone && relicDone)
+            StartCoroutine(DelayClose(0.2f));
+    }
 
     private Transform inventoryOriginal;
     private int inventoryOriginalIndex;
@@ -94,7 +153,6 @@ public class SelectCardUI : UIBase
     {
         base.Show();
         MountInventory();
-        // MapBtn 需要先关闭 SelectCardUI 再打开 MapUI，确保层级正确
         OverrideMapBtn();
     }
 

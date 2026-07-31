@@ -103,7 +103,7 @@ public class SuccubusQueenEnemy : Enemy
         base.PerformDefend();
 
         // 防御时往弃牌堆塞2张毒泡
-        ShuffleCardToDiscardPile("Date_Card/Card/2004_毒泡", 2);
+        ShuffleCardToDiscardPile("Data_Card/Card/2004_毒泡", 2);
     }
 
     protected override void PerformHeal()
@@ -111,7 +111,7 @@ public class SuccubusQueenEnemy : Enemy
         base.PerformHeal();
 
         // 回血时往抽牌堆塞2张蛇毒
-        ShuffleCardToDrawPile("Date_Card/Card/2005_蛇毒", 2);
+        ShuffleCardToDrawPile("Data_Card/Card/2005_蛇毒", 2);
     }
 
     private void ShuffleCardToDiscardPile(string path, int count)

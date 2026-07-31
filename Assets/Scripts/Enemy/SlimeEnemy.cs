@@ -46,7 +46,7 @@ public class SlimeEnemy : Enemy
     private void ShuffleMucusToDrawPile()
     {
         // 加载黏液卡牌数据
-        CardData mucusData = Resources.Load<CardData>("Date_Card/Card/2001_黏液");
+        CardData mucusData = Resources.Load<CardData>("Data_Card/Card/2001_黏液");
         if (mucusData == null)
         {
             Debug.LogWarning("黏液卡牌数据加载失败");

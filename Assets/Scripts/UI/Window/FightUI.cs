@@ -84,6 +84,9 @@ public class FightUI : UIBase
 
     private List<CardItem> cardItemList;
 
+    /// <summary>获取所有手牌卡牌（用于存档）</summary>
+    public List<CardItem> GetAllCardItems() => cardItemList;
+
     public static readonly Vector2 CardCancelPos = new Vector2(-800, -500);
 
     private int currentCoinDisplay;

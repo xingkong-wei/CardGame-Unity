@@ -305,6 +305,7 @@
     <Compile Include="Assets\Epic Toon FX\Demo\ParticleEffectsShowcase\Scripts\UICanvasManager.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\WidthAttribute.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\WidthExample.cs" />
+    <Compile Include="Assets\Scripts\Manager\SaveManager.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\CurePotion.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\OneLine\RectEx\GridExtensions.cs" />

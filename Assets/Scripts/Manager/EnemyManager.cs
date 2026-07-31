@@ -20,6 +20,12 @@ public class EnemyManager
 
     private List<Enemy> enemyList;//存储战斗中的敌人
 
+    /// <summary>获取所有敌人列表（用于存档）</summary>
+    public List<Enemy> GetEnemyList() => enemyList;
+
+    /// <summary>当前加载的关卡ID（用于存档/读档保持敌人一致）</summary>
+    public int CurrentLevelId { get; set; } = -1;
+
     // 存储每个关卡的权重（通过的关卡权重降低）
     private Dictionary<int, int> levelWeights = new Dictionary<int, int>();
 
@@ -129,6 +135,7 @@ public class EnemyManager
     public void LoadRes(int islandIndex, Map.NodeType nodeType = Map.NodeType.MinorEnemy)
     {
         enemyList = new List<Enemy>();
+        CurrentLevelId = -1; // 重置，防止残留旧值
 
         // 根据节点类型确定需要的关卡分类
         LevelCategory targetCategory = NodeTypeToLevelCategory(nodeType);
@@ -165,6 +172,7 @@ public class EnemyManager
 
         int randomLevelId = GetWeightedRandom(availableLevels, weights);
         SaveCompletedLevel(randomLevelId);
+        CurrentLevelId = randomLevelId;
 
         // 加载关卡配置并生成敌人（不按敌人 tier 二次筛选）
         LevelConfig levelCfg = LevelConfigManager.Instance.GetLevelById(randomLevelId);
@@ -175,6 +183,45 @@ public class EnemyManager
         else
         {
             SpawnEnemiesFromTxt(randomLevelId.ToString());
+        }
+    }
+
+    /// <summary>
+    /// 按指定关卡ID加载敌人（用于读档恢复，不重新随机）
+    /// </summary>
+    public void LoadResByLevelId(int levelId)
+    {
+        enemyList = new List<Enemy>();
+        CurrentLevelId = levelId;
+
+        if (levelToIslandMap.Count == 0)
+            InitializeLevelToIslandMap();
+
+        LoadCompletedLevels();
+
+        // 确保关卡已完成标记（读档时不重复标记，因为第一次加载时已标记）
+        // 但为了安全，检查是否已标记
+        string completedStr = PlayerPrefs.GetString("CompletedLevels", "");
+        bool alreadyCompleted = false;
+        if (!string.IsNullOrEmpty(completedStr))
+        {
+            foreach (string s in completedStr.Split(','))
+            {
+                if (int.TryParse(s, out int cid) && cid == levelId)
+                { alreadyCompleted = true; break; }
+            }
+        }
+        if (!alreadyCompleted)
+            SaveCompletedLevel(levelId);
+
+        LevelConfig levelCfg = LevelConfigManager.Instance.GetLevelById(levelId);
+        if (levelCfg != null)
+        {
+            SpawnEnemiesFromConfig(levelCfg);
+        }
+        else
+        {
+            SpawnEnemiesFromTxt(levelId.ToString());
         }
     }
 

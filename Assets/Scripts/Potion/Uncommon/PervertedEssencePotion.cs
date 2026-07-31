@@ -17,7 +17,7 @@ public class PervertedEssencePotion : PotionBase
         int emptySlots = MAX_POTION_SLOTS - potionList.Count + 1;
 
         // 加载所有药水，排除瓶中精灵（无法主动使用/无意义的被动药水）
-        PotionData[] allPotions = Resources.LoadAll<PotionData>("Date_Potion");
+        PotionData[] allPotions = Resources.LoadAll<PotionData>("Data_Potion");
         List<PotionData> pool = new List<PotionData>();
         foreach (var p in allPotions)
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 100
   curHp: 100
   maxPowerCount: 3
-  initialCoin: 99
+  initialCoin: 199
   killCoinReward: 25
   drawCardsPerTurn: 5
   maxHandSize: 10

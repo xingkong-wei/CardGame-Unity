@@ -52,8 +52,8 @@ public class Enemy : MonoBehaviour
     protected string flightIdleAnimName = "idle";
     protected string flightHitAnimName = "hit";
 
-    protected bool isFlightMode = false;
-    protected int turnsWithoutAttack = 0;
+    [HideInInspector] public bool isFlightMode = false;
+    [HideInInspector] public int turnsWithoutAttack = 0;
     protected const int FORCE_ATTACK_THRESHOLD = 3;
 
     protected string defenseEffectPath = "Effects/MagicEffect/Prefabs/Magic circle 18";
@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
     protected string currentAttackAnimName;
     private const string DEFAULT_ATTACK_EFFECT_CONFIG_PATH = "Data_Enemy/MonsterAttackEffects";
 
-    protected EnemyData enemyDataSO;
+    [HideInInspector] public EnemyData enemyDataSO;
 
     // ===== 初始化 =====
 

@@ -35,6 +35,7 @@ public class GameSettingUI : UIBase
     {
         returnBtn.onClick.AddListener(OnReturnBtnClick);
         quitBtn.onClick.AddListener(OnQuitBtnClick);
+        saveBtn.onClick.AddListener(OnSaveBtnClick);
 
         mainSlider.value = AudioManager.Instance.MainVolume;
         mainText.text = (mainSlider.value * 100).ToString("F0") + "%";
@@ -83,6 +84,40 @@ public class GameSettingUI : UIBase
                 }
             }
         }
+    }
+
+    //保存并退出按钮事件
+    private void OnSaveBtnClick()
+    {
+        // 根据当前所在界面判断游戏阶段并保存
+        SavePhase phase = GetCurrentSavePhase();
+        SaveManager.Save(phase);
+
+        // 清除敌人
+        if (EnemyManager.Instance != null)
+            EnemyManager.Instance.ClearAllEnemies();
+
+        // 关闭所有UI
+        UIManager.Instance.CloseAllUI();
+
+        // 终止 DOTween 动画
+        DG.Tweening.DOTween.KillAll();
+
+        // 显示登录界面（带继续按钮）
+        UIManager.Instance.ShowUI<LoginUI_Exit>("LoginUI_Exit");
+
+        // 切换背景音乐
+        AudioManager.Instance.PlayBGM("bgm1");
+    }
+
+    /// <summary>根据当前显示的 UI 判断游戏阶段</summary>
+    private SavePhase GetCurrentSavePhase()
+    {
+        if (UIManager.Instance.Find("SelectCardUI") != null) return SavePhase.Reward;
+        if (UIManager.Instance.Find("ShopUI") != null) return SavePhase.Shop;
+        if (UIManager.Instance.Find("TreasureUI") != null) return SavePhase.Treasure;
+        if (UIManager.Instance.Find("RestSiteUI") != null) return SavePhase.RestSite;
+        return SavePhase.Fight;
     }
 
     //放弃按钮事件

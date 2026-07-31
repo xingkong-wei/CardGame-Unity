@@ -74,7 +74,7 @@ public static class PotionDropManager
     /// </summary>
     private static PotionData RollRarity()
     {
-        PotionData[] all = Resources.LoadAll<PotionData>("Date_Potion");
+        PotionData[] all = Resources.LoadAll<PotionData>("Data_Potion");
         if (all == null || all.Length == 0) return null;
 
         // 按稀有度分组加权
@@ -111,7 +111,7 @@ public static class PotionDropManager
     /// </summary>
     public static RelicData RollEliteRelic()
     {
-        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relics");
+        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relic");
         System.Collections.Generic.List<RelicData> pool = new System.Collections.Generic.List<RelicData>();
 
         int roll = Random.Range(0, 100);
@@ -135,7 +135,7 @@ public static class PotionDropManager
     /// </summary>
     public static RelicData RollBossRelic()
     {
-        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relics");
+        RelicData[] all = Resources.LoadAll<RelicData>("Data_Relic");
         System.Collections.Generic.List<RelicData> pool = new System.Collections.Generic.List<RelicData>();
 
         foreach (var r in all)

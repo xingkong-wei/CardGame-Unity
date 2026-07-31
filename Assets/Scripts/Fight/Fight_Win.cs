@@ -35,6 +35,10 @@ public class Fight_Win : FightUnit
 
         // 订阅奖励界面关闭事件
         SelectCardUI.OnClosed += OnRewardSelected;
+
+        // 奖励界面存档（确保奖励状态不丢失）
+        if (!SaveManager.IsLoading)
+            SaveManager.Save(SavePhase.Reward);
     }
 
     private void OnRewardSelected()
@@ -71,12 +75,18 @@ public class Fight_Win : FightUnit
         {
             // 非 Boss 战 → 返回节点地图继续探索（无关闭按钮）
             SlayTheSpireMapUI nodeMapUI = UIManager.Instance.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
+            if (nodeMapUI == null)
+            {
+                // 继续游戏后直接进入战斗时，地图 UI 还未创建，需要主动创建
+                nodeMapUI = UIManager.Instance.ShowUI<SlayTheSpireMapUI>("SlayTheSpireMapUI") as SlayTheSpireMapUI;
+            }
             if (nodeMapUI != null)
             {
                 nodeMapUI.ReopenAfterVictory();
             }
             else
             {
+                // 兜底：打开岛屿选择界面
                 MapUI mapUI = UIManager.Instance.GetUI<MapUI>("MapUI");
                 if (mapUI != null)
                     mapUI.Show();
