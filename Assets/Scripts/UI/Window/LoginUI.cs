@@ -27,16 +27,16 @@ public class LoginUI : UIBase
         Close();
 
         // 清除保存的地图数据,重新开始游戏
-        if (PlayerPrefs.HasKey("Map"))
+        if (SaveFileManager.HasKey("Map"))
         {
-            PlayerPrefs.DeleteKey("Map");
-            PlayerPrefs.Save();
+            SaveFileManager.DeleteKey("Map");
+            SaveFileManager.Flush();
         }
 
         // 清除旧升级数据，重新初始化卡组
-        PlayerPrefs.DeleteKey("SavedCurHp");
-        PlayerPrefs.DeleteKey("UpgradedCardIds");
-        PlayerPrefs.Save();
+        SaveFileManager.DeleteKey("SavedCurHp");
+        SaveFileManager.DeleteKey("UpgradedCardIds");
+        SaveFileManager.Flush();
         RoleManager.Instance.Init();
         RoleManager.Instance.ApplyUpgradesToDeck();
 
@@ -85,19 +85,14 @@ public class LoginUI : UIBase
         FightManager.Instance.potionList.Clear();
 
         // 清除所有岛屿地图
-        for (int i = 0; i < 10; i++)
-        {
-            string mapKey = $"Map_Island_{i}";
-            if (PlayerPrefs.HasKey(mapKey))
-                PlayerPrefs.DeleteKey(mapKey);
-        }
-        PlayerPrefs.DeleteKey("Map");
-        PlayerPrefs.DeleteKey("UpgradedCardIds");
-        PlayerPrefs.DeleteKey("SavedCurHp");
-        PlayerPrefs.DeleteKey("SavedMaxHp");
-        PlayerPrefs.DeleteKey("SavedCoinAmount");
-        PlayerPrefs.DeleteKey("SavedIslandIndex");
-        PlayerPrefs.Save();
+        SaveFileManager.DeleteKeysByPrefix("Map_Island_");
+        SaveFileManager.DeleteKey("Map");
+        SaveFileManager.DeleteKey("UpgradedCardIds");
+        SaveFileManager.DeleteKey("SavedCurHp");
+        SaveFileManager.DeleteKey("SavedMaxHp");
+        SaveFileManager.DeleteKey("SavedCoinAmount");
+        SaveFileManager.DeleteKey("SavedIslandIndex");
+        SaveFileManager.Flush();
 
         Close();
         MapUI mapUI = UIManager.Instance.ShowUI<MapUI>("MapUI") as MapUI;

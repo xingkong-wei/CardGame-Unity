@@ -23,6 +23,22 @@ public class EnemyManager
     /// <summary>获取所有敌人列表（用于存档）</summary>
     public List<Enemy> GetEnemyList() => enemyList;
 
+    /// <summary>
+    /// 获取所有存活（activeInHierarchy 且 CurHp > 0）的敌人列表
+    /// 替代所有 FindObjectsOfType&lt;Enemy&gt;() 调用，O(1) 性能
+    /// </summary>
+    public List<Enemy> GetAliveEnemies()
+    {
+        List<Enemy> result = new List<Enemy>();
+        if (enemyList == null) return result;
+        foreach (var e in enemyList)
+        {
+            if (e != null && e.gameObject != null && e.gameObject.activeInHierarchy && e.CurHp > 0)
+                result.Add(e);
+        }
+        return result;
+    }
+
     /// <summary>当前加载的关卡ID（用于存档/读档保持敌人一致）</summary>
     public int CurrentLevelId { get; set; } = -1;
 
@@ -39,7 +55,7 @@ public class EnemyManager
     private void LoadCompletedLevels()
     {
         // 从PlayerPrefs加载已通过的关卡
-        string completedStr = PlayerPrefs.GetString("CompletedLevels", "");
+        string completedStr = SaveFileManager.GetString("CompletedLevels", "");
         if (string.IsNullOrEmpty(completedStr))
         {
             return;
@@ -105,7 +121,7 @@ public class EnemyManager
     // 保存通过的关卡
     private void SaveCompletedLevel(int levelId)
     {
-        string completedStr = PlayerPrefs.GetString("CompletedLevels", "");
+        string completedStr = SaveFileManager.GetString("CompletedLevels", "");
         List<int> completedList = new List<int>();
 
         if (!string.IsNullOrEmpty(completedStr))
@@ -123,8 +139,8 @@ public class EnemyManager
         if (!completedList.Contains(levelId))
         {
             completedList.Add(levelId);
-            PlayerPrefs.SetString("CompletedLevels", string.Join(",", completedList));
-            PlayerPrefs.Save();
+            SaveFileManager.SetString("CompletedLevels", string.Join(",", completedList));
+            SaveFileManager.Flush();
 
             // 降低该关卡的权重
             levelWeights[levelId] = 10;
@@ -201,7 +217,7 @@ public class EnemyManager
 
         // 确保关卡已完成标记（读档时不重复标记，因为第一次加载时已标记）
         // 但为了安全，检查是否已标记
-        string completedStr = PlayerPrefs.GetString("CompletedLevels", "");
+        string completedStr = SaveFileManager.GetString("CompletedLevels", "");
         bool alreadyCompleted = false;
         if (!string.IsNullOrEmpty(completedStr))
         {
@@ -295,7 +311,7 @@ public class EnemyManager
     /// </summary>
     private void SpawnEnemy(EnemyData data, Vector3 position)
     {
-        GameObject enemyPrefab = Resources.Load<GameObject>(data.modelPath);
+        GameObject enemyPrefab = ResourceCache.Get<GameObject>(data.modelPath);
         if (enemyPrefab == null)
         {
             Debug.LogError($"敌人模型加载失败: {data.modelPath}");

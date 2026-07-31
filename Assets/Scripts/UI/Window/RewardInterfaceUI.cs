@@ -204,7 +204,7 @@ public class RewardInterfaceUI : UIBase
     /// </summary>
     private void CreateCardPreview(CardData cardData)
     {
-        GameObject cardObj = Instantiate(Resources.Load<GameObject>("UI/CardItem"), cardContainer);
+        GameObject cardObj = Instantiate(ResourceCache.Get<GameObject>("UI/CardItem"), cardContainer);
 
         // 移除预制体自带的 CardItem 组件，防止拖拽/攻击行为
         CardItem[] items = cardObj.GetComponents<CardItem>();
@@ -217,12 +217,12 @@ public class RewardInterfaceUI : UIBase
         {
             Image bgImg = bg.GetComponent<Image>();
             if (bgImg != null && !string.IsNullOrEmpty(cardData.bgIcon))
-                bgImg.sprite = Resources.Load<Sprite>(cardData.bgIcon);
+                bgImg.sprite = ResourceCache.GetSprite(cardData.bgIcon);
 
             // 设置边框材质（CardItem.Start() 中原本会设置）
             if (bgImg != null)
             {
-                Material srcMat = Resources.Load<Material>("Mats/outline");
+                Material srcMat = ResourceCache.Get<Material>("Mats/outline");
                 if (srcMat != null) outlineMat = Object.Instantiate(srcMat);
                 if (outlineMat != null)
                 {
@@ -237,7 +237,7 @@ public class RewardInterfaceUI : UIBase
             {
                 Image iconImg = iconTf.GetComponent<Image>();
                 if (iconImg != null && !string.IsNullOrEmpty(cardData.icon))
-                    iconImg.sprite = Resources.Load<Sprite>(cardData.icon);
+                    iconImg.sprite = ResourceCache.GetSprite(cardData.icon);
             }
 
             TextMeshProUGUI msgTxt = bg.Find("msgTxt")?.GetComponent<TextMeshProUGUI>();

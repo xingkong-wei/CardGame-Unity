@@ -8,6 +8,15 @@ public class GameApp : MonoBehaviour
 {
     void Start()
     {
+        //初始化二进制存档系统（替代 PlayerPrefs，减少 JSON 序列化和 IO 开销）
+        SaveFileManager.Load();
+
+        //初始化资源缓存（预加载常用预制体，避免运行时 Resources.Load 重复 IO）
+        ResourceCache.Init();
+
+        //初始化对象池（减少 Instantiate/Destroy GC 压力）
+        PoolManager.Init();
+
         //初始化配置表
         GameConfigManager.Instance.Init();
 

@@ -43,9 +43,11 @@ public class LossUI : UIBase
 
     private void CleanupEnemies()
     {
-        foreach (Enemy enemy in Object.FindObjectsOfType<Enemy>())
+        foreach (Enemy enemy in EnemyManager.Instance.GetEnemyList())
         {
-            Object.Destroy(enemy.gameObject);
+            if (enemy != null && enemy.gameObject != null)
+                Object.Destroy(enemy.gameObject);
         }
+        EnemyManager.Instance.GetEnemyList().Clear();
     }
 }

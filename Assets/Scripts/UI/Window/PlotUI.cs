@@ -113,7 +113,7 @@ public class PlotUI : UIBase
     public void RefreshUnlockState()
     {
         int maxUnlocked = RoleManager.Instance != null
-            ? PlayerPrefs.GetInt("MaxUnlockedIsland", 0)
+            ? SaveFileManager.GetInt("MaxUnlockedIsland", 0)
             : 0;
 
         foreach (var node in storyNodes)

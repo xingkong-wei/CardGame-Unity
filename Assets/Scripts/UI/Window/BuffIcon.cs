@@ -89,7 +89,7 @@ public class BuffIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (string.IsNullOrEmpty(path)) return null;
         path = path.Trim();
         if (string.IsNullOrEmpty(path)) return null;
-        return Resources.Load<Sprite>(path);
+        return ResourceCache.GetSprite(path);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public class BuffIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             StatusDisplayType.Special => "Icon/Buff/DefaultSpecial",
             _ => "Icon/Buff/DefaultBuff"
         };
-        return Resources.Load<Sprite>(path);
+        return ResourceCache.GetSprite(path);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

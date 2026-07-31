@@ -88,13 +88,6 @@ public class SpiritBindEssencePotion : PotionBase
 
     private List<Enemy> GetAliveEnemies()
     {
-        List<Enemy> result = new List<Enemy>();
-        Enemy[] allEnemies = Object.FindObjectsOfType<Enemy>();
-        foreach (Enemy e in allEnemies)
-        {
-            if (e != null && e.gameObject.activeInHierarchy && e.CurHp > 0)
-                result.Add(e);
-        }
-        return result;
+        return EnemyManager.Instance.GetAliveEnemies();
     }
 }

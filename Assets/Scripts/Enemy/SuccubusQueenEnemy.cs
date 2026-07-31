@@ -116,7 +116,7 @@ public class SuccubusQueenEnemy : Enemy
 
     private void ShuffleCardToDiscardPile(string path, int count)
     {
-        CardData cardData = Resources.Load<CardData>(path);
+        CardData cardData = ResourceCache.Get<CardData>(path);
         if (cardData == null)
         {
             Debug.LogWarning($"卡牌数据加载失败: {path}");
@@ -134,7 +134,7 @@ public class SuccubusQueenEnemy : Enemy
 
     private void ShuffleCardToDrawPile(string path, int count)
     {
-        CardData cardData = Resources.Load<CardData>(path);
+        CardData cardData = ResourceCache.Get<CardData>(path);
         if (cardData == null)
         {
             Debug.LogWarning($"卡牌数据加载失败: {path}");

@@ -118,7 +118,7 @@ public class AshSpiderEnemy : Enemy
         // 第一回合防御时：往手牌/抽牌堆/弃牌堆各塞一张缠绕
         if (_turnCount == 1)
         {
-            CardData intertwineData = Resources.Load<CardData>("Data_Card/Card/2003_缠绕");
+            CardData intertwineData = ResourceCache.Get<CardData>("Data_Card/Card/2003_缠绕");
             if (intertwineData == null)
             {
                 Debug.LogWarning("缠绕卡牌数据加载失败");
@@ -157,7 +157,7 @@ public class AshSpiderEnemy : Enemy
     /// </summary>
     private void ShuffleIntertwineToDrawPile()
     {
-        CardData intertwineData = Resources.Load<CardData>("Data_Card/Card/2003_缠绕");
+        CardData intertwineData = ResourceCache.Get<CardData>("Data_Card/Card/2003_缠绕");
         if (intertwineData == null)
         {
             Debug.LogWarning("缠绕卡牌数据加载失败");

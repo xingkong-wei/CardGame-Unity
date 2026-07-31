@@ -362,7 +362,7 @@ public class AttackCardItem : CardItem
     protected void PlayEffect(Vector3 pos, string effectPath)
     {
         if (string.IsNullOrEmpty(effectPath)) return;
-        GameObject effectObj = Resources.Load(effectPath) as GameObject;
+        GameObject effectObj = ResourceCache.Get<GameObject>(effectPath);
         if (effectObj != null)
         {
             GameObject instance = Instantiate(effectObj);

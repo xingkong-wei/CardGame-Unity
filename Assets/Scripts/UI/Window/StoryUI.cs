@@ -114,7 +114,7 @@ public class StoryUI : UIBase
         if (skipBtn != null) skipBtn.gameObject.SetActive(true);
 
         // 播放键盘音效
-        AudioClip clip = Resources.Load<AudioClip>("Sounds/Effect/KeyboardEffect");
+        AudioClip clip = ResourceCache.Get<AudioClip>("Sounds/Effect/KeyboardEffect");
         if (clip != null)
         {
             audioSource.clip = clip;

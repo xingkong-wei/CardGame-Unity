@@ -245,27 +245,47 @@ public class FightUI : UIBase
     }
 
 
+    /// <summary>从对象池获取卡牌并初始化</summary>
+    private CardItem GetCardFromPool(CardData cardData, DeckCard dc)
+    {
+        GameObject obj = PoolManager.Get("CardItem");
+        obj.transform.SetParent(transform, false);
+        obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000, -700);
+        obj.transform.localScale = Vector3.one;
+
+        System.Type cardType = System.Type.GetType(cardData.scriptName);
+        if (cardType == null || !typeof(CardItem).IsAssignableFrom(cardType))
+        {
+            Debug.LogError($"无法创建卡牌脚本类型: {cardData.scriptName}");
+            PoolManager.Release("CardItem", obj);
+            return null;
+        }
+
+        // 清理旧组件，添加新组件
+        CardItem[] oldItems = obj.GetComponents<CardItem>();
+        foreach (var ci in oldItems) DestroyImmediate(ci);
+
+        CardItem item = obj.AddComponent(cardType) as CardItem;
+        item.Init(cardData, dc);
+        return item;
+    }
+
+    /// <summary>归还卡牌到对象池</summary>
+    private void ReturnCardToPool(CardItem item)
+    {
+        if (item == null) return;
+        DOTween.Kill(item.transform);
+        item.enabled = false;
+        PoolManager.Release("CardItem", item.gameObject);
+    }
+
     /// <summary>直接创建指定卡牌到手牌（不消耗抽牌堆）</summary>
     public void CreateCardItem(CardData cardData)
     {
         if (cardData == null) return;
-
-        GameObject obj = Instantiate(Resources.Load("UI/CardItem"), transform) as GameObject;
-        obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000, -700);
-
         DeckCard dc = new DeckCard(cardData);
-        System.Type cardType = System.Type.GetType(cardData.scriptName);
-        if (cardType != null && typeof(CardItem).IsAssignableFrom(cardType))
-        {
-            CardItem item = obj.AddComponent(cardType) as CardItem;
-            item.Init(cardData, dc);
-            cardItemList.Add(item);
-        }
-        else
-        {
-            Debug.LogError($"无法创建卡牌脚本类型: {cardData.scriptName}");
-            Destroy(obj);
-        }
+        CardItem item = GetCardFromPool(cardData, dc);
+        if (item != null) cardItemList.Add(item);
     }
 
     //创建卡牌物体
@@ -285,31 +305,16 @@ public class FightUI : UIBase
                 break;
             }
 
-            GameObject obj = Instantiate(Resources.Load("UI/CardItem"), transform) as GameObject;
-            obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000, -700);
-
             //抽卡（返回DeckCard含升级标记）
             DeckCard drawn = FightCardManager.Instance.DrawCard();
             if (drawn == null || drawn.cardData == null)
             {
                 Debug.LogError("抽卡失败，卡牌数据为null");
-                Destroy(obj);
                 continue;
             }
 
-            CardData cardData = drawn.cardData;
-            System.Type cardType = System.Type.GetType(cardData.scriptName);
-            if (cardType != null && typeof(CardItem).IsAssignableFrom(cardType))
-            {
-                CardItem item = obj.AddComponent(cardType) as CardItem;
-                item.Init(cardData, drawn);
-                cardItemList.Add(item);
-            }
-            else
-            {
-                Debug.LogError($"无法创建卡牌脚本类型: {cardData.scriptName}");
-                Destroy(obj);
-            }
+            CardItem item = GetCardFromPool(drawn.cardData, drawn);
+            if (item != null) cardItemList.Add(item);
         }
 
         // 更新抽牌堆数量显示
@@ -412,7 +417,16 @@ public class FightUI : UIBase
 
         item.transform.DOScale(0, 0.25f);
 
-        Destroy(item.gameObject, 1);
+        // 归还到对象池（延迟1秒，等动画播完）
+        ReturnCardToPoolDelayed(item, 1f);
+    }
+
+    private void ReturnCardToPoolDelayed(CardItem item, float delay)
+    {
+        if (item == null) return;
+        var po = item.gameObject.GetComponent<PooledObject>() ?? item.gameObject.AddComponent<PooledObject>();
+        po.Pool = PoolManager.GetPool("CardItem");
+        po.ReturnToPoolDelayed(delay);
     }
 
     //删除所有卡牌（带动画效果）- 回合结束时的丢弃
@@ -430,14 +444,16 @@ public class FightUI : UIBase
         }
     }
 
-    //清理所有手牌（立即清理，用于进入新战斗时）
+    //清理所有手牌（立即归还对象池，用于进入新战斗时）
     public void ClearAllCards()
     {
         foreach (CardItem item in cardItemList)
         {
             if (item != null && item.gameObject != null)
             {
-                Destroy(item.gameObject);
+                DOTween.Kill(item.transform);
+                item.enabled = false;
+                PoolManager.Release("CardItem", item.gameObject);
             }
         }
         cardItemList.Clear();
@@ -461,23 +477,12 @@ public class FightUI : UIBase
     {
         if (cardData == null) return;
 
-        GameObject obj = Instantiate(Resources.Load("UI/CardItem"), transform) as GameObject;
-        obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000, -700);
-
-        System.Type cardType = System.Type.GetType(cardData.scriptName);
-        if (cardType != null && typeof(CardItem).IsAssignableFrom(cardType))
+        CardItem item = GetCardFromPool(cardData, deckCard);
+        if (item != null)
         {
-            CardItem item = obj.AddComponent(cardType) as CardItem;
-            item.Init(cardData, deckCard);
             cardItemList.Add(item);
+            UpdateCardCount();
         }
-        else
-        {
-            Debug.LogError($"无法创建卡牌脚本类型: {cardData.scriptName}");
-            Destroy(obj);
-        }
-
-        UpdateCardCount();
     }
 
     public void RemoveCardDirectly(CardItem item)

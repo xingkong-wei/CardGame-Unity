@@ -68,7 +68,7 @@ public abstract class AbilityCard : CardItem
     protected void PlayAbilityEffect()
     {
         if (string.IsNullOrEmpty(data.effects)) return;
-        GameObject effectObj = Instantiate(Resources.Load(data.effects)) as GameObject;
+        GameObject effectObj = Instantiate(ResourceCache.Get<GameObject>(data.effects)) as GameObject;
         Vector3 pos = Camera.main.transform.position;
         pos.y = 0;
         effectObj.transform.position = pos;

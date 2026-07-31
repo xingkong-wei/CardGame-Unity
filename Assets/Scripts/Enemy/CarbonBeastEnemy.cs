@@ -118,7 +118,7 @@ public class CarbonBeastEnemy : Enemy
     /// </summary>
     private void ShuffleDizzinessToDiscardPile(int count)
     {
-        CardData dizzinessData = Resources.Load<CardData>("Data_Card/Card/2002_眩晕");
+        CardData dizzinessData = ResourceCache.Get<CardData>("Data_Card/Card/2002_眩晕");
         if (dizzinessData == null)
         {
             Debug.LogWarning("眩晕卡牌数据加载失败");

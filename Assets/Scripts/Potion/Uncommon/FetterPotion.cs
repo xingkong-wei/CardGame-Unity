@@ -11,15 +11,12 @@ public class FetterPotion : PotionBase
         base.Use();
 
         int stacks = data.effectValue;
-        Enemy[] allEnemies = Object.FindObjectsOfType<Enemy>();
+        var allEnemies = EnemyManager.Instance.GetAliveEnemies();
         int count = 0;
         foreach (Enemy e in allEnemies)
         {
-            if (e != null && e.gameObject.activeInHierarchy && e.CurHp > 0)
-            {
-                e.AddStatus(StatusType.Fetter, stacks);
-                count++;
-            }
+            e.AddStatus(StatusType.Fetter, stacks);
+            count++;
         }
         if (count > 0)
             UIManager.Instance.ShowTip($"所有敌人枷锁 +{stacks}", Color.magenta);

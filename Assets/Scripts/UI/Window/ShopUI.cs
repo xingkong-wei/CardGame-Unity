@@ -200,7 +200,7 @@ public class ShopUI : UIBase
 
     private void CreateCardItem(CardData cardData, int price)
     {
-        GameObject cardObj = Instantiate(Resources.Load<GameObject>("UI/CardItem"), cardContainer);
+        GameObject cardObj = Instantiate(ResourceCache.Get<GameObject>("UI/CardItem"), cardContainer);
         cardObj.name = cardData.scriptName; // 用 scriptName 便于存档/读档恢复
 
         CardItem[] items = cardObj.GetComponents<CardItem>();
@@ -223,9 +223,9 @@ public class ShopUI : UIBase
         {
             Image bgImg = bg.GetComponent<Image>();
             if (bgImg != null && !string.IsNullOrEmpty(cardData.bgIcon))
-                bgImg.sprite = Resources.Load<Sprite>(cardData.bgIcon);
+                bgImg.sprite = ResourceCache.GetSprite(cardData.bgIcon);
 
-            Material srcMat = Resources.Load<Material>("Mats/outline");
+            Material srcMat = ResourceCache.Get<Material>("Mats/outline");
             if (srcMat != null && bgImg != null)
             {
                 Material outlineMat = Object.Instantiate(srcMat);
@@ -239,7 +239,7 @@ public class ShopUI : UIBase
             {
                 Image iconImg = iconTf.GetComponent<Image>();
                 if (iconImg != null && !string.IsNullOrEmpty(cardData.icon))
-                    iconImg.sprite = Resources.Load<Sprite>(cardData.icon);
+                    iconImg.sprite = ResourceCache.GetSprite(cardData.icon);
             }
 
             TextMeshProUGUI nameTxt = bg.Find("nameTxt")?.GetComponent<TextMeshProUGUI>();
@@ -272,7 +272,7 @@ public class ShopUI : UIBase
 
     private void CreateRelicItem(RelicData relic, int price)
     {
-        GameObject obj = Instantiate(Resources.Load<GameObject>("UI/RelicIcon"), relicContainer);
+        GameObject obj = Instantiate(ResourceCache.Get<GameObject>("UI/RelicIcon"), relicContainer);
         obj.name = relic.scriptName; // 用 scriptName 便于存档/读档恢复
         obj.transform.localScale = Vector3.one * itemScale;
 
@@ -310,7 +310,7 @@ public class ShopUI : UIBase
 
     private void CreatePotionItem(PotionData potion, int price)
     {
-        GameObject obj = Instantiate(Resources.Load<GameObject>("UI/PotionIcon"), potionContainer);
+        GameObject obj = Instantiate(ResourceCache.Get<GameObject>("UI/PotionIcon"), potionContainer);
         obj.name = potion.scriptName; // 用 scriptName 便于存档/读档恢复
         obj.transform.localScale = Vector3.one * itemScale;
 
@@ -319,7 +319,7 @@ public class ShopUI : UIBase
         {
             if (ri.iconImage != null && !string.IsNullOrEmpty(potion.icon))
             {
-                ri.iconImage.sprite = Resources.Load<Sprite>(potion.icon);
+                ri.iconImage.sprite = ResourceCache.GetSprite(potion.icon);
                 Color c = ri.iconImage.color;
                 c.a = 1f;
                 ri.iconImage.color = c;

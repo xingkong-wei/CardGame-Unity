@@ -27,10 +27,36 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public CardData data;
     public DeckCard sourceDeckCard; // 来源DeckCard（含升级标记，null则用全局判断）
 
+    // ============ 缓存的 Transform 引用（避免每次 transform.Find） ============
+    private Transform _bgTf;
+    private Image _bgImg;
+    private Image _iconImg;
+    private TextMeshProUGUI _nameTxt;
+    private TextMeshProUGUI _msgTxt;
+    private TextMeshProUGUI _costTxt;
+    private TextMeshProUGUI _typeTxt;
+
+    /// <summary>缓存子物体引用，在 Init/对象池复用时调用</summary>
+    private void CacheReferences()
+    {
+        _bgTf = transform.Find("bg");
+        if (_bgTf != null)
+        {
+            _bgImg = _bgTf.GetComponent<Image>();
+            _iconImg = _bgTf.Find("icon")?.GetComponent<Image>();
+            _nameTxt = _bgTf.Find("nameTxt")?.GetComponent<TextMeshProUGUI>();
+            _msgTxt = _bgTf.Find("msgTxt")?.GetComponent<TextMeshProUGUI>();
+            _costTxt = _bgTf.Find("useTxt")?.GetComponent<TextMeshProUGUI>();
+            _typeTxt = _bgTf.Find("Text")?.GetComponent<TextMeshProUGUI>();
+        }
+    }
+
     public void Init(CardData data, DeckCard deckCard = null)
     {
         this.data = data;
         this.sourceDeckCard = deckCard;
+        // 对象池复用时重新缓存引用（预制体结构不变，但 Transform 可能变了）
+        if (_bgTf == null) CacheReferences();
         // 检查是否免费卡
         if (deckCard != null && FightCardManager.Instance.IsFreeCard(deckCard.instanceId))
             costOverride = 0;
@@ -284,19 +310,17 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     protected void SetHighlight(bool highlight)
     {
-        if (transform.Find("bg") == null) return;
-        Image bgImg = transform.Find("bg").GetComponent<Image>();
-        if (bgImg.material == null) return;
+        if (_bgImg == null || _bgImg.material == null) return;
 
         if (highlight)
         {
-            bgImg.material.SetColor("_lineColor", Color.yellow);
-            bgImg.material.SetFloat("_lineWidth", 10);
+            _bgImg.material.SetColor("_lineColor", Color.yellow);
+            _bgImg.material.SetFloat("_lineWidth", 10);
         }
         else
         {
-            bgImg.material.SetColor("_lineColor", Color.black);
-            bgImg.material.SetFloat("_lineWidth", 1);
+            _bgImg.material.SetColor("_lineColor", Color.black);
+            _bgImg.material.SetFloat("_lineWidth", 1);
         }
     }
 
@@ -389,10 +413,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (data == null || GetExpend() <= 0) return;
         
-        if (costText == null)
-        {
-            costText = transform.Find("bg/useTxt")?.GetComponent<TextMeshProUGUI>();
-        }
+        if (costText == null) costText = _costTxt;
         if (costText != null)
         {
             costText.text = (GetExpend() - 1).ToString();
@@ -407,10 +428,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (data == null) return;
         
-        if (costText == null)
-        {
-            costText = transform.Find("bg/useTxt")?.GetComponent<TextMeshProUGUI>();
-        }
+        if (costText == null) costText = _costTxt;
         if (costText != null)
         {
             costText.text = GetExpend().ToString();
@@ -427,16 +445,14 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         bool upgraded = IsUpgraded();
 
         // 刷新名称
-        TextMeshProUGUI nameTxt = transform.Find("bg/nameTxt")?.GetComponent<TextMeshProUGUI>();
-        if (nameTxt != null)
+        if (_nameTxt != null)
         {
-            nameTxt.text = upgraded ? data.cardName + "+" : data.cardName;
-            nameTxt.color = upgraded ? Color.yellow : Color.white;
+            _nameTxt.text = upgraded ? data.cardName + "+" : data.cardName;
+            _nameTxt.color = upgraded ? Color.yellow : Color.white;
         }
 
         // 刷新描述
-        TextMeshProUGUI msgTxt = transform.Find("bg/msgTxt")?.GetComponent<TextMeshProUGUI>();
-        if (msgTxt != null)
+        if (_msgTxt != null)
         {
             string desc = (upgraded && !string.IsNullOrEmpty(data.upgradedDescription))
                 ? string.Format(data.upgradedDescription, data.upgradedArg0)
@@ -444,7 +460,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             string traits = GetTraitsText(upgraded);
             if (!string.IsNullOrEmpty(traits))
                 desc = "<color=yellow>" + traits + "</color> " + desc;
-            msgTxt.text = desc;
+            _msgTxt.text = desc;
         }
 
         // 刷新费用
@@ -458,10 +474,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (data == null) return;
         
-        if (costText == null)
-        {
-            costText = transform.Find("bg/useTxt")?.GetComponent<TextMeshProUGUI>();
-        }
+        if (costText == null) costText = _costTxt;
         if (costText != null)
         {
             int cost = GetCost();
@@ -522,7 +535,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void PlayEffect(Vector3 pos)
     {
         if (string.IsNullOrEmpty(data.effects)) return;
-        GameObject prefab = Resources.Load(data.effects) as GameObject;
+        GameObject prefab = ResourceCache.Get<GameObject>(data.effects);
         if (prefab == null) return;
         GameObject effectObj = Instantiate(prefab);
         effectObj.transform.position = pos;
@@ -539,10 +552,13 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             return;
         }
 
+        // 确保引用已缓存
+        if (_bgTf == null) CacheReferences();
+
         bool upgraded = IsUpgraded();
 
-        transform.Find("bg").GetComponent<Image>().sprite = Resources.Load<Sprite>(data.bgIcon);
-        transform.Find("bg/icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(data.icon);
+        if (_bgImg != null) _bgImg.sprite = ResourceCache.GetSprite(data.bgIcon);
+        if (_iconImg != null) _iconImg.sprite = ResourceCache.GetSprite(data.icon);
         
         // 升级后使用升级描述，并在开头添加金色词条
         string desc;
@@ -554,38 +570,40 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         string traits = GetTraitsText(upgraded);
         if (!string.IsNullOrEmpty(traits))
             desc = "<color=yellow>" + traits + "</color> " + desc;
-        transform.Find("bg/msgTxt").GetComponent<TextMeshProUGUI>().text = desc;
+        if (_msgTxt != null) _msgTxt.text = desc;
         
         // 升级后卡牌名显示金色 + "+"
-        TextMeshProUGUI nameTxt = transform.Find("bg/nameTxt").GetComponent<TextMeshProUGUI>();
-        if (upgraded)
+        if (_nameTxt != null)
         {
-            nameTxt.text = data.cardName + "+";
-            nameTxt.color = Color.yellow;
-        }
-        else
-        {
-            nameTxt.text = data.cardName;
-            nameTxt.color = Color.white;
+            if (upgraded)
+            {
+                _nameTxt.text = data.cardName + "+";
+                _nameTxt.color = Color.yellow;
+            }
+            else
+            {
+                _nameTxt.text = data.cardName;
+                _nameTxt.color = Color.white;
+            }
         }
         
         // 使用覆盖费用（如时间回溯设为0）或升级后的费用
         int displayCost = costOverride >= 0 ? costOverride : GetExpend();
-        transform.Find("bg/useTxt").GetComponent<TextMeshProUGUI>().text = displayCost.ToString();
+        if (_costTxt != null) _costTxt.text = displayCost.ToString();
         
         // 类型文本（升级后去除消耗类型）
         string typeNames = data.GetTypeNames();
         if (upgraded && data.removeConsumeOnUpgrade && data.IsConsumeCard())
             typeNames = typeNames.Replace("消耗", "").Replace("//", "/").Trim('/');
-        transform.Find("bg/Text").GetComponent<TextMeshProUGUI>().text = typeNames;
+        if (_typeTxt != null) _typeTxt.text = typeNames;
         
-        // 设置边框材质
-        transform.Find("bg").GetComponent<Image>().material = Instantiate(Resources.Load<Material>("Mats/outline"));
+        // 设置边框材质（使用缓存，每次 Instantiate 产生独立实例避免共享修改）
+        if (_bgImg != null) _bgImg.material = Object.Instantiate(ResourceCache.Get<Material>("Mats/outline"));
 
         // 如果有费用覆盖，显示为绿色
-        if (costOverride >= 0)
+        if (costOverride >= 0 && _costTxt != null)
         {
-            transform.Find("bg/useTxt").GetComponent<TextMeshProUGUI>().color = Color.green;
+            _costTxt.color = Color.green;
         }
 
         // 检查费用减免效果，如果有则更新费用显示

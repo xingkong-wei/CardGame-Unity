@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 存档管理器 - 节点入口快照，SL 读档回到节点开始
+/// 使用二进制文件流替代 PlayerPrefs
 /// </summary>
 public class SaveManager : MonoBehaviour
 {
@@ -19,13 +20,9 @@ public class SaveManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<SaveManager>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("SaveManager");
-                    _instance = go.AddComponent<SaveManager>();
-                    DontDestroyOnLoad(go);
-                }
+                GameObject go = new GameObject("SaveManager");
+                _instance = go.AddComponent<SaveManager>();
+                DontDestroyOnLoad(go);
             }
             return _instance;
         }
@@ -37,7 +34,7 @@ public class SaveManager : MonoBehaviour
         else if (_instance != this) Destroy(gameObject);
     }
 
-    public static bool HasSave() => PlayerPrefs.HasKey(SAVE_KEY);
+    public static bool HasSave() => SaveFileManager.HasKey(SAVE_KEY);
 
     /// <summary>保存（支持不同游戏阶段）</summary>
     public static void Save(SavePhase phase = SavePhase.Fight)
@@ -80,8 +77,8 @@ public class SaveManager : MonoBehaviour
         }
 
         string mapKey = $"Map_Island_{data.currentIslandIndex}";
-        if (PlayerPrefs.HasKey(mapKey))
-            data.mapJson = PlayerPrefs.GetString(mapKey);
+        if (SaveFileManager.HasKey(mapKey))
+            data.mapJson = SaveFileManager.GetString(mapKey);
 
         // 保存当前敌人关卡ID（确保 SL 后同一个节点遇到同一组敌人）
         data.levelId = EnemyManager.Instance.CurrentLevelId;
@@ -103,32 +100,37 @@ public class SaveManager : MonoBehaviour
         data.saveTimeTicks = DateTime.Now.Ticks;
 
         string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString(SAVE_KEY, json);
-        PlayerPrefs.Save();
+        SaveFileManager.SetString(SAVE_KEY, json);
+        SaveFileManager.Flush();
     }
 
     /// <summary>加载存档</summary>
     public static GameSaveData Load()
     {
         if (!HasSave()) return null;
-        return JsonUtility.FromJson<GameSaveData>(PlayerPrefs.GetString(SAVE_KEY));
+        return JsonUtility.FromJson<GameSaveData>(SaveFileManager.GetString(SAVE_KEY));
     }
 
     /// <summary>删除存档</summary>
     public static void DeleteSave()
     {
-        if (PlayerPrefs.HasKey(SAVE_KEY)) { PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save(); }
+        if (SaveFileManager.HasKey(SAVE_KEY))
+            SaveFileManager.DeleteKey(SAVE_KEY);
+        SaveFileManager.Flush();
     }
 
     /// <summary>清除所有游戏数据</summary>
     public static void ClearAllGameData()
     {
         DeleteSave();
-        PlayerPrefs.DeleteKey("SavedCurHp"); PlayerPrefs.DeleteKey("SavedMaxHp");
-        PlayerPrefs.DeleteKey("SavedCoinAmount"); PlayerPrefs.DeleteKey("SavedIslandIndex");
-        PlayerPrefs.DeleteKey("Map"); PlayerPrefs.DeleteKey("UpgradedCardIds");
-        PlayerPrefs.DeleteKey("CompletedLevels");
-        for (int i = 0; i < 20; i++) { string k = $"Map_Island_{i}"; if (PlayerPrefs.HasKey(k)) PlayerPrefs.DeleteKey(k); }
-        PlayerPrefs.Save();
+        SaveFileManager.DeleteKey("SavedCurHp");
+        SaveFileManager.DeleteKey("SavedMaxHp");
+        SaveFileManager.DeleteKey("SavedCoinAmount");
+        SaveFileManager.DeleteKey("SavedIslandIndex");
+        SaveFileManager.DeleteKey("Map");
+        SaveFileManager.DeleteKey("UpgradedCardIds");
+        SaveFileManager.DeleteKey("CompletedLevels");
+        SaveFileManager.DeleteKeysByPrefix("Map_Island_");
+        SaveFileManager.Flush();
     }
 }

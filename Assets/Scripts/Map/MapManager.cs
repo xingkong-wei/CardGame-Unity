@@ -36,13 +36,13 @@ namespace Map
 
             string islandKey = $"Map_Island_{islandIndex}";
 
-            if (PlayerPrefs.HasKey(islandKey))
+            if (SaveFileManager.HasKey(islandKey))
             {
-                mapJson = PlayerPrefs.GetString(islandKey);
+                mapJson = SaveFileManager.GetString(islandKey);
             }
-            else if (PlayerPrefs.HasKey("Map"))
+            else if (SaveFileManager.HasKey("Map"))
             {
-                mapJson = PlayerPrefs.GetString("Map");
+                mapJson = SaveFileManager.GetString("Map");
             }
 
             if (!string.IsNullOrEmpty(mapJson))
@@ -84,8 +84,8 @@ namespace Map
 
             string json = JsonConvert.SerializeObject(CurrentMap, Formatting.Indented,
                 new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
-            PlayerPrefs.SetString("Map", json);
-            PlayerPrefs.Save();
+            SaveFileManager.SetString("Map", json);
+            SaveFileManager.Flush();
         }
 
         private void OnApplicationQuit()
@@ -110,11 +110,11 @@ namespace Map
             Debug.Log($"战斗胜利事件触发: {nodePoint}");
         }
 
-        // 辅助方法：根据坐标查找 MapNode
+        // 辅助方法：根据坐标查找 MapNode（使用 MapView 缓存的节点列表）
         private MapNode FindMapNode(Vector2Int point)
         {
-            MapNode[] nodes = FindObjectsOfType<MapNode>();
-            foreach (var mn in nodes)
+            if (MapView.Instance == null) return null;
+            foreach (var mn in MapView.Instance.MapNodes)
             {
                 if (mn.Node.point == point)
                     return mn;

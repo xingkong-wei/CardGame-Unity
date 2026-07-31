@@ -91,31 +91,77 @@ public class EnemyStatusUI : MonoBehaviour
     }
     
     /// <summary>
-    /// 重新构建所有图标
+    /// 重新构建所有图标（使用对象池，避免全量销毁重建）
     /// </summary>
     private void RebuildIcons()
     {
-        ClearIcons();
-        
+        // 统计需要的图标数
+        int neededCount = 0;
+        foreach (var kvp in currentStatus)
+        {
+            if (kvp.Value > 0) neededCount++;
+        }
+
+        // 归还多余的图标到池
+        while (buffIcons.Count > neededCount)
+        {
+            GameObject extra = buffIcons[buffIcons.Count - 1];
+            buffIcons.RemoveAt(buffIcons.Count - 1);
+            PoolManager.Release("BuffIcon", extra);
+        }
+
+        // 补充不足的图标
+        while (buffIcons.Count < neededCount)
+        {
+            GameObject iconObj = PoolManager.Get("BuffIcon");
+            iconObj.transform.SetParent(iconContainer, false);
+            buffIcons.Add(iconObj);
+        }
+
+        // 更新所有图标的内容和位置
         int index = 0;
         foreach (var kvp in currentStatus)
         {
-            if (kvp.Value > 0)
+            if (kvp.Value <= 0) continue;
+
+            GameObject iconObj = buffIcons[index];
+            iconObj.SetActive(true);
+
+            // 计算位置
+            int col = index % maxIconsPerRow;
+            float xPos = col * (iconSize + iconSpacing);
+            RectTransform iconRT = iconObj.GetComponent<RectTransform>();
+            if (iconRT != null)
             {
-                CreateIcon(kvp.Key, kvp.Value, index);
-                index++;
+                iconRT.anchorMin = Vector2.zero;
+                iconRT.anchorMax = Vector2.zero;
+                iconRT.pivot = new Vector2(0.5f, 0.5f);
+                iconRT.anchoredPosition = new Vector2(xPos, 0f);
+                iconRT.sizeDelta = new Vector2(iconSize, iconSize);
             }
+
+            // 更新图标内容
+            BuffIcon icon = iconObj.GetComponent<BuffIcon>();
+            if (icon != null)
+            {
+                StatusEffect effect = new StatusEffect(kvp.Key, kvp.Value, -1);
+                effect.effectName = GetStatusDisplayName(kvp.Key);
+                effect.iconPath = GetStatusIconPath(kvp.Key);
+                icon.Setup(effect);
+            }
+            index++;
         }
     }
     
     /// <summary>
-    /// 创建单个Buff图标
+    /// 创建单个Buff图标（保留接口兼容性，内部使用对象池）
     /// </summary>
     private void CreateIcon(StatusType type, int stack, int index)
     {
-        if (buffIconPrefab == null || iconContainer == null) return;
+        if (iconContainer == null) return;
         
-        GameObject iconObj = Instantiate(buffIconPrefab, iconContainer);
+        GameObject iconObj = PoolManager.Get("BuffIcon");
+        iconObj.transform.SetParent(iconContainer, false);
         buffIcons.Add(iconObj);
         
         // 计算位置（横向排列，从左到右）
@@ -178,14 +224,14 @@ public class EnemyStatusUI : MonoBehaviour
     }
     
     /// <summary>
-    /// 清除所有图标
+    /// 清除所有图标（归还到对象池）
     /// </summary>
     private void ClearIcons()
     {
         foreach (var icon in buffIcons)
         {
             if (icon != null)
-                Destroy(icon);
+                PoolManager.Release("BuffIcon", icon);
         }
         buffIcons.Clear();
     }

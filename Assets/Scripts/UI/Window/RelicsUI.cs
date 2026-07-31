@@ -19,6 +19,17 @@ public class RelicsUI : MonoBehaviour
 
     private List<GameObject> relicIcons = new List<GameObject>();
 
+    private void Awake()
+    {
+        FightManager.CachedRelicsUI = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (FightManager.CachedRelicsUI == this)
+            FightManager.CachedRelicsUI = null;
+    }
+
     private void Start()
     {
         RefreshUI();

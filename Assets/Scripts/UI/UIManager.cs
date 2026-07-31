@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
 
     public Transform canvasTf;//画布的变化组件
 
-    private List<UIBase> uiList;//存储加载过的界面集合
+    /// <summary>Dictionary O(1) 查找，替代 List O(n) 线性搜索</summary>
+    private Dictionary<string, UIBase> _uiDict;
 
     private void Awake()
     {
@@ -22,23 +23,22 @@ public class UIManager : MonoBehaviour
         canvasTf = GameObject.Find("Canvas").transform;
 
         //初始化集合
-        uiList = new List<UIBase>();
+        _uiDict = new Dictionary<string, UIBase>();
     }
 
     //显示
     public UIBase ShowUI<T>(string uiName) where T : UIBase
     {
-        UIBase ui = Find(uiName);
-        if (ui == null)
+        if (!_uiDict.TryGetValue(uiName, out UIBase ui) || ui == null)
         {
-            GameObject obj = Instantiate(Resources.Load("UI/" + uiName), canvasTf) as GameObject;
+            GameObject obj = Instantiate(ResourceCache.Get<GameObject>("UI/" + uiName), canvasTf) as GameObject;
             obj.name = uiName;
             ui = obj.GetComponent<T>();          // 尝试获取已有组件
             if (ui == null)
             {
                 ui = obj.AddComponent<T>();      // 没有则添加
             }
-            uiList.Add(ui);
+            _uiDict[uiName] = ui;
         }
         ui.Show(); // 首次加载和已存在都需要调用 Show
         return ui;
@@ -46,8 +46,7 @@ public class UIManager : MonoBehaviour
     //隐藏
     public void HideUI(string uiName)
     {
-        UIBase ui = Find(uiName);
-        if (ui !=null)
+        if (_uiDict.TryGetValue(uiName, out UIBase ui) && ui != null)
         {
             ui.Hide();
         }
@@ -56,43 +55,35 @@ public class UIManager : MonoBehaviour
     //关闭所有界面
     public void CloseAllUI()
     {
-        for (int i = uiList.Count - 1; i >= 0; i--)
+        foreach (var ui in _uiDict.Values)
         {
-            Destroy(uiList[i].gameObject);
+            if (ui != null)
+                Destroy(ui.gameObject);
         }
-
-        uiList.Clear();//清空集合
+        _uiDict.Clear();
     }
 
     //关闭某个界面
     public void CloseUI(string uiName)
     {
-        UIBase ui = Find(uiName);
-        if (ui != null)
+        if (_uiDict.TryGetValue(uiName, out UIBase ui) && ui != null)
         {
-            uiList.Remove(ui);
+            _uiDict.Remove(uiName);
             Destroy(ui.gameObject);
         }
     }
 
-    //从集合中找到名字对应的界面脚本
+    //从集合中找到名字对应的界面脚本（O(1)）
     public UIBase Find(string uiName)
     {
-        for (int i = 0; i < uiList.Count; i++)
-        {
-            if (uiList[i].name == uiName)
-            {
-                return uiList[i];
-            }
-        }
-        return null;
+        _uiDict.TryGetValue(uiName, out UIBase ui);
+        return ui;
     }
 
     //获得某个界面的脚本
     public T GetUI<T>(string uiName) where T : UIBase
     {
-        UIBase ui = Find(uiName);
-        if (ui != null)
+        if (_uiDict.TryGetValue(uiName, out UIBase ui) && ui != null)
         {
             return ui.GetComponent<T>();
         }
@@ -102,7 +93,7 @@ public class UIManager : MonoBehaviour
     //创建敌人头部的行动图标物体
     public GameObject CreateActionIcon()
     {
-        GameObject prefab = Resources.Load<GameObject>("UI/actionIcon");
+        GameObject prefab = ResourceCache.Get<GameObject>("UI/actionIcon");
         if (prefab == null)
         {
             Debug.LogError("行动图标预制体加载失败: UI/actionIcon");
@@ -116,7 +107,7 @@ public class UIManager : MonoBehaviour
     //创建敌人底部的血量物体
     public GameObject CreateHpItem()
     {
-        GameObject prefab = Resources.Load<GameObject>("UI/HpItem");
+        GameObject prefab = ResourceCache.Get<GameObject>("UI/HpItem");
         if (prefab == null)
         {
             Debug.LogError("血量UI预制体加载失败: UI/HpItem");
@@ -130,7 +121,10 @@ public class UIManager : MonoBehaviour
     //提示界面
     public void ShowTip(string msg, Color color, System.Action callback = null)
     {
-        GameObject obj = Instantiate(Resources.Load("UI/Tips"), canvasTf) as GameObject;
+        GameObject obj = PoolManager.Get("Tips");
+        obj.transform.SetParent(canvasTf, false);
+        obj.transform.localScale = Vector3.one;
+
         TextMeshProUGUI text = obj.transform.Find("bg/Text").GetComponent<TextMeshProUGUI>();
         text.text = msg; 
         text.color = color;
@@ -143,35 +137,24 @@ public class UIManager : MonoBehaviour
         seq.Append(scale2);
         seq.AppendCallback(delegate ()
         {
-            if (callback != null)
-            {
-                callback();
-            }
+            if (callback != null) callback();
+            PoolManager.Release("Tips", obj);
         });
-        MonoBehaviour.Destroy(obj, 2);
     }
 
     //受伤特效
     public void ShowDamageEffect()
     {
-        // 加载预制体
-        GameObject prefab = Resources.Load<GameObject>("UI/DamageEffect");
-        if (prefab == null)
-        {
-            Debug.LogError("DamageEffect prefab not found at Resources/UI/DamageEffect");
-            return;
-        }
-
-        // 实例化到 Canvas 下
-        GameObject effect = Instantiate(prefab, canvasTf);
-        effect.name = "DamageEffect";
+        GameObject effect = PoolManager.Get("DamageEffect");
+        if (effect == null) return;
+        effect.transform.SetParent(canvasTf, false);
 
         // 获取 Image 组件
         Image img = effect.GetComponent<Image>();
         if (img == null)
         {
             Debug.LogError("DamageEffect prefab missing Image component");
-            Destroy(effect);
+            PoolManager.Release("DamageEffect", effect);
             return;
         }
 
@@ -184,12 +167,12 @@ public class UIManager : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         seq.Append(img.DOFade(0.5f, 0.1f));  // 快速淡入到半透明
         seq.Append(img.DOFade(0f, 0.3f));    // 缓慢淡出
-        seq.OnComplete(() => Destroy(effect)); // 动画完成后销毁
+        seq.OnComplete(() => PoolManager.Release("DamageEffect", effect)); // 动画完成后归还
     }
 
     // 获取所有已加载的 UI
     public List<UIBase> GetAllUI()
     {
-        return new List<UIBase>(uiList);
+        return new List<UIBase>(_uiDict.Values);
     }
 }

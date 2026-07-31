@@ -42,6 +42,17 @@ public class PotionPanelController : MonoBehaviour
     // 是否通过点击打开了 Panel
     private bool isPanelShownByClick = false;
 
+    private void Awake()
+    {
+        FightManager.CachedPotionPanel = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (FightManager.CachedPotionPanel == this)
+            FightManager.CachedPotionPanel = null;
+    }
+
     private void Start()
     {
         parentRect = transform.GetComponent<RectTransform>();
@@ -147,8 +158,8 @@ public class PotionPanelController : MonoBehaviour
 
         if (data != null && !string.IsNullOrEmpty(data.icon))
         {
-            // 有药水：显示药水图标
-            Sprite sprite = Resources.Load<Sprite>(data.icon.Trim());
+            // 有药水：显示药水图标（使用缓存）
+            Sprite sprite = ResourceCache.GetSprite(data.icon);
             if (sprite != null)
             {
                 btnImg.sprite = sprite;

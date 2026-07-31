@@ -60,7 +60,7 @@ public class RestSiteUI : UIBase
 
         if (Camera.main != null)
         {
-            GameObject effect = Instantiate(Resources.Load<GameObject>("Effects/HealOnce"));
+            GameObject effect = Instantiate(ResourceCache.Get<GameObject>("Effects/HealOnce"));
             if (effect != null)
             {
                 effect.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2f;

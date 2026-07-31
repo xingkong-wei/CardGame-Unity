@@ -144,20 +144,20 @@ public class RoleManager
 
     private void SaveUnlockData()
     {
-        PlayerPrefs.SetInt("MaxUnlockedIsland", maxUnlockedIsland);
-        PlayerPrefs.Save();
+        SaveFileManager.SetInt("MaxUnlockedIsland", maxUnlockedIsland);
+        SaveFileManager.Flush();
     }
 
     private void SaveCompletedIsland()
     {
-        PlayerPrefs.SetInt("CompletedIsland", completedIsland);
-        PlayerPrefs.Save();
+        SaveFileManager.SetInt("CompletedIsland", completedIsland);
+        SaveFileManager.Flush();
     }
 
     private void LoadUnlockData()
     {
-        maxUnlockedIsland = PlayerPrefs.GetInt("MaxUnlockedIsland", 0);
-        completedIsland = PlayerPrefs.GetInt("CompletedIsland", -1);
+        maxUnlockedIsland = SaveFileManager.GetInt("MaxUnlockedIsland", 0);
+        completedIsland = SaveFileManager.GetInt("CompletedIsland", -1);
     }
 
     /// <summary>
@@ -171,13 +171,13 @@ public class RoleManager
             if (dc.upgraded)
                 ids.Add(dc.instanceId);
         }
-        PlayerPrefs.SetString("UpgradedCardIds", ids.Count > 0 ? string.Join(",", ids) : "");
-        PlayerPrefs.Save();
+        SaveFileManager.SetString("UpgradedCardIds", ids.Count > 0 ? string.Join(",", ids) : "");
+        SaveFileManager.Flush();
     }
 
     private void LoadUpgradedCards()
     {
-        string data = PlayerPrefs.GetString("UpgradedCardIds", "");
+        string data = SaveFileManager.GetString("UpgradedCardIds", "");
         if (string.IsNullOrEmpty(data)) return;
         // 旧格式兼容：纯数字=模板ID，用旧逻辑；含逗号=instanceId列表，等cardList加载后匹配
         _pendingUpgradedIds = new List<int>();

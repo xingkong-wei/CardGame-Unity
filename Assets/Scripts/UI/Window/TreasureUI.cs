@@ -154,7 +154,7 @@ public class TreasureUI : UIBase
         // 遗物
         if (rolledRelic != null && relicMount != null)
         {
-            relicInstance = Instantiate(Resources.Load<GameObject>("UI/RelicIcon"), relicMount);
+            relicInstance = Instantiate(ResourceCache.Get<GameObject>("UI/RelicIcon"), relicMount);
             RelicIcon ri = relicInstance.GetComponent<RelicIcon>();
             if (ri != null) ri.Setup(rolledRelic);
         }

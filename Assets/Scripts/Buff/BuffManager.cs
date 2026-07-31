@@ -408,16 +408,12 @@ public class BuffManager
         if (polarStorm == 0) return;
         if (FightManager.Instance == null) return;
 
-        // 每层每触发造成2点伤害
+        // 每层每触发造成2点伤害（使用 EnemyManager 缓存，避免 FindObjectsOfType）
         for (int t = 0; t < times; t++)
         {
-            Enemy[] allEnemies = Object.FindObjectsOfType<Enemy>();
-            foreach (Enemy enemy in allEnemies)
+            foreach (Enemy enemy in EnemyManager.Instance.GetAliveEnemies())
             {
-                if (enemy != null && enemy.gameObject != null && enemy.gameObject.activeInHierarchy)
-                {
-                    enemy.Hit(2 * polarStorm);
-                }
+                enemy.Hit(2 * polarStorm);
             }
         }
     }

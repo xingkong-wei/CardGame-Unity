@@ -33,9 +33,8 @@ public class PervertedEssencePotion : PotionBase
             potionList.Add(pool[idx]);
         }
 
-        // 刷新药水UI
-        PotionPanelController ppc = Object.FindObjectOfType<PotionPanelController>();
-        if (ppc != null) ppc.RefreshPotionButtons();
+        // 刷新药水UI（使用静态缓存）
+        if (FightManager.CachedPotionPanel != null) FightManager.CachedPotionPanel.RefreshPotionButtons();
 
         UIManager.Instance.ShowTip($"逆乱原液：获得 {emptySlots} 瓶随机药水", Color.magenta);
     }

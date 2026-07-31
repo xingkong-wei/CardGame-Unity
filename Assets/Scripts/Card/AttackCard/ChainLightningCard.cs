@@ -235,19 +235,10 @@ public class ChainLightningCard : SpellAttackCard
     }
 
     /// <summary>
-    /// 获取所有存活的敌人列表（AOE卡牌通用）
+    /// 获取所有存活的敌人列表（使用 EnemyManager 缓存，O(1) 性能）
     /// </summary>
     protected List<Enemy> GetAliveEnemies()
     {
-        List<Enemy> aliveEnemies = new List<Enemy>();
-        Enemy[] allEnemies = Object.FindObjectsOfType<Enemy>();
-        foreach (Enemy enemy in allEnemies)
-        {
-            if (enemy != null && enemy.gameObject != null && enemy.gameObject.activeInHierarchy)
-            {
-                aliveEnemies.Add(enemy);
-            }
-        }
-        return aliveEnemies;
+        return EnemyManager.Instance.GetAliveEnemies();
     }
 }

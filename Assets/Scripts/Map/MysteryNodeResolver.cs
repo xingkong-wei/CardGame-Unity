@@ -50,11 +50,11 @@ namespace Map
         /// </summary>
         private int StreakCount
         {
-            get => PlayerPrefs.GetInt(MYSTERY_STREAK_KEY, 0);
+            get => SaveFileManager.GetInt(MYSTERY_STREAK_KEY, 0);
             set
             {
-                PlayerPrefs.SetInt(MYSTERY_STREAK_KEY, value);
-                PlayerPrefs.Save();
+                SaveFileManager.SetInt(MYSTERY_STREAK_KEY, value);
+                SaveFileManager.Flush();
             }
         }
 
@@ -107,8 +107,8 @@ namespace Map
         /// </summary>
         public static void Reset()
         {
-            PlayerPrefs.SetInt(MYSTERY_STREAK_KEY, 0);
-            PlayerPrefs.Save();
+            SaveFileManager.SetInt(MYSTERY_STREAK_KEY, 0);
+            SaveFileManager.Flush();
         }
 
         /// <summary>

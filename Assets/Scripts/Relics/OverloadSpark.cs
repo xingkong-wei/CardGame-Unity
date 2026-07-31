@@ -20,11 +20,7 @@ public class OverloadSpark : RelicBase
 
     private Enemy GetRandomAliveEnemy()
     {
-        Enemy[] all = Object.FindObjectsOfType<Enemy>();
-        var alive = new System.Collections.Generic.List<Enemy>();
-        foreach (var e in all)
-            if (e != null && e.gameObject.activeInHierarchy && e.CurHp > 0)
-                alive.Add(e);
+        var alive = EnemyManager.Instance.GetAliveEnemies();
         return alive.Count > 0 ? alive[Random.Range(0, alive.Count)] : null;
     }
 }

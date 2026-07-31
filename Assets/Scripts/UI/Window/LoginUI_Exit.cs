@@ -43,11 +43,11 @@ public class LoginUI_Exit : UIBase
         FightManager.Instance.relicList.Clear();
         FightManager.Instance.potionList.Clear();
 
-        for (int i = 0; i < 20; i++) { string k = $"Map_Island_{i}"; if (PlayerPrefs.HasKey(k)) PlayerPrefs.DeleteKey(k); }
-        PlayerPrefs.DeleteKey("Map"); PlayerPrefs.DeleteKey("UpgradedCardIds");
-        PlayerPrefs.DeleteKey("SavedCurHp"); PlayerPrefs.DeleteKey("SavedMaxHp");
-        PlayerPrefs.DeleteKey("SavedCoinAmount"); PlayerPrefs.DeleteKey("SavedIslandIndex");
-        PlayerPrefs.Save();
+        SaveFileManager.DeleteKeysByPrefix("Map_Island_");
+        SaveFileManager.DeleteKey("Map"); SaveFileManager.DeleteKey("UpgradedCardIds");
+        SaveFileManager.DeleteKey("SavedCurHp"); SaveFileManager.DeleteKey("SavedMaxHp");
+        SaveFileManager.DeleteKey("SavedCoinAmount"); SaveFileManager.DeleteKey("SavedIslandIndex");
+        SaveFileManager.Flush();
 
         Close();
         MapUI mapUI = UIManager.Instance.ShowUI<MapUI>("MapUI") as MapUI;
@@ -90,22 +90,22 @@ public class LoginUI_Exit : UIBase
         if (!string.IsNullOrEmpty(data.mapJson))
         {
             string mapKey = $"Map_Island_{data.currentIslandIndex}";
-            PlayerPrefs.SetString(mapKey, data.mapJson);
+            SaveFileManager.SetString(mapKey, data.mapJson);
 
             Map.Map map = JsonConvert.DeserializeObject<Map.Map>(data.mapJson);
             if (map != null)
             {
-                MapManager mapManager = Object.FindObjectOfType<MapManager>();
+                MapManager mapManager = FindFirstObjectByType<MapManager>();
                 if (mapManager != null) mapManager.CurrentMap = map;
             }
         }
 
         // 持久化数值（供 FightInit 等读取）
-        PlayerPrefs.SetInt("SavedCurHp", data.curHp);
-        PlayerPrefs.SetInt("SavedMaxHp", data.maxHp);
-        PlayerPrefs.SetInt("SavedCoinAmount", data.coinAmount);
-        PlayerPrefs.SetInt("SavedIslandIndex", data.currentIslandIndex);
-        PlayerPrefs.Save();
+        SaveFileManager.SetInt("SavedCurHp", data.curHp);
+        SaveFileManager.SetInt("SavedMaxHp", data.maxHp);
+        SaveFileManager.SetInt("SavedCoinAmount", data.coinAmount);
+        SaveFileManager.SetInt("SavedIslandIndex", data.currentIslandIndex);
+        SaveFileManager.Flush();
 
         // 恢复敌人关卡ID
         EnemyManager.Instance.CurrentLevelId = data.levelId > 0 ? data.levelId : -1;
@@ -178,11 +178,10 @@ public class LoginUI_Exit : UIBase
     /// <summary>手动创建 UI 并注册到 UIManager（绕过 ShowUI 的自动 Show）</summary>
     private T CreateUIManually<T>(string prefabPath, string objName) where T : UIBase
     {
-        GameObject prefab = Resources.Load<GameObject>(prefabPath);
+        GameObject prefab = ResourceCache.Get<GameObject>(prefabPath);
         if (prefab == null) { Debug.LogError($"{prefabPath} prefab 未找到"); return null; }
 
-        Canvas rootCanvas = Object.FindObjectOfType<Canvas>();
-        Transform parent = rootCanvas != null ? rootCanvas.transform : null;
+        Transform parent = UIManager.Instance?.canvasTf;
         GameObject go = Object.Instantiate(prefab, parent);
         go.name = objName;
 

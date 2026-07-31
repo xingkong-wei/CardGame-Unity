@@ -201,7 +201,7 @@ public class MeteoriteFallCard : CardItem
         // 播放特效
         if (!string.IsNullOrEmpty(data.effects))
         {
-            GameObject effectObj = Instantiate(Resources.Load(data.effects)) as GameObject;
+            GameObject effectObj = Instantiate(ResourceCache.Get<GameObject>(data.effects)) as GameObject;
             if (effectObj != null)
             {
                 Vector3 pos = Camera.main.transform.position;
@@ -214,15 +214,6 @@ public class MeteoriteFallCard : CardItem
 
     private List<Enemy> GetAliveEnemies()
     {
-        List<Enemy> aliveEnemies = new List<Enemy>();
-        Enemy[] allEnemies = Object.FindObjectsOfType<Enemy>();
-        foreach (Enemy enemy in allEnemies)
-        {
-            if (enemy != null && enemy.gameObject != null && enemy.gameObject.activeInHierarchy)
-            {
-                aliveEnemies.Add(enemy);
-            }
-        }
-        return aliveEnemies;
+        return EnemyManager.Instance.GetAliveEnemies();
     }
 }

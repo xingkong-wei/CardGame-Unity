@@ -215,7 +215,7 @@ public class CardCollectionUI : UIBase
         // 背景图
         Image bgImg = bg.GetComponent<Image>();
         if (bgImg != null && !string.IsNullOrEmpty(cardData.bgIcon))
-            bgImg.sprite = Resources.Load<Sprite>(cardData.bgIcon);
+            bgImg.sprite = ResourceCache.GetSprite(cardData.bgIcon);
 
         // 图标
         Transform iconTf = bg.Find("icon");
@@ -223,7 +223,7 @@ public class CardCollectionUI : UIBase
         {
             Image iconImg = iconTf.GetComponent<Image>();
             if (iconImg != null && !string.IsNullOrEmpty(cardData.icon))
-                iconImg.sprite = Resources.Load<Sprite>(cardData.icon);
+                iconImg.sprite = ResourceCache.GetSprite(cardData.icon);
         }
 
         // 描述文本（升级后使用升级描述，词条金色显示在开头）
@@ -277,7 +277,7 @@ public class CardCollectionUI : UIBase
         // 边框材质
         if (bgImg != null)
         {
-            Material outlineMat = Resources.Load<Material>("Mats/outline");
+            Material outlineMat = ResourceCache.Get<Material>("Mats/outline");
             if (outlineMat != null)
                 bgImg.material = Instantiate(outlineMat);
         }

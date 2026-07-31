@@ -198,7 +198,7 @@ public class SpireBuffUI : MonoBehaviour
             // 设置图标精灵
             if (iconComp.iconImage != null && !string.IsNullOrEmpty(data.iconPath))
             {
-                Sprite sprite = Resources.Load<Sprite>(data.iconPath.Trim());
+                Sprite sprite = ResourceCache.GetSprite(data.iconPath);
                 if (sprite != null)
                 {
                     iconComp.iconImage.sprite = sprite;

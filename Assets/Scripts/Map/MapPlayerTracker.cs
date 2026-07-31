@@ -63,7 +63,7 @@ namespace Map
 
         private static void EnterNode(MapNode mapNode)
         {
-            // 1. 先尝试从 UIManager 获取
+            // 从 UIManager 获取（不再使用 FindObjectOfType 作为 fallback）
             SlayTheSpireMapUI mapUI = UIManager.Instance?.GetUI<SlayTheSpireMapUI>("SlayTheSpireMapUI");
             if (mapUI != null)
             {
@@ -71,14 +71,12 @@ namespace Map
                 return;
             }
 
-            // 2. 如果 UIManager 中找不到,使用 FindObjectOfType
-            SlayTheSpireMapUI[] mapUIs = UnityEngine.Object.FindObjectsOfType<SlayTheSpireMapUI>();
-            if (mapUIs != null && mapUIs.Length > 0)
+            // 如果 UIManager 中找不到，尝试通过 ShowUI 动态创建
+            mapUI = UIManager.Instance?.ShowUI<SlayTheSpireMapUI>("SlayTheSpireMapUI") as SlayTheSpireMapUI;
+            if (mapUI != null)
             {
-                mapUIs[0].OnNodeClicked(mapNode);
-                return;
+                mapUI.OnNodeClicked(mapNode);
             }
-
         }
 
         private void PlayWarningThatNodeCannotBeAccessed()

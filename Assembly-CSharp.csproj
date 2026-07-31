@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Card\AbilityCard\ElementalDominanceCard.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\FruitExtractPotion.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\MeteorHammerCard.cs" />
+    <Compile Include="Assets\Scripts\Manager\SaveFileManager.cs" />
     <Compile Include="Assets\Scripts\Map\LineConnection.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\MeteoriteFallCard.cs" />
     <Compile Include="Assets\Scripts\Buff\StatusType.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\SlicesTest.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\CustomPropertyDrawerExample.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXFireProjectile.cs" />
+    <Compile Include="Assets\Scripts\Tools\ResourceCache.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Scripts\Enemy\BallDragonEnemy.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\HighlightExample.cs" />
@@ -115,6 +117,8 @@
     <Compile Include="Assets\Scripts\Potion\Uncommon\SovereignGlarePotion.cs" />
     <Compile Include="Assets\Scripts\Data\AttackEffectConfig.cs" />
     <Compile Include="Assets\OneLine\RectEx\ColumnExtensions.cs" />
+    <Compile Include="Assets\Scripts\Manager\RelicInventory.cs" />
+    <Compile Include="Assets\Scripts\Tools\PoolManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\RiftDragonflyEnemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Card\AbilityCard\Power.cs" />
@@ -179,6 +183,7 @@
     <Compile Include="Assets\Scripts\Card\OtherCard\DizzinessCard.cs" />
     <Compile Include="Assets\Scripts\GameApp.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FrostNovaCard.cs" />
+    <Compile Include="Assets\Scripts\Manager\PotionInventory.cs" />
     <Compile Include="Assets\Scripts\Map\MapConfig.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\BerserkPotion.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\NestedArrayExample.cs" />
@@ -189,12 +194,14 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\FeatheringPotion.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
+    <Compile Include="Assets\Scripts\Manager\Enemy.Animation.cs" />
     <Compile Include="Assets\Scripts\Fight\FightUnit.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Overview\Scripts\StandartTypesOverview.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\ThornPotion.cs" />
     <Compile Include="Assets\Scripts\Buff\StatusEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
+    <Compile Include="Assets\Scripts\Manager\Enemy.Visual.cs" />
     <Compile Include="Assets\Scripts\UI\Window\FightUI.cs" />
     <Compile Include="Assets\Scripts\Enemy\GolemEnemy.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\SnakeVenomCard.cs" />
@@ -297,6 +304,7 @@
     <Compile Include="Assets\Scripts\Data\GameConfig.cs" />
     <Compile Include="Assets\Scripts\Relics\ArchmagusEye.cs" />
     <Compile Include="Assets\Scripts\Map\MapViewUI.cs" />
+    <Compile Include="Assets\Scripts\Manager\PlayerStateManager.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\MucusCard.cs" />
     <Compile Include="Assets\Scripts\Map\DottedLineRenderer.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\BottledSpritePotion.cs" />
@@ -324,6 +332,7 @@
     <Compile Include="Assets\Scripts\Potion\Common\EnergyPotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\GamblerBrewPotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\MoltenGuardPotion.cs" />
+    <Compile Include="Assets\Scripts\Tools\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Map\UI Lines\Utilities\BezierPath.cs" />
     <Compile Include="Assets\Scripts\Data\CardData.cs" />
     <Compile Include="Assets\Scripts\Map\MapView.cs" />
@@ -355,6 +364,7 @@
     <Compile Include="Assets\Scripts\Card\AbilityCard\SpiritFocusCard.cs" />
     <Compile Include="Assets\Scripts\Enemy\FlameDragonEnemy.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\PosionBlisterCard.cs" />
+    <Compile Include="Assets\Scripts\Manager\Enemy.Status.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\Nested\NestedSimpleExample.cs" />
     <Compile Include="Assets\Scripts\Relics\FusionFurnace.cs" />
     <Compile Include="Assets\Scripts\Enemy\CarbonBeastEnemy.cs" />

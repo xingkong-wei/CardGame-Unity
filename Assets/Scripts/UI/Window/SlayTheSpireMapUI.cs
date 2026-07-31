@@ -65,15 +65,10 @@ public class SlayTheSpireMapUI : UIBase
 
     public void ResetMapState()
     {
-        for (int i = 0; i < 23; i++)
-        {
-            string key = GetMapSaveKey(i);
-            if (PlayerPrefs.HasKey(key))
-                PlayerPrefs.DeleteKey(key);
-        }
-        if (PlayerPrefs.HasKey("Map"))
-            PlayerPrefs.DeleteKey("Map");
-        PlayerPrefs.Save();
+        SaveFileManager.DeleteKeysByPrefix("Map_Island_");
+        if (SaveFileManager.HasKey("Map"))
+            SaveFileManager.DeleteKey("Map");
+        SaveFileManager.Flush();
     }
 
     private string GetMapSaveKey(int islandIndex) => $"Map_Island_{islandIndex}";
@@ -96,9 +91,9 @@ public class SlayTheSpireMapUI : UIBase
 
         // 清除旧数据，生成新地图
         string key = GetMapSaveKey(islandIndex);
-        if (PlayerPrefs.HasKey(key))
-            PlayerPrefs.DeleteKey(key);
-        PlayerPrefs.Save();
+        if (SaveFileManager.HasKey(key))
+            SaveFileManager.DeleteKey(key);
+        SaveFileManager.Flush();
 
         ResetDisplay();
         ShowCloseBtn();
@@ -144,9 +139,9 @@ public class SlayTheSpireMapUI : UIBase
         else
         {
             string key = GetMapSaveKey(islandIndex);
-            if (PlayerPrefs.HasKey(key))
+            if (SaveFileManager.HasKey(key))
             {
-                string mapJson = PlayerPrefs.GetString(key);
+                string mapJson = SaveFileManager.GetString(key);
                 Map.Map map = Newtonsoft.Json.JsonConvert.DeserializeObject<Map.Map>(mapJson);
                 if (map != null)
                 {
@@ -239,8 +234,8 @@ public class SlayTheSpireMapUI : UIBase
         if (mapManager == null || mapManager.CurrentMap == null) return;
         string json = Newtonsoft.Json.JsonConvert.SerializeObject(mapManager.CurrentMap, Newtonsoft.Json.Formatting.Indented,
             new Newtonsoft.Json.JsonSerializerSettings { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
-        PlayerPrefs.SetString(GetMapSaveKey(currentIslandIndex), json);
-        PlayerPrefs.Save();
+        SaveFileManager.SetString(GetMapSaveKey(currentIslandIndex), json);
+        SaveFileManager.Flush();
     }
 
     // ===== 节点点击 =====

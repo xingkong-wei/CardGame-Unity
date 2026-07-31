@@ -10,13 +10,9 @@ public class ExitManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<ExitManager>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("ExitManager");
-                    _instance = go.AddComponent<ExitManager>();
-                    DontDestroyOnLoad(go);
-                }
+                GameObject go = new GameObject("ExitManager");
+                _instance = go.AddComponent<ExitManager>();
+                DontDestroyOnLoad(go);
             }
             return _instance;
         }
@@ -58,25 +54,19 @@ public class ExitManager : MonoBehaviour
 
     private void ShowExitUI()
     {
-        GameObject prefab = Resources.Load<GameObject>("UI/ExitUI");
+        GameObject prefab = ResourceCache.Get<GameObject>("UI/ExitUI");
         if (prefab == null)
         {
             Debug.LogError("ExitUI 预制体未找到！");
             return;
         }
 
-        // 优先使用 UIManager 中的 Canvas，避免重复查找
+        // 直接使用 UIManager 中缓存的 Canvas 引用
         Transform parent = UIManager.Instance?.canvasTf;
         if (parent == null)
         {
-            Canvas canvas = FindObjectOfType<Canvas>();
-            if (canvas != null)
-                parent = canvas.transform;
-            else
-            {
-                Debug.LogError("场景中没有 Canvas，无法显示 ExitUI！");
-                return;
-            }
+            Debug.LogError("场景中没有 Canvas，无法显示 ExitUI！");
+            return;
         }
 
         Instantiate(prefab, parent, false);

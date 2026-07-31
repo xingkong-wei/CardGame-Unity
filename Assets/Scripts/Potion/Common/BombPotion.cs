@@ -30,13 +30,6 @@ public class BombPotion : PotionBase
 
     private List<Enemy> GetAliveEnemies()
     {
-        List<Enemy> alive = new List<Enemy>();
-        Enemy[] all = Object.FindObjectsOfType<Enemy>();
-        foreach (var e in all)
-        {
-            if (e != null && e.gameObject != null && e.gameObject.activeInHierarchy)
-                alive.Add(e);
-        }
-        return alive;
+        return EnemyManager.Instance.GetAliveEnemies();
     }
 }

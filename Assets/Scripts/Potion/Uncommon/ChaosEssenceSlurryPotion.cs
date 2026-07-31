@@ -98,11 +98,7 @@ public class ChaosEssenceSlurryPotion : PotionBase
 
     private Enemy GetRandomAliveEnemy()
     {
-        Enemy[] all = Object.FindObjectsOfType<Enemy>();
-        List<Enemy> alive = new List<Enemy>();
-        foreach (var e in all)
-            if (e != null && e.gameObject.activeInHierarchy && e.CurHp > 0)
-                alive.Add(e);
+        List<Enemy> alive = EnemyManager.Instance.GetAliveEnemies();
         return alive.Count > 0 ? alive[Random.Range(0, alive.Count)] : null;
     }
 }

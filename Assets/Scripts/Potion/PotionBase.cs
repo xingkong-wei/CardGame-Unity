@@ -55,7 +55,7 @@ public abstract class PotionBase
     /// </summary>
     protected void PlayEffect(string effectPath)
     {
-        GameObject effectPrefab = Resources.Load<GameObject>(effectPath);
+        GameObject effectPrefab = ResourceCache.Get<GameObject>(effectPath);
         if (effectPrefab != null)
         {
             Object.Instantiate(effectPrefab);

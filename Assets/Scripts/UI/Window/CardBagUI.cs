@@ -93,7 +93,7 @@ public class CardBagUI : UIBase
         }
         if (cardItemPrefab == null)
         {
-            cardItemPrefab = Resources.Load<GameObject>("UI/CardItem");
+            cardItemPrefab = ResourceCache.Get<GameObject>("UI/CardItem");
         }
     }
 
@@ -187,8 +187,8 @@ public class CardBagUI : UIBase
             displayDesc = "<color=yellow>" + traits + "</color> " + displayDesc;
 
         // 手动设置卡牌视觉
-        cardObj.transform.Find("bg").GetComponent<Image>().sprite = Resources.Load<Sprite>(cardData.bgIcon);
-        cardObj.transform.Find("bg/icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(cardData.icon);
+        cardObj.transform.Find("bg").GetComponent<Image>().sprite = ResourceCache.GetSprite(cardData.bgIcon);
+        cardObj.transform.Find("bg/icon").GetComponent<Image>().sprite = ResourceCache.GetSprite(cardData.icon);
         cardObj.transform.Find("bg/msgTxt").GetComponent<TextMeshProUGUI>().text = displayDesc;
         cardObj.transform.Find("bg/nameTxt").GetComponent<TextMeshProUGUI>().text = showUpgraded ? cardData.cardName + "+" : cardData.cardName;
         if (showUpgraded)
