@@ -114,10 +114,10 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\Nested\NestedArrayExample.cs" />
     <Compile Include="Assets\Scripts\Card\PowerCard.cs" />
-    <Compile Include="Assets\Scripts\Potion\Uncommon\SovereignGlarePotion.cs" />
-    <Compile Include="Assets\Scripts\Data\AttackEffectConfig.cs" />
-    <Compile Include="Assets\OneLine\RectEx\ColumnExtensions.cs" />
     <Compile Include="Assets\Scripts\Manager\RelicInventory.cs" />
+    <Compile Include="Assets\Scripts\Potion\Uncommon\SovereignGlarePotion.cs" />
+    <Compile Include="Assets\OneLine\RectEx\ColumnExtensions.cs" />
+    <Compile Include="Assets\Scripts\Data\AttackEffectConfig.cs" />
     <Compile Include="Assets\Scripts\Tools\PoolManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\RiftDragonflyEnemy.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />

@@ -65,9 +65,7 @@ public class LoginUI_Exit : UIBase
 
         FightManager fm = FightManager.Instance;
 
-        // 恢复基础数值
-        fm.CurHp = data.curHp;
-        fm.MaxHp = data.maxHp;
+        // 恢复基础数值（血量由 FightInit 重新初始化，这里只恢复持久化数据）
         fm.SetCoinAmount(data.coinAmount);
         fm.currentIslandIndex = data.currentIslandIndex;
         fm.currentNodePoint = new Vector2Int(data.currentNodeX, data.currentNodeY);

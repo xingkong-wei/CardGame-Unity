@@ -53,6 +53,12 @@ public class SaveManager : MonoBehaviour
             data.currentNodeY = fm.currentNodePoint.y;
             data.currentNodeTypeStr = fm.currentNodeType.ToString();
 
+            // 同步持久化数据到二进制文件，确保 SL 读档时血量一致
+            SaveFileManager.SetInt("SavedCurHp", fm.CurHp);
+            SaveFileManager.SetInt("SavedMaxHp", fm.MaxHp);
+            SaveFileManager.SetInt("SavedCoinAmount", fm.CoinAmount);
+            SaveFileManager.SetInt("SavedIslandIndex", fm.currentIslandIndex);
+
             if (fm.potionList != null)
                 foreach (var p in fm.potionList)
                     if (p != null) data.potionIds.Add(p.scriptName);

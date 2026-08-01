@@ -152,7 +152,7 @@ public static class StatusCallbacks
                 {
                     BuffManager.Instance.RemoveStatus(StatusType.Weak, 1);
                 };
-                effect.modifyAttackDamage = (e, dmg) => Mathf.CeilToInt(dmg * (1f - e.stack * 0.25f));
+                effect.modifyAttackDamage = (e, dmg) => Mathf.CeilToInt(dmg * 0.75f); // 固定减少25%伤害
                 // 敌人端：虚弱在敌人回合结束时递减
                 effect.onEnemyTurnEnd = (e, enemy) =>
                 {
@@ -229,7 +229,7 @@ public static class StatusCallbacks
                 {
                     BuffManager.Instance.RemoveStatus(StatusType.Frail, 1);
                 };
-                effect.modifyDefenseGain = (e, dmg) => Mathf.CeilToInt(dmg * (1f - e.stack * 0.25f));
+                effect.modifyDefenseGain = (e, dmg) => Mathf.CeilToInt(dmg * 0.75f); // 固定减少25%护甲获得
                 break;
 
             case StatusType.Agility:

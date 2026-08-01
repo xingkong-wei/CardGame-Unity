@@ -57,6 +57,10 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         this.sourceDeckCard = deckCard;
         // 对象池复用时重新缓存引用（预制体结构不变，但 Transform 可能变了）
         if (_bgTf == null) CacheReferences();
+        // 重置费用状态（对象池复用可能残留旧颜色）
+        costOverride = -1;
+        costText = null;
+        if (_costTxt != null) _costTxt.color = Color.white;
         // 检查是否免费卡
         if (deckCard != null && FightCardManager.Instance.IsFreeCard(deckCard.instanceId))
             costOverride = 0;
@@ -478,9 +482,10 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (costText != null)
         {
             int cost = GetCost();
+            int baseExpend = GetExpend();
             costText.text = cost.ToString();
-            // 费用覆盖（免费）或法术减免时显示绿色
-            if (costOverride == 0 || ((BuffManager.Instance.HasSpellCostDiscount() || RelicManager.Instance.HasSpellCostReduction()) && IsSpellCard()))
+            // 费用低于原始费用时显示绿色（实际减免判断，而非 buff 存在判断）
+            if (costOverride == 0 || (cost < baseExpend && baseExpend > 0))
             {
                 costText.color = Color.green;
             }

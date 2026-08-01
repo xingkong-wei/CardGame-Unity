@@ -185,7 +185,9 @@ public class FrostNovaCard : CardItem
         List<Enemy> enemies = GetAliveEnemies();
         if (enemies.Count == 0) return;
 
-        int damage = data != null ? GetArg0() : 10;
+        int baseDamage = data != null ? GetArg0() : 10;
+        int damage = BuffManager.Instance.ModifyAttackDamage(baseDamage);
+        if (IsSpellCard()) damage = BuffManager.Instance.ApplySpellDamageModifier(damage);
         int weakStacks = (IsUpgraded() ? 2 : 1) * (grabbedDup ? 2 : 1);
         int iceAffinityGain = 3 * (grabbedDup ? 2 : 1);
 

@@ -22,15 +22,15 @@ MonoBehaviour:
   bgIcon: Icon/CardBg/GreenCard
   icon: Icon/DefenseCard/ElementOverflow
   expend: 0
-  arg0: 1
+  arg0: 2
   effects: Effects/SpinZoneBlue
   damageSource: 0
   damagePercent: 1
-  description: "\u9009\u62E9\u6D88\u8017\u4E00\u79CD\u5143\u7D20\u4EB2\u548C\u5EA6\uFF0C\u6BCF\u6D88\u80175\u5C42\u83B7\u5F971\u70B9\u80FD\u91CF"
+  description: "\u9009\u62E9\u6D88\u8017\u4E00\u79CD\u5143\u7D20\u4EB2\u548C\u5EA6\uFF0C\u6BCF\u6D88\u80175\u5C42\u83B7\u5F972\u70B9\u80FD\u91CF"
   upgradable: 1
   upgradedExpend: 0
-  upgradedArg0: 3
-  upgradedDescription: "\u9009\u62E9\u6D88\u8017\u4E00\u79CD\u5143\u7D20\u4EB2\u548C\u5EA6\uFF0C\u6BCF\u6D88\u80175\u5C42\u83B7\u5F973\u70B9\u80FD\u91CF"
+  upgradedArg0: 4
+  upgradedDescription: "\u9009\u62E9\u6D88\u8017\u4E00\u79CD\u5143\u7D20\u4EB2\u548C\u5EA6\uFF0C\u6BCF\u6D88\u80175\u5C42\u83B7\u5F974\u70B9\u80FD\u91CF"
   removeConsumeOnUpgrade: 0
   isInnate: 0
   upgradedIsInnate: 0

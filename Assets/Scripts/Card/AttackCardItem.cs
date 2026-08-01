@@ -45,8 +45,16 @@ public class AttackCardItem : CardItem
         // 应用百分比
         int damage = Mathf.FloorToInt(baseValue * data.damagePercent);
 
-        // 应用Buff修改（力量/虚弱），但魔杖充能不能在这里处理
+        // 应用Buff修改（力量/虚弱）
         damage = BuffManager.Instance.ModifyAttackDamage(damage, false);
+
+        // 如果是法术攻击牌，额外应用法术伤害修正（火亲和度等）
+        // 注意：不能调用 ModifySpellDamage（它会重复应用 ModifyAttackDamage），
+        // 直接应用 modifySpellDamage 回调
+        if (IsSpellCard())
+        {
+            damage = BuffManager.Instance.ApplySpellDamageModifier(damage);
+        }
 
         return damage;
     }

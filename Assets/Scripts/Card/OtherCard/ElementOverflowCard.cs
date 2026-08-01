@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 元素四溢 - 选择消耗一种元素亲和度，每消耗5层获得1点能量
+/// 元素四溢 - 选择消耗一种元素亲和度，每消耗5层获得 arg0 点能量
 /// </summary>
 public class ElementOverflowCard : CardItem
 {
@@ -52,12 +52,14 @@ public class ElementOverflowCard : CardItem
     /// </summary>
     private void OnElementSelected(StatusType type)
     {
+        int energyGain = GetArg0();
+
         // 消耗5层亲和度
         BuffManager.Instance.RemoveStatus(type, 5);
 
-        // 获得1点能量
-        FightManager.Instance.CurPowerCount += 1;
-        UIManager.Instance.ShowTip("元素四溢：消耗5层亲和度，获得1能量", Color.yellow);
+        // 获得能量
+        FightManager.Instance.CurPowerCount += energyGain;
+        UIManager.Instance.ShowTip($"元素四溢：消耗5层亲和度，获得{energyGain}能量", Color.yellow);
 
         // 更新UI
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");

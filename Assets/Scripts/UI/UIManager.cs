@@ -123,6 +123,7 @@ public class UIManager : MonoBehaviour
     {
         GameObject obj = PoolManager.Get("Tips");
         obj.transform.SetParent(canvasTf, false);
+        obj.transform.SetAsLastSibling(); // 确保提示UI在所有UI最上层
         obj.transform.localScale = Vector3.one;
 
         TextMeshProUGUI text = obj.transform.Find("bg/Text").GetComponent<TextMeshProUGUI>();

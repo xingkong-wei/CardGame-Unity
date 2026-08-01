@@ -50,10 +50,13 @@ public class BuffManager
         // 亲和度类型：调用 modifyAffinityGain 回调处理翻倍等逻辑
         if (isAffinity)
         {
-            StatusEffect tempAffinity = new StatusEffect(type, 0);
-            StatusCallbacks.Inject(tempAffinity);
-            if (tempAffinity.modifyAffinityGain != null)
-                stack = tempAffinity.modifyAffinityGain(tempAffinity, stack);
+            // 查找所有有 modifyAffinityGain 回调的状态（如 AffinityDouble），
+            // 用它们各自的层数来计算翻倍
+            foreach (var se in statusEffects)
+            {
+                if (se.modifyAffinityGain != null && se.stack > 0)
+                    stack = se.modifyAffinityGain(se, stack);
+            }
 
             stack = OnAffinityModify?.Invoke(type, stack) ?? stack;
         }
@@ -246,6 +249,8 @@ public class BuffManager
 
     /// <summary>
     /// 法术攻击时修改伤害（包含火亲和度）
+    /// 注意：此方法会先调 ModifyAttackDamage，适合首次计算伤害的场景
+    /// 如果已经调用过 ModifyAttackDamage，请用 ApplySpellDamageModifier
     /// </summary>
     public int ModifySpellDamage(int baseDamage)
     {
@@ -258,6 +263,20 @@ public class BuffManager
         }
 
         return modifiedDamage;
+    }
+
+    /// <summary>
+    /// 仅应用 modifySpellDamage 回调（不重复应用 modifyAttackDamage）
+    /// 用于已经调用过 ModifyAttackDamage 的场景
+    /// </summary>
+    public int ApplySpellDamageModifier(int damage)
+    {
+        foreach (var effect in statusEffects)
+        {
+            if (effect.modifySpellDamage != null)
+                damage = effect.modifySpellDamage(effect, damage);
+        }
+        return damage;
     }
 
     /// <summary>

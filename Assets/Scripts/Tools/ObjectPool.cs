@@ -38,19 +38,20 @@ public class ObjectPool
     }
 
     /// <summary>
-    /// 从池中取出一个对象（若池空则创建新对象）
+    /// 从池中取出一个对象（若池空或对象已销毁则创建新对象）
     /// </summary>
     public GameObject Get()
     {
-        GameObject obj;
-        if (_pool.Count > 0)
+        GameObject obj = null;
+        while (_pool.Count > 0)
         {
             obj = _pool.Dequeue();
+            if (obj != null) break;
         }
-        else
-        {
+
+        if (obj == null)
             obj = CreateNew();
-        }
+
         obj.SetActive(true);
         return obj;
     }
@@ -62,6 +63,7 @@ public class ObjectPool
     {
         if (obj == null) return;
         obj.SetActive(false);
+        obj.transform.SetParent(_parent, false); // 归还到池根节点，防止场景切换时被销毁
         _pool.Enqueue(obj);
     }
 

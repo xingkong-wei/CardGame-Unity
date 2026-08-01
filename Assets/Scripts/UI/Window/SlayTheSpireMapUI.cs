@@ -313,6 +313,10 @@ public class SlayTheSpireMapUI : UIBase
         }
 
         FightManager.Instance.SetCurrentIslandIndex(currentIslandIndex);
+        // 保存入场血量（SL 读档时恢复到进入节点时的状态）
+        SaveFileManager.SetInt("NodeEntryCurHp", FightManager.Instance.CurHp);
+        SaveFileManager.SetInt("NodeEntryMaxHp", FightManager.Instance.MaxHp);
+        SaveFileManager.Flush();
         FightManager.Instance.ChangeType(FightType.Init);
     }
 

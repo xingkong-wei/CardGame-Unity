@@ -18,7 +18,6 @@ public class CureCard : CardItem
             FightManager.Instance.CurHp = FightManager.Instance.MaxHp;
         }
         int healed = FightManager.Instance.CurHp - oldHp;
-        Debug.Log($"治愈 {healed} 点生命，当前血量: {FightManager.Instance.CurHp}/{FightManager.Instance.MaxHp}");
 
         FightUI fightUI = UIManager.Instance.GetUI<FightUI>("FightUI");
         if (fightUI != null)
