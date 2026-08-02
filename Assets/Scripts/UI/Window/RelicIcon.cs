@@ -109,6 +109,53 @@ public class RelicIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AdjustTooltipSize();
     }
 
+    /// <summary>
+    /// 静态方法：根据文本内容自适应 TooltipPanel 大小（不需要 RelicIcon 实例）
+    /// </summary>
+    public static void AdjustTooltipSizeStatic(GameObject tooltipPanel, TextMeshProUGUI nameText, TextMeshProUGUI descText)
+    {
+        if (tooltipPanel == null) return;
+        var panelRT = tooltipPanel.GetComponent<RectTransform>();
+        if (panelRT == null) return;
+
+        float tooltipMaxWidth = 280f;
+        float tooltipPaddingX = 12f;
+        float tooltipPaddingY = 10f;
+        float nameDescSpacing = 6f;
+
+        float textMaxWidth = tooltipMaxWidth - tooltipPaddingX * 2;
+
+        RectTransform nameRT = nameText?.GetComponent<RectTransform>();
+        RectTransform descRT = descText?.GetComponent<RectTransform>();
+
+        if (descRT != null) descRT.sizeDelta = new Vector2(textMaxWidth, 0);
+        if (nameRT != null) nameRT.sizeDelta = new Vector2(textMaxWidth, 0);
+
+        nameText?.ForceMeshUpdate();
+        descText?.ForceMeshUpdate();
+
+        Vector2 nameValues = nameText != null ? nameText.GetPreferredValues(textMaxWidth, 0) : Vector2.zero;
+        Vector2 descValues = descText != null ? descText.GetPreferredValues(textMaxWidth, 0) : Vector2.zero;
+
+        float nameHeight = nameValues.y;
+        float descHeight = descValues.y;
+        float contentHeight = tooltipPaddingY * 2 + nameHeight + nameDescSpacing + descHeight;
+
+        panelRT.sizeDelta = new Vector2(tooltipMaxWidth, contentHeight);
+
+        float halfHeight = contentHeight / 2f;
+        if (nameRT != null)
+        {
+            float nameY = halfHeight - tooltipPaddingY - nameHeight / 2f;
+            nameRT.anchoredPosition = new Vector2(0, nameY);
+        }
+        if (descRT != null)
+        {
+            float descY = halfHeight - tooltipPaddingY - nameHeight - nameDescSpacing - descHeight / 2f;
+            descRT.anchoredPosition = new Vector2(0, descY);
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (tooltipPanel != null)

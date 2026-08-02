@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 37
   modelPath: Model/Explosive Bug-Blue
   initialDefense: 0
+  designDescription: "\u610F\u56FE\uFF1ABreathAttack\u2192BiteAttack\u4EA4\u66FF\uFF0C\u7EAF\u653B\u51FB\u578B\u3002\u4E0D\u9632\u5FA1\u3001\u4E0D\u56DE\u8840\u3002\n\nBreathAttack\uFF1A8\u70B9\u4F24\u5BB3+\u7ED9\u73A9\u5BB61\u5C42\u865A\u5F31\u3002\nBiteAttack\uFF1A6\u70B9\u4F24\u5BB3+\u81EA\u8EAB\u83B7\u5F973\u70B9\u529B\u91CF\u3002\n\n\u7B49\u7EA7\uFF1A\u666E\u901A"
   tier: 0
   scriptName: RiftDragonflyEnemy
   idleAnim: Idle

@@ -74,12 +74,12 @@ public class EncyclpediaUI : UIBase
 
     private void OnPotionBtnClick()
     {
-        // TODO: 打开药剂工坊
+        UIManager.Instance.ShowUI<PotionBagUI>("PotionBagUI");
     }
 
     private void OnReliqueBtnClick()
     {
-        // TODO: 打开遗物收录
+        UIManager.Instance.ShowUI<RelicBagUI>("RelicBagUI");
     }
 
     private void OnEnemyBtnClick()

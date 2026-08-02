@@ -17,6 +17,7 @@ MonoBehaviour:
   maxHp: 252
   modelPath: Model/Fire Demon-Red
   initialDefense: 0
+  designDescription: "\u610F\u56FE\uFF1A7\u6B65\u56FA\u5B9A\u5FAA\u73AF\uFF1AMeleeAttack02\uFF0810+2\u529B\u91CF\uFF09\u2192ShockwaveAttack\uFF088+2\u8106\u5F31\uFF09\u2192CrushAttack\uFF086+1\u7729\u6655\uFF09\u2192FireBreathAttack\uFF083*2\uFF09\u2192\u9632\u5FA1\uFF08\u62A4\u76FE13\uFF09\u2192\u56DE\u8840\uFF0813\uFF09\u2192MeleeAttack01\uFF0814+1\u529B\u91CF\uFF09\u3002\n\n\u7B49\u7EA7\uFF1ABoss"
   tier: 2
   scriptName: MoltenColossusEnemy
   idleAnim: Idle

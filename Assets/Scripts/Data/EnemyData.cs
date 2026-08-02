@@ -22,6 +22,11 @@ public class EnemyData : ScriptableObject
     [Tooltip("登场时自带的护盾值")]
     public int initialDefense;
 
+    [Header(" 敌人描述")]
+    [TextArea(3, 10)]
+    [Tooltip("描述该敌人的行动意图、攻击顺序、特殊机制等")]
+    public string designDescription;
+
     [Header(" 等级分类 ")]
     [Tooltip("敌人等级：普通/精英/Boss")]
     public EnemyTier tier = EnemyTier.Normal;

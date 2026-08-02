@@ -97,9 +97,9 @@
     <Compile Include="Assets\Scripts\Card\AttackCard\FireMagicCard.cs" />
     <Compile Include="Assets\Scripts\Relics\ElementCodex.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
+    <Compile Include="Assets\Top-Down Dungeons\Scripts\fpscounter.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\LuckyTonicPotion.cs" />
-    <Compile Include="Assets\Top-Down Dungeons\Scripts\fpscounter.cs" />
     <Compile Include="Assets\Scripts\UI\Window\BuffIcon.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\SlicesTest.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Details\Scripts\CustomPropertyDrawerExample.cs" />
@@ -140,8 +140,8 @@
     <Compile Include="Assets\Scripts\GameEvents.cs" />
     <Compile Include="Assets\Scripts\UI\Window\CardBagUI.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\MeditationPotion.cs" />
-    <Compile Include="Assets\Scripts\Card\OtherCard\AddCard.cs" />
     <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\VortexEffect.cs" />
+    <Compile Include="Assets\Scripts\Card\OtherCard\AddCard.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\WeakPotion.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\DawnCondensedDewPotion.cs" />
@@ -157,6 +157,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Scripts\Data\GameConfigData.cs" />
     <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\NoiseEffect.cs" />
+    <Compile Include="Assets\Scripts\UI\Window\PotionBagUI.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\FateBindElixirPotion.cs" />
     <Compile Include="Assets\Epic Toon FX\Scripts\ETFXRotation.cs" />
     <Compile Include="Assets\Scripts\UI\Window\TreasureUI.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Assets\Scripts\Manager\ExitManager.cs" />
     <Compile Include="Assets\Scripts\UI\PotionPanelController.cs" />
     <Compile Include="Assets\Scripts\Potion\Uncommon\LiquidMemoryPotion.cs" />
+    <Compile Include="Assets\Scripts\UI\Window\RelicBagUI.cs" />
     <Compile Include="Assets\Scripts\Manager\FightCardManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoleManager.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
@@ -185,9 +187,9 @@
     <Compile Include="Assets\Scripts\Card\AttackCard\JudgmentCard.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXLoopScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\Top-Down Dungeons\Scripts\MovementScript.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\AgilityPotion.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\DizzinessCard.cs" />
-    <Compile Include="Assets\Top-Down Dungeons\Scripts\MovementScript.cs" />
     <Compile Include="Assets\Scripts\GameApp.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FrostNovaCard.cs" />
     <Compile Include="Assets\Scripts\Manager\PotionInventory.cs" />
@@ -340,9 +342,9 @@
     <Compile Include="Assets\Scripts\Buff\StatusCallbacks.cs" />
     <Compile Include="Assets\Scripts\Map\MysteryNodeResolver.cs" />
     <Compile Include="Assets\Scripts\Card\OtherCard\MeditationCard.cs" />
+    <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\ImageEffectBase.cs" />
     <Compile Include="Assets\Scripts\Potion\Common\EnergyPotion.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\GamblerBrewPotion.cs" />
-    <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\ImageEffectBase.cs" />
     <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\SSAOEffect.cs" />
     <Compile Include="Assets\Scripts\Potion\Rare\MoltenGuardPotion.cs" />
     <Compile Include="Assets\Scripts\Tools\ObjectPool.cs" />
@@ -365,9 +367,9 @@
     <Compile Include="Assets\Scripts\UI\Window\RestSiteUI.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCard\FlamestrikeCard.cs" />
     <Compile Include="Assets\OneLine\OneLine\Example\Tests\Scripts\ExtendedGenericTest.cs" />
+    <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\GlowEffect.cs" />
     <Compile Include="Assets\Scripts\Card\AttackCardItem.cs" />
     <Compile Include="Assets\OneLine\OneLine\Attributes\HideLabelAttribute.cs" />
-    <Compile Include="Assets\Top-Down Dungeons\Standard Assets\Image Effects (Pro Only)\GlowEffect.cs" />
     <Compile Include="Assets\Scripts\Relics\FrostHeart.cs" />
     <Compile Include="Assets\Scripts\Map\MapNode.cs" />
     <Compile Include="Assets\Scripts\Relics\StorageVial.cs" />

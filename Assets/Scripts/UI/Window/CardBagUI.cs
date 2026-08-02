@@ -111,9 +111,9 @@ public class CardBagUI : UIBase
 
         // --- 稀有度下拉 ---
         rarityOptions.Clear();
-        rarityOptions.Add("All");
+        rarityOptions.Add("全部");
         foreach (CardRarity r in System.Enum.GetValues(typeof(CardRarity)))
-            rarityOptions.Add(r.ToString());
+            rarityOptions.Add(RarityToChinese(r));
         rarityDropDown.ClearOptions();
         rarityDropDown.AddOptions(rarityOptions);
         rarityDropDown.onValueChanged.AddListener(_ => RefreshDisplay());
@@ -143,7 +143,7 @@ public class CardBagUI : UIBase
         {
             if (selectedType != "All" && !card.HasCardType(selectedType))
                 continue;
-            if (selectedRarity != "All" && card.rarity.ToString() != selectedRarity)
+            if (selectedRarity != "全部" && RarityToChinese(card.rarity) != selectedRarity)
                 continue;
 
             // 纯数据查询（不依赖游戏进度）：
@@ -210,6 +210,24 @@ public class CardBagUI : UIBase
             img.raycastTarget = false;
 
         displayedItems.Add(cardObj);
+    }
+
+    private static string RarityToChinese(CardRarity rarity)
+    {
+        return rarity switch
+        {
+            CardRarity.Basic => "初始",
+            CardRarity.Common => "普通",
+            CardRarity.Uncommon => "罕见",
+            CardRarity.Rare => "稀有",
+            CardRarity.Event => "事件",
+            CardRarity.Ancient => "先古之民",
+            CardRarity.Status => "状态",
+            CardRarity.Curse => "诅咒",
+            CardRarity.Quest => "任务",
+            CardRarity.Generated => "衍生",
+            _ => rarity.ToString()
+        };
     }
 
     private void OnReturnBtn(GameObject obj, PointerEventData pData)

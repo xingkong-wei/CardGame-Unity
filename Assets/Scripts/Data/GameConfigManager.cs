@@ -15,6 +15,12 @@ public class GameConfigManager
     private List<CardTypeData> cardTypeList = new List<CardTypeData>();
     private Dictionary<int, CardTypeData> cardTypeDict = new Dictionary<int, CardTypeData>();
 
+    //药水列表
+    private List<PotionData> potionDataList = new List<PotionData>();
+
+    //遗物列表
+    private List<RelicData> relicDataList = new List<RelicData>();
+
     //关卡表（保留原有逻辑）
     private GameConfigData levelData;
     private TextAsset textAsset;
@@ -27,6 +33,12 @@ public class GameConfigManager
 
         //加载所有卡牌类型
         LoadCardTypeData();
+
+        //加载所有药水数据
+        LoadPotionData();
+
+        //加载所有遗物数据
+        LoadRelicData();
 
         //加载关卡数据（优先使用 ScriptableObject，兼容旧 txt）
         LevelConfigManager.Instance.Init();
@@ -125,6 +137,46 @@ public class GameConfigManager
             return GetCardTypeById(intId);
         }
         return null;
+    }
+
+    //加载药水数据
+    private void LoadPotionData()
+    {
+        potionDataList.Clear();
+
+        // Resources.LoadAll 不递归搜索子目录，需要分别加载每个稀有度子文件夹
+        string[] subFolders = { "Data_Potion/Common", "Data_Potion/Uncommon", "Data_Potion/Rare" };
+        foreach (string folder in subFolders)
+        {
+            PotionData[] potions = Resources.LoadAll<PotionData>(folder);
+            foreach (PotionData potion in potions)
+            {
+                potionDataList.Add(potion);
+            }
+        }
+
+        Debug.Log($"PotionBagUI: 加载了 {potionDataList.Count} 个药水数据");
+    }
+
+    public List<PotionData> GetPotionDataList()
+    {
+        return potionDataList;
+    }
+
+    //加载遗物数据
+    private void LoadRelicData()
+    {
+        relicDataList.Clear();
+        RelicData[] relics = Resources.LoadAll<RelicData>("Data_Relic");
+        foreach (RelicData relic in relics)
+        {
+            relicDataList.Add(relic);
+        }
+    }
+
+    public List<RelicData> GetRelicDataList()
+    {
+        return relicDataList;
     }
 
     public List<Dictionary<string, string>> GetLevelLines()

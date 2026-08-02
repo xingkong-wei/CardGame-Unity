@@ -167,7 +167,7 @@ public class FightManager : MonoBehaviour
             CurHp -= finalHit;
             UIManager.Instance.ShowDamageEffect();
 
-            if (CurHp < 0)
+            if (CurHp <= 0)
             {
                 if (_potionInventory.TryUseBottledSprite())
                 {

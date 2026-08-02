@@ -28,8 +28,6 @@ public class LevelConfigManager
                 islandLevelsMap[cfg.islandIndex] = new List<int>();
             islandLevelsMap[cfg.islandIndex].Add(cfg.levelId);
         }
-
-        Debug.Log($"[LevelConfigManager] 加载了 {levelDict.Count} 个关卡配置");
     }
 
     /// <summary>
