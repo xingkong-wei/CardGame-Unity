@@ -43,7 +43,7 @@ public class GamblerBrewPotion : PotionBase
                         FightCardManager.Instance.usedCardList.Add(dc);
                         handCards.RemoveAt(i);
                         card.enabled = false;
-                        Object.Destroy(card.gameObject);
+                        PoolManager.Release("CardItem", card.gameObject);
                         break;
                     }
                 }

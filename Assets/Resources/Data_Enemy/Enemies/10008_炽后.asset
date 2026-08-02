@@ -31,9 +31,9 @@ MonoBehaviour:
   defenseAnim: CastSpell01
   defenseEffectPath: Effects/MagicEffect/Magic circle 19
   defenseEffectParams:
-    positionOffset: {x: 0, y: 2.3, z: 0}
+    positionOffset: {x: 0, y: 2.8, z: 0}
     rotationOffset: {x: -180, y: 0, z: 0}
-    effectScale: 1.2
+    effectScale: 1.5
     duration: 1.3
   defenseVariance: 0
   flightAttackAnim: 
@@ -47,7 +47,7 @@ MonoBehaviour:
   healAnim: CastSpell02
   healEffectPath: Effects/MagicEffect/Magic circle 19
   healEffectParams:
-    positionOffset: {x: 0, y: 2.3, z: 0}
+    positionOffset: {x: 0, y: 2.8, z: 0}
     rotationOffset: {x: -180, y: 0, z: 0}
-    effectScale: 1.2
+    effectScale: 1.5
     duration: 1.3

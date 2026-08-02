@@ -20,7 +20,7 @@ MonoBehaviour:
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: -0.4, y: 0.8, z: 1}
-    effectScale: 0.2
+    effectScale: 0.6
     delayTime: 0.25
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}
@@ -29,7 +29,7 @@ MonoBehaviour:
     spawnPositionType: 3
     spawnTransformPath: 
     positionOffset: {x: 0.4, y: 0.8, z: 1}
-    effectScale: 0.2
+    effectScale: 0.6
     delayTime: 0.25
     duration: 1
     rotationOffset: {x: 0, y: 0, z: 0}

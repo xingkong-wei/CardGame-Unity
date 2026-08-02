@@ -18,8 +18,8 @@ MonoBehaviour:
   category: 0
   enemies:
   - enemyId: 10000
-    position: {x: 3, y: 0, z: 1}
+    position: {x: 4, y: 0, z: 0}
   - enemyId: 10002
     position: {x: 0, y: 0, z: 1}
   - enemyId: 10001
-    position: {x: -3, y: 0, z: 1}
+    position: {x: -4, y: 0, z: 0}

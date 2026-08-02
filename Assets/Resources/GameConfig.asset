@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7a9226fb17801409459bd1345cfb0a, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  maxHp: 100
-  curHp: 100
+  maxHp: 1000
+  curHp: 1000
   maxPowerCount: 3
   initialCoin: 99
   killCoinReward: 25
@@ -21,12 +21,14 @@ MonoBehaviour:
   maxHandSize: 10
   initialCards:
   - cardData: {fileID: 11400000, guid: 2fc9bcf8e43f7f84cab60811b2048270, type: 2}
-    count: 4
+    count: 40
   - cardData: {fileID: 11400000, guid: 792ac2965af2f3144b22fc3aa11ff269, type: 2}
     count: 4
   - cardData: {fileID: 11400000, guid: b76e3abbe9e3bd341ae1d38df3044f55, type: 2}
     count: 1
   - cardData: {fileID: 11400000, guid: 60353d13ee1876e4192bcb7773339dfd, type: 2}
+    count: 1
+  - cardData: {fileID: 11400000, guid: 87af4a9e5d2be3f4cabbb703dafc1800, type: 2}
     count: 1
   initialPotions:
   - {fileID: 11400000, guid: fd85642bfc2dce74eb4041aa995e98de, type: 2}

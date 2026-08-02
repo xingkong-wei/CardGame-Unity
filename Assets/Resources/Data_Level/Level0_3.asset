@@ -18,6 +18,6 @@ MonoBehaviour:
   category: 0
   enemies:
   - enemyId: 10002
-    position: {x: 1.5, y: 0, z: 2}
+    position: {x: 2.3, y: 0.2, z: 1}
   - enemyId: 10002
-    position: {x: -1.5, y: 0, z: 2}
+    position: {x: -2.3, y: 0.2, z: 1}

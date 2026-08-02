@@ -38,7 +38,7 @@ MonoBehaviour:
     spawnPositionType: 0
     spawnTransformPath: 
     positionOffset: {x: 0, y: 0, z: -2}
-    effectScale: 2
+    effectScale: 4
     delayTime: 0.5
     duration: 0
     rotationOffset: {x: 0, y: 0, z: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
     spawnPositionType: 4
     spawnTransformPath: RigTail2Gizmo
     positionOffset: {x: -0.05, y: 0.08, z: -0.5}
-    effectScale: 3
+    effectScale: 4
     delayTime: 0.5
     duration: 0
     rotationOffset: {x: -190, y: 2, z: 0}

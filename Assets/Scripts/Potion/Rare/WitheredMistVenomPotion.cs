@@ -28,8 +28,9 @@ public class WitheredMistVenomPotion : PotionBase
             // 加入废牌堆（仅本场战斗，不永久移除）
             DeckCard dc = card.sourceDeckCard ?? new DeckCard(card.data);
             FightCardManager.Instance.consumeCardList.Add(dc);
-            // 销毁卡牌
-            Object.Destroy(card.gameObject);
+            // 归还卡牌到对象池
+            card.enabled = false;
+            PoolManager.Release("CardItem", card.gameObject);
         }
 
         fightUI.GetCardItemList().Clear();
