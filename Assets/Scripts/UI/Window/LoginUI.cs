@@ -72,31 +72,40 @@ public class LoginUI : UIBase
         UIManager.Instance.ShowUI<GameSettingUI_Login>("GameSettingUI_Login");
     }
 
-    //新游戏按钮事件（清除所有存档数据）
+    //重置进度按钮事件（清除所有存档数据）
+    private bool _resetPending = false;
     private void onNewGameBtn(GameObject obj, PointerEventData pData)
     {
-        SaveManager.ClearAllGameData();
+        if (!_resetPending)
+        {
+            _resetPending = true;
+            UIManager.Instance.ShowTip("再次点击确认重置所有进度", Color.red);
+            // 3秒后重置确认状态
+            CancelInvoke(nameof(CancelReset));
+            Invoke(nameof(CancelReset), 3f);
+            return;
+        }
+
+        _resetPending = false;
+        CancelInvoke(nameof(CancelReset));
+
+        // 直接删除整个 gamesave.bin 文件（彻底清除所有存档）
+        SaveFileManager.ClearAll();
         FightCardManager.Instance.ResetForNewGame();
         RoleManager.Instance.Init();
         RoleManager.Instance.ApplyUpgradesToDeck();
         FightUI.ResetBattleTimer();
         FightManager.ResetHp();
-        FightManager.Instance.relicList.Clear();
-        FightManager.Instance.potionList.Clear();
+        // 重新加载初始遗物和药水（而非清空）
+        FightManager.Instance.InitRelics();
+        FightManager.Instance.InitPotions();
 
-        // 清除所有岛屿地图
-        SaveFileManager.DeleteKeysByPrefix("Map_Island_");
-        SaveFileManager.DeleteKey("Map");
-        SaveFileManager.DeleteKey("UpgradedCardIds");
-        SaveFileManager.DeleteKey("SavedCurHp");
-        SaveFileManager.DeleteKey("SavedMaxHp");
-        SaveFileManager.DeleteKey("SavedCoinAmount");
-        SaveFileManager.DeleteKey("SavedIslandIndex");
-        SaveFileManager.Flush();
+        UIManager.Instance.ShowTip("进度已重置", Color.green);
+    }
 
-        Close();
-        MapUI mapUI = UIManager.Instance.ShowUI<MapUI>("MapUI") as MapUI;
-        mapUI.OnNewGameStarted();
+    private void CancelReset()
+    {
+        _resetPending = false;
     }
 
     //图鉴按钮事件

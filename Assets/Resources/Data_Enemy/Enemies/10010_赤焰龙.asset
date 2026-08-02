@@ -17,7 +17,7 @@ MonoBehaviour:
   maxHp: 341
   modelPath: Model/Fire Dragon-Red
   initialDefense: 0
-  designDescription: "\u610F\u56FE\uFF1A\u5730\u97625\u6B65\u5FAA\u73AF\uFF1A\u653B\u51FB\uFF083\u90091\uFF0CBiteAttack12/FireBreathAttack8/ProjectileAttack10\uFF09\u2192\u653B\u51FB\uFF083\u90091\uFF09\u2192\u9632\u5FA1\uFF08\u62A4\u76FE13+\u7ED9\u73A9\u5BB61\u865A\u5F31\uFF09\u2192\u653B\u51FB\u2192\u9632\u5FA1\u3002\n\n\u534A\u8840\u540E\u5207\u6362\u98DE\u884C\u6A21\u5F0F10\u6B65\u5FAA\u73AF\uFF1AFlyBiteAttackLow\u2192FlyProjectileAttackLow\u2192\u9632\u5FA1\u2192FlyFireBreathAttackHigh\u2192\u9632\u5FA1\u2192FlyBiteAttackHigh\u2192\u9632\u5FA1\u2192FlyProjectileAttackHigh\u2192FlyFireBreathAttackLow\u2192\u9632\u5FA1\u3002\n\n\u7B49\u7EA7\uFF1ABoss"
+  designDescription: "\u610F\u56FE\uFF1A\u5730\u97625\u6B65\u5FAA\u73AF\uFF1A\u653B\u51FB\uFF083\u90091\uFF0CBiteAttack12/FireBreathAttack8/ProjectileAttack10\uFF09\u2192\u653B\u51FB\uFF083\u90091\uFF09\u2192\u9632\u5FA1\uFF08\u62A4\u76FE13+\u7ED9\u73A9\u5BB61\u865A\u5F31\uFF09\u2192\u653B\u51FB\u2192\u9632\u5FA1\u3002\n\n\u534A\u8840\u540E\u5207\u6362\u98DE\u884C\u6A21\u5F0F10\u6B65\u5FAA\u73AF\uFF1AFlyBiteAttackLow\u2192FlyProjectileAttackLow\u2192\u9632\u5FA1\u2192FlyFireBreathAttackHigh\u2192\u9632\u5FA1\u2192FlyBiteAttackHigh\u2192\u9632\u5FA1\u2192FlyProjectileAttackHigh\u2192FlyFireBreathAttackLow\u2192\u9632\u5FA1\u3002"
   tier: 2
   scriptName: FlameDragonEnemy
   idleAnim: Idle

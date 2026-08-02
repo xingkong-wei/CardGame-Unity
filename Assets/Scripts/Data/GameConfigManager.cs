@@ -155,7 +155,6 @@ public class GameConfigManager
             }
         }
 
-        Debug.Log($"PotionBagUI: 加载了 {potionDataList.Count} 个药水数据");
     }
 
     public List<PotionData> GetPotionDataList()

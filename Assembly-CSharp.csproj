@@ -498,6 +498,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\Fire Creatures Pack\Hell Creeper\Read me.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
+    <None Include="Assets\link.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

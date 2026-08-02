@@ -569,7 +569,7 @@ public class ShopUI : UIBase
     private void OnLeaveClick()
     {
         OnClosed?.Invoke();
-        Close();
+        UIManager.Instance.CloseUI("ShopUI");
     }
 
     public override void Show()

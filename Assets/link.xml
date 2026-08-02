@@ -1,0 +1,50 @@
+<linker>
+  <!-- 保留所有药水类（通过 scriptName 反射创建） -->
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="AttackPotion" preserve="all" />
+    <type fullname="SkillPotion" preserve="all" />
+    <type fullname="StrengthPotion" preserve="all" />
+    <type fullname="AgilityPotion" preserve="all" />
+    <type fullname="EasilyInjuredPotion" preserve="all" />
+    <type fullname="BlockPotion" preserve="all" />
+    <type fullname="CurePotion" preserve="all" />
+    <type fullname="FirePotion" preserve="all" />
+    <type fullname="BombPotion" preserve="all" />
+    <type fullname="ViolentPotion" preserve="all" />
+    <type fullname="HuntPotion" preserve="all" />
+    <type fullname="MeditaionPotion" preserve="all" />
+    <type fullname="FeatheringPotion" preserve="all" />
+    <type fullname="AbilityPotion" preserve="all" />
+    <type fullname="EnergyPotion" preserve="all" />
+    <type fullname="WeakPotion" preserve="all" />
+    <type fullname="FortifyPotion" preserve="all" />
+    <type fullname="DuplicatePotion" preserve="all" />
+    <type fullname="EternalSpiritElixirPotion" preserve="all" />
+    <type fullname="DawnCondensedDewPotion" preserve="all" />
+    <type fullname="SoulSecureElixirPotion" preserve="all" />
+    <type fullname="HolyTinctPotion" preserve="all" />
+    <type fullname="CalmMinSerumPotion" preserve="all" />
+    <type fullname="VoidDusPotion" preserve="all" />
+    <type fullname="SpiritBindEssencePotion" preserve="all" />
+    <type fullname="WitheredMistVenomPotion" preserve="all" />
+    <type fullname="StrangeTallowSlurryPotion" preserve="all" />
+    <type fullname="UpstreamPotion" preserve="all" />
+    <type fullname="MoltenGuardPotion" preserve="all" />
+    <type fullname="BerserkPotion" preserve="all" />
+    <type fullname="ThornPotion" preserve="all" />
+    <type fullname="GamblerBrewPotion" preserve="all" />
+    <type fullname="FateBindElixirPotion" preserve="all" />
+    <type fullname="FallenAngelBountyPotion" preserve="all" />
+    <type fullname="SovereignGlarePotion" preserve="all" />
+    <type fullname="GuardianElixirPotion" preserve="all" />
+    <type fullname="LuckyTonicPotion" preserve="all" />
+    <type fullname="FetterPotion" preserve="all" />
+    <type fullname="ChaosEssenceSlurryPotion" preserve="all" />
+    <type fullname="PervertedEssencePotion" preserve="all" />
+    <type fullname="LiquidMemoryPotion" preserve="all" />
+    <type fullname="BottledSpritePotion" preserve="all" />
+    <type fullname="BeetleExtractPotion" preserve="all" />
+    <type fullname="GiantGrowthPotion" preserve="all" />
+    <type fullname="FruitExtractPotion" preserve="all" />
+  </assembly>
+</linker>

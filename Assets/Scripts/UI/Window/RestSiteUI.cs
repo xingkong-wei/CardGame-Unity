@@ -105,6 +105,17 @@ public class RestSiteUI : UIBase
             }
             StartCoroutine(CompleteAction());
         });
+
+        // 隐藏 CardCollectionUI 的返回按钮（从 RestSiteUI 进入时不可返回）
+        StartCoroutine(HideCollectionCloseBtn());
+    }
+
+    private IEnumerator HideCollectionCloseBtn()
+    {
+        yield return null; // 等一帧，确保 UI 已创建
+        CardCollectionUI collectionUI = UIManager.Instance?.GetUI<CardCollectionUI>("CardCollectionUI");
+        if (collectionUI != null && collectionUI.closeBtn != null)
+            collectionUI.closeBtn.gameObject.SetActive(false);
     }
 
     private IEnumerator CompleteAction()

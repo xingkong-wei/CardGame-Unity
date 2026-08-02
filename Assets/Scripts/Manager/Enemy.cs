@@ -221,6 +221,17 @@ public partial class Enemy : MonoBehaviour
         PlayHealEffect();
     }
 
+    /// <summary>获取可用的死亡动画名，优先 "Die"，其次 "die"，都没有返回空</summary>
+    private string GetDeathAnim()
+    {
+        if (ani == null) return null;
+        if (ani.HasState(0, Animator.StringToHash("Die")))
+            return "Die";
+        if (ani.HasState(0, Animator.StringToHash("die")))
+            return "die";
+        return null;
+    }
+
     /// <summary>根据动画名获取攻击伤害值</summary>
     public int GetAttackDamageForAnim(string animName)
     {
@@ -266,8 +277,9 @@ public partial class Enemy : MonoBehaviour
                 CurHp = 0;
                 StopAllCoroutines();
                 RelicManager.Instance.TriggerEnemyKilled(this);
-                if (ani != null && ani.HasState(0, Animator.StringToHash("die")))
-                    ani.Play("die");
+                string deathAnim = GetDeathAnim();
+                if (!string.IsNullOrEmpty(deathAnim))
+                    ani.Play(deathAnim);
                 EnemyManager.Instance.DeleteEnemy(this);
                 Destroy(gameObject, 1);
                 Destroy(actionObj);

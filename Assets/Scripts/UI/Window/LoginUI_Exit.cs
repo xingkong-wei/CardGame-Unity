@@ -185,6 +185,15 @@ public class LoginUI_Exit : UIBase
 
         T ui = go.GetComponent<T>() ?? go.AddComponent<T>();
 
+        // 注册到 _uiDict 和 uiList，确保 CloseUI 能找到
+        var dictField = typeof(UIManager).GetField("_uiDict",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (dictField != null)
+        {
+            var dict = dictField.GetValue(UIManager.Instance) as System.Collections.Generic.Dictionary<string, UIBase>;
+            if (dict != null) dict[objName] = ui;
+        }
+
         var uiListField = typeof(UIManager).GetField("uiList",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (uiListField != null)
